@@ -1,150 +1,117 @@
 //=============================================================================
 /**
- * @file	net.h
- * @brief	通信ライブラリの外部公開関数
- * @author	k.ohno
- * @date    2006.11.4
+ * @file	net.c
+ * @brief	GFL通信ライブラリー
+ * @author	GAME FREAK Inc.
+ * @date    2006.12.14
  */
 //=============================================================================
-#ifndef __NET_H__
-#define __NET_H__
+
+#include "gflib.h"
+
+#include "device/wh_config.h"
+
+#include "net.h"
+#include "net_def.h"
+#include "device/net_wireless.h"
+#include "net_system.h"
+#include "net_command.h"
+
+#include "tool/net_ring_buff.h"
+#include "tool/net_queue.h"
+#include "tool/net_tool.h"
 
 
-#undef GLOBAL
-#ifdef __NET_SYS_H_GLOBAL__
-#define GLOBAL /*	*/
-#else
-#define GLOBAL extern
-#endif
+struct _GFL_NETSYS{
+    GFLNetInitializeStruct aNetInit;  ///< 初期化構造体
+    GFL_NETHANDLE* pNetHandle[GFL_NET_MACHINE_MAX];
 
-// デバッグ用決まり文句----------------------
-#define GFL_NET_DEBUG   (0)   ///< ユーザーインターフェイスデバッグ用 0:無効 1:有効
-
-#if defined(DEBUG_ONLY_FOR_ohno)
-#undef GFL_NETDEBUG
-#define GFL_NET_DEBUG   (1)
-#endif  //DEBUG_ONLY_FOR_ohno
-
-#ifndef NET_PRINT
-#if GFL_NET_DEBUG
-#define NET_PRINT(...) \
-  (void) ((OS_Printf(__VA_ARGS__)))
-#else   //GFL_NET_DEBUG
-#define NET_PRINT(...)           ((void) 0)
-#endif  // GFL_NET_DEBUG
-#endif  //GFL_NET_PRINT
-// デバッグ用決まり文句----------------------
-// データダンプ
-#ifdef GFL_NET_DEBUG
-extern void CommDump_Debug(u8* adr, int length, char* pInfoStr);
-#define DEBUG_DUMP(a,l,s)  CommDump_Debug(a,l,s)
-#else
-#define DEBUG_DUMP(a,l,s)       ((void) 0)
-#endif
+    GFL_NETWL* pNetWL;
+    
+    int heapID;  ///< 通信の確保メモリーの場所
+    
+} ;
 
 
-/// @brief 通信管理構造体
-typedef struct _GFL_NETSYS GFL_NETSYS;
-/// @brief ネットワーク単体のハンドル
-typedef struct _GFL_NETHANDLE GFL_NETHANDLE;
-
-// define 
-#define NET_NETID_ALLUSER (0xff)  ///< NetID:全員へ送信する場合
-#define NET_NETID_SERVER (0xfe)   ///< NetID:サーバーの場合これ 後は0からClientID
-
-#define GFL_NET_TOOL_INVALID_LIST_NO  (-1) ///<無効な選択ID
-
-
-/// @brief  コマンド関連の定義
-
-/// コールバック関数の書式
-typedef void (*PTRCommRecvFunc)(const int netID, const int size, const void* pData, void* pWork, GFL_NETHANDLE* pNetHandle);
-/// サイズが固定の場合サイズを関数で返す
-typedef int (*PTRCommRecvSizeFunc)(void);
-/// 受信バッファを外部で持っている場合そのポインタ
-typedef u8* (*PTRCommRecvBuffAddr)(int netID, void* pWork, int size);
-
-/// コマンドパケットテーブル定義
-typedef struct {
-    PTRCommRecvFunc callbackFunc;    ///< コマンドがきた時に呼ばれるコールバック関数
-    PTRCommRecvSizeFunc getSizeFunc; ///< コマンドの送信データサイズが固定なら書いてください
-    PTRCommRecvBuffAddr getAddrFunc;
-} NetRecvFuncTable;
-
-/// 可変データ送信であることを示している
-#define   GFL_NET_COMMAND_SIZE_VARIABLE   (0x00ffffff)
-/// コマンドのサイズを関数か実数か判断する為の定義 (使用しないでください)
-#define   _GFL_NET_COMMAND_SIZE_H         (0xff000000)
-/// コマンドのサイズを定義する為のマクロ
-#define   GFL_NET_COMMAND_SIZE( num )     (PTRCommRecvSizeFunc)(_GFL_NET_COMMAND_SIZE_H + num)
-/// コマンドのサイズを定義する為のマクロ
-#define   GFL_NET_COMMAND_VARIABLE     (PTRCommRecvSizeFunc)(_GFL_NET_COMMAND_SIZE_H + num)
-
-
-typedef enum {
-  GFL_NET_ERROR_RESET_SAVEPOINT = 1,  ///< 直前のセーブに戻すエラー
-  GFL_NET_ERROR_RESET_TITLE,          ///< タイトルに戻すエラー
-  GFL_NET_ERROR_RESET_OTHER,          ///< その他のエラー
-} GFL_NET_ERROR_ENUM;
-
-typedef u8 GameServiceID;  ///< ゲームサービスID  通信の種類
-typedef u8 ConnectID;      ///< 接続するためのID  0-16 まで
-typedef u8 NetID;          ///< 通信ID  0-200 まで
-
-/// @brief 送信完了を受け取るコールバック型
-typedef void (*CBSendEndFunc)(u16 command);
-
-/// @brief 常に送る送信データを得る
-typedef u8* (*CBGetEveryTimeData)(void);
-/// @brief 常に送られる受信データを得る 送られていないとpWorkにNULLが入る
-typedef void (*CBRecvEveryTimeData)(int netID, void* pWork, int size);
-
-
-typedef void* (*NetBeaconGetFunc)(void);    ///< ビーコンデータ取得関数
-typedef int (*NetBeaconGetSizeFunc)(void);    ///< ビーコンデータサイズ取得関数
-typedef BOOL (*NetBeaconCompFunc)(int GameServiceID1, int GameServiceID2);  ///< ビーコンのサービスを比較して繋いで良いかどうか判断する
-typedef void (*NetErrorFunc)(GFL_NETHANDLE* pNet,int errNo);    ///< 通信不能なエラーが起こった場合呼ばれる 切断するしかない
-typedef void (*NetConnectEndFunc)(GFL_NETHANDLE* pNet);  ///< 通信切断時に呼ばれる関数
-typedef u8* (*NetGetSSID)(void);  ///< 親子接続時に認証する為のバイト列 24byte
+static GFL_NETSYS* _pNetSys = NULL; // 通信のメモリーを管理するstatic変数
 
 
 
-/// @brief 通信の初期化用構造体
-typedef struct{
-  GameServiceID gsid;       ///< ゲームサービスID  通信の種類
-  int ggid;                 ///< ＤＳでゲームソフトを区別する為のID
-  u32  allocNo;             ///< allocするための番号
-  NetRecvFuncTable recvFuncTable;  ///< 受信関数テーブル
-  NetBeaconGetFunc beaconGetFunc;  ///< ビーコンデータ取得関数
-  NetBeaconGetSizeFunc beaconGetSizeFunc;  ///< ビーコンデータサイズ取得関数
-  NetBeaconCompFunc beaconCompFunc; ///< ビーコンのサービスを比較して繋いで良いかどうか判断する
-  NetErrorFunc errorFunc;           ///< 通信不能なエラーが起こった場合呼ばれる 切断するしかない
-  NetConnectEndFunc connectEndFunc;  ///< 通信切断時に呼ばれる関数
-  NetGetSSID getSSID;        ///< 親子接続時に認証する為のバイト列  
-  u8 maxConnectNum;   ///< 最大接続人数
-  u8 maxBeaconNum;    ///< 最大ビーコン収集数
-} GFLNetInitializeStruct;
 
-//-------------------------------
-//  関数 ～外部公開関数は全てここに定義
-//-------------------------------
+
+struct _GFL_NETHANDLE{
+    int netID;
+
+
+
+};
+
+
+
+static int _addNetHandle(GFL_NETSYS* pNet, GFL_NETHANDLE* pHandle)
+{
+    int i;
+
+    for(i = 0;i < GFL_NET_MACHINE_MAX;i++){
+        if(pNet->pNetHandle[i]!=NULL){
+            pNet->pNetHandle[i] = pHandle;
+            return i;
+        }
+    }
+    OS_TPanic("no handle");
+    return 0;
+}
+
+static void _deleteAllNetHandle(GFL_NETSYS* pNet)
+{
+    int i;
+
+    for(i = 0;i < GFL_NET_MACHINE_MAX;i++){
+        if(pNet->pNetHandle[i]!=NULL){
+            GFL_HEAP_FreeMemory(pNet->pNetHandle[i]);
+            pNet->pNetHandle[i] = NULL;
+        }
+    }
+}
+
+
 
 //==============================================================================
 /**
  * @brief 通信初期化
- * @param[in]   NetInitializeStruct*  pNetInit  通信初期化構造体のポインタ
- * @retval  none
+ * @param[in]   pNetInit  通信初期化構造体のポインタ
+ * @param[in]   netID     ネットID
+ * @return none
  */
 //==============================================================================
-extern void GFL_NET_Initialize(const GFLNetInitializeStruct* pNetInit,int heapID);
+void GFL_NET_Initialize(const GFLNetInitializeStruct* pNetInit,int heapID)
+{
+    GFL_NETSYS* pNet = GFL_HEAP_AllocMemory(heapID, sizeof(GFL_NETSYS));
+
+    GFL_STD_MemClear(pNet, sizeof(GFL_NETSYS));
+
+    GFL_STD_MemCopy(pNetInit, &pNet->aNetInit, sizeof(GFLNetInitializeStruct));
+    pNet->heapID = heapID;
+    
+    _pNetSys = pNet;
+}
 
 //==============================================================================
 /**
  * @brief  通信終了
- * @retval  void
+ * @retval  TRUE  終了しました
+ * @retval  FALSE 終了しません 時間を空けてもう一回呼んでください
  */
 //==============================================================================
-extern BOOL GFL_NET_Finalize(void);
+BOOL GFL_NET_Finalize(void)
+{
+    GFL_NETSYS* pNet = _GFL_NET_GetNETSYS();
+
+    _deleteAllNetHandle(pNet);
+    GFL_HEAP_FreeMemory(pNet);
+    _pNetSys = NULL;
+    return TRUE;
+}
 
 //-----ビーコン関連
 //==============================================================================
@@ -165,7 +132,14 @@ extern void GFL_NET_AddBeaconServiceID(GFL_NETHANDLE* pNet, GameServiceID gsid);
  * @return  ビーコンデータの先頭ポインタ なければNULL
  */
 //==============================================================================
-extern void* GFL_NET_GetBeaconData(GFL_NETHANDLE* pNet, int index);
+extern void* GFL_NET_GetBeaconData(GFL_NETHANDLE* pNet, int index)
+{
+    if(index >= GFL_NET_MACHINE_MAX){
+        return NULL;
+    }
+    return GFL_NET_WLGetUserBss(index);
+    
+}
 
 //==============================================================================
 /**
@@ -179,13 +153,23 @@ extern u8* GFL_NET_GetBeaconMacAddress(GFL_NETHANDLE* pNet, int index);
 
 
 //--------接続・切断
+
+
 //==============================================================================
 /**
  * @brief 子機になり接続する
  * @return  GFL_NETHANDLE  通信ハンドルのポインタ
  */
 //==============================================================================
-extern GFL_NETHANDLE* GFL_NET_ClientConnect(GFL_NETSYS* pNetSYS);
+GFL_NETHANDLE* GFL_NET_ClientConnect(GFL_NETSYS* pNetSYS)
+{
+    GFL_NETSYS* pNet = _GFL_NET_GetNETSYS();
+    
+    GFL_NETHANDLE* pHandle = GFL_HEAP_AllocMemory(pNet->heapID, sizeof(GFL_NETHANDLE));
+
+    _addNetHandle(pNet, pHandle);
+    return pHandle;
+}
 
 //==============================================================================
 /**
@@ -391,6 +375,26 @@ extern void GFL_NET_TimingSyncStart(GFL_NETHANDLE* pNet, const u8 no);
 extern BOOL GFL_NET_IsTimingSync(GFL_NETHANDLE* pNet, const u8 no);
 
 
+//==============================================================================
+/**
+ * @brief    通信管理構造体を得る  （通信内部使用 外部に公開するならGFL_NET_Initializeの戻り値にするほうがいい）
+ * @return   ネットシステム構造体ポインタ
+ */
+//==============================================================================
+GFL_NETSYS* _GFL_NET_GetNETSYS(void)
+{
+    return _pNetSys;
+}
 
-#endif // __NET_H__
+//==============================================================================
+/**
+ * @brief    WL通信管理構造体を得る  （通信内部使用 割り込み用）
+ * @return   ネットシステム構造体ポインタ
+ */
+//==============================================================================
+
+GFL_NETWL* _GFL_NET_GetNETWL(void)
+{
+    return _pNetSys->pNetWL;
+}
 
