@@ -14,13 +14,13 @@
 #include "ui.h"
 
 #include "main.h"
-#include "yt_common.h"
-#include "yt_net.h"
+#include "key_yt_common.h"
+#include "key_yt_net.h"
 
 #include "sample_graphic/yossyegg.naix"
 
 #define __TITLE_H_GLOBAL__
-#include "title.h"
+#include "key_title.h"
 
 //----------------------------------------------------------------------------
 /**
@@ -29,7 +29,7 @@
  *	@param	gp		ゲームパラメータポインタ
  */
 //-----------------------------------------------------------------------------
-void	YT_InitTitle(GAME_PARAM *gp)
+void	KEY_YT_InitTitle(GAME_PARAM *gp)
 {
 	//BGシステム初期化
 	GFL_BG_Init(gp->heapID);
@@ -127,7 +127,7 @@ void	YT_InitTitle(GAME_PARAM *gp)
 
 	GFL_FADE_SetMasterBrightReq(GFL_FADE_MASTER_BRIGHT_WHITEOUT_MAIN|GFL_FADE_MASTER_BRIGHT_WHITEOUT_SUB,16,0,2);
 
-	YT_JobNoSet(gp,YT_MainTitleNo);
+	KEY_YT_JobNoSet(gp,KEY_YT_MainTitleNo);
 
 	GFL_SOUND_LoadHeapState(gp->mus_level[MUS_LEVEL_JINGLE]);
 	GFL_SOUND_LoadGroupData(GROUP_TITLE);
@@ -142,16 +142,16 @@ void	YT_InitTitle(GAME_PARAM *gp)
  */
 //-----------------------------------------------------------------------------
 enum{
-	YT_SEQ_TITLE_KEY_WAIT=0,
-	YT_SEQ_TITLE_END,
-	YT_SEQ_TITLE_NET_CHILD,
-	YT_SEQ_TITLE_NET_PARENT,
-	YT_SEQ_TITLE_MULTI_BOOT,
+	KEY_YT_SEQ_TITLE_KEY_WAIT=0,
+	KEY_YT_SEQ_TITLE_END,
+	KEY_YT_SEQ_TITLE_NET_CHILD,
+	KEY_YT_SEQ_TITLE_NET_PARENT,
+	KEY_YT_SEQ_TITLE_MULTI_BOOT,
 };
-void	YT_MainTitle(GAME_PARAM *gp)
+void	KEY_YT_MainTitle(GAME_PARAM *gp)
 {
 	switch(gp->seq_no){
-	case YT_SEQ_TITLE_KEY_WAIT:
+	case KEY_YT_SEQ_TITLE_KEY_WAIT:
 #if 0
 		if( GFL_UI_KEY_GetTrg() & PAD_BUTTON_START){
 			GFL_FADE_SetMasterBrightReq(GFL_FADE_MASTER_BRIGHT_BLACKOUT_MAIN|GFL_FADE_MASTER_BRIGHT_BLACKOUT_SUB,0,16,2);
@@ -174,35 +174,35 @@ void	YT_MainTitle(GAME_PARAM *gp)
 //			GFL_DISP_ClearVRAM();
 		}
 		if( GFL_UI_KEY_GetTrg() & PAD_BUTTON_L){ // Lボタンが押された
-            YT_NET_Init(gp, FALSE);  // 通信開始
-			gp->seq_no = YT_SEQ_TITLE_NET_CHILD;
+            KEY_YT_NET_Init(gp, FALSE);  // 通信開始
+			gp->seq_no = KEY_YT_SEQ_TITLE_NET_CHILD;
 		}
 		if( GFL_UI_KEY_GetTrg() & PAD_BUTTON_R){ // Rボタンが押された
-            YT_NET_Init(gp, TRUE);  // 通信開始
-			gp->seq_no = YT_SEQ_TITLE_NET_PARENT;
+            KEY_YT_NET_Init(gp, TRUE);  // 通信開始
+			gp->seq_no = KEY_YT_SEQ_TITLE_NET_PARENT;
 		}
 		if( GFL_UI_KEY_GetTrg() & PAD_BUTTON_SELECT){ // SELECTボタンが押された
 			GFL_FADE_SetMasterBrightReq(GFL_FADE_MASTER_BRIGHT_BLACKOUT_MAIN|GFL_FADE_MASTER_BRIGHT_BLACKOUT_SUB,0,16,2);
-			gp->seq_no = YT_SEQ_TITLE_MULTI_BOOT;
+			gp->seq_no = KEY_YT_SEQ_TITLE_MULTI_BOOT;
 		}
 		break;
-	case YT_SEQ_TITLE_END:
+	case KEY_YT_SEQ_TITLE_END:
 		if(GFL_FADE_CheckFade()==FALSE){
 			GFL_BG_Exit();
-			YT_JobNoSet(gp,YT_InitGameNo);
+			KEY_YT_JobNoSet(gp,KEY_YT_InitGameNo);
 		}
         break;
-    case YT_SEQ_TITLE_NET_CHILD:
-    case YT_SEQ_TITLE_NET_PARENT:
-        if(YT_NET_Main(gp->pNetParam)){
+    case KEY_YT_SEQ_TITLE_NET_CHILD:
+    case KEY_YT_SEQ_TITLE_NET_PARENT:
+        if(KEY_YT_NET_Main(gp->pNetParam)){
 			GFL_FADE_SetMasterBrightReq(GFL_FADE_MASTER_BRIGHT_BLACKOUT_MAIN|GFL_FADE_MASTER_BRIGHT_BLACKOUT_SUB,0,16,2);
-            gp->seq_no = YT_SEQ_TITLE_END;
+            gp->seq_no = KEY_YT_SEQ_TITLE_END;
         }
         break;
-	case YT_SEQ_TITLE_MULTI_BOOT:
+	case KEY_YT_SEQ_TITLE_MULTI_BOOT:
 		if(GFL_FADE_CheckFade()==FALSE){
 			GFL_BG_Exit();
-			YT_JobNoSet(gp,YT_InitMultiBootNo);
+			KEY_YT_JobNoSet(gp,KEY_YT_InitMultiBootNo);
 		}
         break;
 	}
