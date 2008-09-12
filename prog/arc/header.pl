@@ -1,6 +1,6 @@
 #====================================================================================
 #
-#	アーカイブテーブル　生成コンバータ
+#	アーカイブ定数定義　生成コンバータ
 #
 #====================================================================================
 
@@ -8,8 +8,8 @@ use Switch;
 
 	$argc = @ARGV;
 
-	if( $argc < 4 ){
-		print "error:perl perl_file read_file pm_version src_dir dest_dir\n";
+	if( $argc < 2 ){
+		print "error:perl perl_file read_file pm_version\n";
 		exit(1);
 	}
 
@@ -17,18 +17,19 @@ use Switch;
 	@data = <ARC_F>;
 	close( ARC_F );
 
-	open( ARC_TREE, "> file_tree.inc");
+	open( ARC_DEF, "> arc_def.h");
+	open( ARC_FILE, "> arc_file.h");
 	
-	print ARC_TREE "GAME_FILE_TREE=";
+	print ARC_DEF "#ifndef __ARC_DEF_H__\n";
+	print ARC_DEF "#define __ARC_DEF_H__\n\n";
+	print ARC_DEF "enum{\n";
+	print ARC_FILE "static	const char *ArchiveFileTable[]={\n";
 
 	$data_num	= @data;
 	$num_1		= 0;
 	$num_10		= 0;
 	$num_100	= 0;
 	$count		= 0;
-	$write_count= 0;
-
-	&MakeDir;
 
 	while($data_num != 0){
 		@arc_data		=	split(/ |\t|\r|\n/,@data[$count]);
@@ -63,7 +64,11 @@ use Switch;
 		$data_num--;
 	}
 
-	close( ARC_TREE );
+	print ARC_DEF "\tARCID_TABLE_MAX\n};\n";
+	print ARC_DEF "\n#endif __ARC_DEF_H__\n";
+	print ARC_FILE "};\n";
+	close( ARC_DEF );
+	close( ARC_FILE );
 
 #===========================================================
 #
@@ -91,18 +96,13 @@ sub FileWrite{
 		exit(1);
 	}
 
-	if( $write_count > 0 ){
-		print ARC_TREE	" \\\n";
-	}
-
-	print ARC_TREE	"\t$tree";
+	print ARC_DEF	"\t$enum,\n";
+	print ARC_FILE	"\t\"$tree\",\t\t//$file\n";
 
 	$num_1++;
-	my $flag = FALSE;
 	if( $num_1 > 9 ){
 		$num_1 = 0;
 		$num_10++;
-		$flag = TRUE;
 		if( $num_10 > 9 ){
 			$num_10 = 0;
 			$num_100 ++;
@@ -111,55 +111,6 @@ sub FileWrite{
 				exit(1);
 			}
 		}
-	}
-	if( $flag == TRUE ){
-		&MakeDir;
-	}
-
-	my $src_file = @ARGV[2];
-	$src_file .= $file;
-	my $dst_file = @ARGV[3];
-	$dst_file .= $tree;
-	my @cmd = ( 'cp', $src_file, $dst_file );
-
-	system @cmd;
-	if( $? >> 8 != 0 ){
-		exit(1);
-	}
-
-	$write_count++;
-}
-
-#===========================================================
-#
-#	ディレクトリ作成サブルーチン
-#
-#===========================================================
-sub MakeDir{
-	my $dir = "@ARGV[3]a";
-	if( -d $dir){}
-	else{
-		mkdir ( $dir, 0777) || die "mkdir failed : $!";
-	}
-	$dir .= "/0";
-	if( -d $dir){}
-	else{
-		mkdir ( $dir, 0777) || die "mkdir failed : $!";
-	}
-	$dir .= "/0";
-	if( -d $dir){}
-	else{
-		mkdir ( $dir, 0777) || die "mkdir failed : $!";
-	}
-	$dir = "@ARGV[3]a/$num_100";
-	if( -d $dir){}
-	else{
-		mkdir ( $dir, 0777) || die "mkdir failed : $!";
-	}
-	$dir .= "/$num_10";
-	if( -d $dir){}
-	else{
-		mkdir ( $dir, 0777) || die "mkdir failed : $!";
 	}
 }
 
