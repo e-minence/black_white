@@ -45,5 +45,8 @@ typedef enum {
 }StrNumberCodeType;
 
 
+extern void STRTOOL_SetNumber( STRBUF* dst, int number, u32 keta, StrNumberDispType dispType, StrNumberCodeType codeType );
+
+
 
 #endif
