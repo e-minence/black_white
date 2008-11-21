@@ -1,42 +1,35 @@
 //======================================================================
-/*
- * @file	field_comm_event.h
- * @brief	通信会話処理
+/**
+ * @file	field_comm_debug.c
+ * @brief	フィールド通信デバッグ 子メニュー
  * @author	ariizumi
- * @data	08/11/19
+ * @data	08/11/21
  */
 //======================================================================
-#ifndef FIELD_COMM_EVENT_H__
-#define FIELD_COMM_EVENT_H__
 
-#include "field_comm_main.h"
+#ifndef FIELD_COMM_DEBUG_H__
+#define FIELD_COMM_DEBUG_H__
+
+#include "field/fieldmap.h"
 
 //======================================================================
 //	define
 //======================================================================
 
-
 //======================================================================
 //	enum
 //======================================================================
 
-
 //======================================================================
 //	typedef struct
 //======================================================================
-typedef struct _FIELD_COMM_EVENT FIELD_COMM_EVENT;
+typedef struct _FIELD_COMM_DEBUG_WORK FIELD_COMM_DEBUG_WORK;
 
 //======================================================================
 //	proto
 //======================================================================
-extern const int FIELD_COMM_EVENT_GetWorkSize(void);
-extern void FIELD_COMM_EVENT_SetWorkData( FIELD_COMM_MAIN *commSys , FIELD_COMM_EVENT *commEvent );
+extern const int FIELD_COMM_DEBUG_GetWorkSize(void);
+extern void	FIELD_COMM_DEBUG_InitWork( const HEAPID heapID , FIELD_MAIN_WORK *fieldWork , GMEVENT *event , FIELD_COMM_DEBUG_WORK *commDeb );
+extern GMEVENT_RESULT FIELD_COMM_DEBUG_CommDebugMenu( GMEVENT *event , int *seq , void *work );
 
-extern GMEVENT_RESULT FIELD_COMM_EVENT_StartCommNormal( GMEVENT *event , int *seq , void *work );
-extern GMEVENT_RESULT FIELD_COMM_EVENT_StartCommInvasion( GMEVENT *event , int *seq , void *work );
-
-extern GMEVENT* FIELD_COMM_EVENT_StartTalk( GAMESYS_WORK *gameSys , FIELD_COMM_MAIN *commSys );
-extern GMEVENT* FIELD_COMM_EVENT_StartTalkPartner( GAMESYS_WORK *gameSys , FIELD_COMM_MAIN *commSys );
-
-
-#endif //FIELD_COMM_EVENT_H__
+#endif //FIELD_COMM_DEBUG_H__a
