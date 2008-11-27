@@ -1,16 +1,14 @@
 //======================================================================
 /**
- * @file	field_comm_debug.c
- * @brief	フィールド通信デバッグ 子メニュー
+ * @file	ari_comm_trade.h
+ * @brief	フィールド通信テスト用パート
  * @author	ariizumi
- * @data	08/11/21
+ * @data	08/11/25
  */
 //======================================================================
 
-#ifndef FIELD_COMM_DEBUG_H__
-#define FIELD_COMM_DEBUG_H__
-
-#include "field/fieldmap.h"
+#ifndef ARI_COMM_CARD_H__
+#define ARI_COMM_CARD_H__
 
 //======================================================================
 //	define
@@ -23,13 +21,14 @@
 //======================================================================
 //	typedef struct
 //======================================================================
-typedef struct _FIELD_COMM_DEBUG_WORK FIELD_COMM_DEBUG_WORK;
+typedef struct _ARI_COMM_CARD_WORK ARI_COMM_CARD_WORK;
 
 //======================================================================
 //	proto
 //======================================================================
-extern const int FIELD_COMM_DEBUG_GetWorkSize(void);
-extern void	FIELD_COMM_DEBUG_InitWork( const HEAPID heapID , GAMESYS_WORK *gameSys , FIELD_MAIN_WORK *fieldWork , GMEVENT *event , FIELD_COMM_DEBUG_WORK *commDeb );
-extern GMEVENT_RESULT FIELD_COMM_DEBUG_CommDebugMenu( GMEVENT *event , int *seq , void *work );
+extern ARI_COMM_CARD_WORK* ARI_COMM_CARD_Init( HEAPID heapID );
+extern const BOOL ARI_COMM_CARD_Loop( ARI_COMM_CARD_WORK *work );
+extern void ARI_COMM_CARD_Term( ARI_COMM_CARD_WORK *work );
 
-#endif //FIELD_COMM_DEBUG_H__a
+
+#endif //ARI_COMM_CARD_H__
