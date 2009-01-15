@@ -1,7 +1,7 @@
 //==============================================================================
 /**
- * @file	palace_block.c
- * @brief	パレス：ブロック制御
+ * @file	palace_block2.c
+ * @brief	パレス：ブロック制御(頂点手動)
  * @author	matsuda
  * @date	2009.01.14(水)
  */
@@ -72,9 +72,9 @@ typedef struct {
 //==============================================================================
 //	プロトタイプ宣言
 //==============================================================================
-GFL_PROC_RESULT PalaceBlockProcInit( GFL_PROC * proc, int * seq, void * pwk, void * mywk );
-GFL_PROC_RESULT PalaceBlockProcMain( GFL_PROC * proc, int * seq, void * pwk, void * mywk );
-GFL_PROC_RESULT PalaceBlockProcEnd( GFL_PROC * proc, int * seq, void * pwk, void * mywk );
+GFL_PROC_RESULT PalaceHandProcInit( GFL_PROC * proc, int * seq, void * pwk, void * mywk );
+GFL_PROC_RESULT PalaceHandProcMain( GFL_PROC * proc, int * seq, void * pwk, void * mywk );
+GFL_PROC_RESULT PalaceHandProcEnd( GFL_PROC * proc, int * seq, void * pwk, void * mywk );
 static void Local_VramSetting(TITLE_WORK *tw);
 static void Local_BGFrameSetting(TITLE_WORK *tw);
 static void Local_3DSetting(TITLE_WORK *tw);
@@ -89,10 +89,10 @@ static VecFx32 _BlockPosGet(TITLE_WORK *tw, int block_no);
 //	データ
 //==============================================================================
 ///タイトル画面呼び出しようのPROCデータ
-const GFL_PROC_DATA PalaceBlockProcData = {
-	PalaceBlockProcInit,
-	PalaceBlockProcMain,
-	PalaceBlockProcEnd,
+const GFL_PROC_DATA PalaceHandProcData = {
+	PalaceHandProcInit,
+	PalaceHandProcMain,
+	PalaceHandProcEnd,
 };
 
 //--------------------------------------------------------------
@@ -146,7 +146,7 @@ static const GFL_G3D_UTIL_SETUP g3Dutil_setup = {
  * @retval  
  */
 //--------------------------------------------------------------
-GFL_PROC_RESULT PalaceBlockProcInit( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
+GFL_PROC_RESULT PalaceHandProcInit( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
 {
 	TITLE_WORK *tw;
 	
@@ -192,7 +192,7 @@ GFL_PROC_RESULT PalaceBlockProcInit( GFL_PROC * proc, int * seq, void * pwk, voi
  * PROC Main
  */
 //--------------------------------------------------------------------------
-GFL_PROC_RESULT PalaceBlockProcMain( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
+GFL_PROC_RESULT PalaceHandProcMain( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
 {
 	TITLE_WORK* tw = mywk;
 	enum{
@@ -245,7 +245,7 @@ GFL_PROC_RESULT PalaceBlockProcMain( GFL_PROC * proc, int * seq, void * pwk, voi
  * PROC Quit
  */
 //--------------------------------------------------------------------------
-GFL_PROC_RESULT PalaceBlockProcEnd( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
+GFL_PROC_RESULT PalaceHandProcEnd( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
 {
 	TITLE_WORK* tw = mywk;
 	int i, mode;
