@@ -1,9 +1,9 @@
 //==============================================================================
 /**
- * @file	d_matsu.c
- * @brief	松田デバッグソース：通信テスト
+ * @file	d_matsu_huge_beacon.c
+ * @brief	松田デバッグソース：ビーコンを使用した巨大データ送受信テスト
  * @author	matsuda
- * @date	2008.08.26(火)
+ * @date	2009.01.20(火)
  */
 //==============================================================================
 #include <gflib.h>
@@ -17,12 +17,14 @@
 
 #include "net\network_define.h"
 
+#include "huge_beacon.h"
+
 
 //==============================================================================
 //	構造体定義
 //==============================================================================
 typedef struct {
-
+	int parent_child;		//0=親、1=子
 	u16		seq;
 	HEAPID	heapID;
 	int debug_mode;
@@ -38,8 +40,24 @@ typedef struct {
 	u8 huge_data[0x1000];
 	u8 receive_huge_data[2][0x1000];
 	volatile u16 cs;
+	
+	u8 beacon_huge_send_data[0x900];//[0x10000];
+	u8 beacon_huge_receive_buf[0x900];//[0x10000];
 }D_MATSU_WORK;
 
+//--------------------------------------------------------------
+//	b-con
+//--------------------------------------------------------------
+typedef struct{
+    int gameNo;   ///< ゲーム種類
+    int data_no;
+    
+    u8 mac_address[6];
+    u8 padding[2];
+} _testBeaconStruct;
+
+static _testBeaconStruct _testBeacon = { WB_NET_DEBUG_MATSUDA_SERVICEID };
+static _testBeaconStruct _recvBeacon = {-1};
 
 //==============================================================================
 //	プロトタイプ宣言
@@ -70,7 +88,7 @@ static u8 * _RecvHugeBuffer(int netID, void* pWork, int size);
  * @retval  
  */
 //--------------------------------------------------------------
-static GFL_PROC_RESULT DebugMatsudaMainProcInit( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
+static GFL_PROC_RESULT DebugMatsudaBeaconProcInit( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
 {
 	static const GFL_DISP_VRAM vramBank = {
 		GX_VRAM_BG_128_A,				// メイン2DエンジンのBG
@@ -176,7 +194,7 @@ static GFL_PROC_RESULT DebugMatsudaMainProcInit( GFL_PROC * proc, int * seq, voi
  * PROC Main
  */
 //--------------------------------------------------------------------------
-static GFL_PROC_RESULT DebugMatsudaMainProcMain( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
+static GFL_PROC_RESULT DebugMatsudaBeaconProcMain( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
 {
 	D_MATSU_WORK* wk = mywk;
 	BOOL ret = 0;
@@ -204,7 +222,7 @@ static GFL_PROC_RESULT DebugMatsudaMainProcMain( GFL_PROC * proc, int * seq, voi
  * PROC Quit
  */
 //--------------------------------------------------------------------------
-static GFL_PROC_RESULT DebugMatsudaMainProcEnd( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
+static GFL_PROC_RESULT DebugMatsudaBeaconProcEnd( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
 {
 	GFL_BG_Exit();
 	GFL_BMPWIN_Exit();
@@ -239,7 +257,6 @@ enum{
 #define _MAXSIZE  (GFL_NET_IRC_SEND_MAX)	//(32)        // 最大送信バイト数
 #define _BCON_GET_NUM (16)    // 最大ビーコン収集数
 
-
 static const GFLNetInitializeStruct aGFLNetInit = {
     _CommPacketTbl,  // 受信関数テーブル
     NELEMS(_CommPacketTbl), // 受信テーブル要素数
@@ -263,7 +280,7 @@ static const GFLNetInitializeStruct aGFLNetInit = {
     0,   ///< DWCへのHEAPサイズ
     TRUE,        ///< デバック用サーバにつなぐかどうか
 #endif  //GFL_NET_WIFI
-    0x532,//0x444,  //ggid  DP=0x333,RANGER=0x178,WII=0x346
+    GGID_HUGE_DATA,//0x444,  //ggid  DP=0x333,RANGER=0x178,WII=0x346
     GFL_HEAPID_APP,  //元になるheapid
     HEAPID_NETWORK,  //通信用にcreateされるHEAPID
     HEAPID_WIFI,  //wifi用にcreateされるHEAPID
@@ -291,6 +308,8 @@ static const GFLNetInitializeStruct aGFLNetInit = {
 static BOOL DebugMatsuda_WiressTest(D_MATSU_WORK *wk)
 {
 	BOOL ret;
+	int i;
+	_testBeaconStruct *bcon_buff;
 	
 	GF_ASSERT(wk);
 
@@ -304,6 +323,16 @@ static BOOL DebugMatsuda_WiressTest(D_MATSU_WORK *wk)
 	
 	switch( wk->seq ){
 	case 0:
+		OS_GetMacAddress(_testBeacon.mac_address);
+		{
+			int i;
+			OS_TPrintf("自分のMACアドレス：");
+			for(i = 0; i < 6; i++){
+				OS_TPrintf("%02x:", _testBeacon.mac_address[i]);
+			}
+			OS_TPrintf("\n");
+		}
+		//_testBeacon.gameNo = 
 		{
 			GFLNetInitializeStruct net_ini_data;
 			
@@ -314,18 +343,44 @@ static BOOL DebugMatsuda_WiressTest(D_MATSU_WORK *wk)
 		break;
 	case 1:
 		if(GFL_NET_IsInit() == TRUE){	//初期化終了待ち
+			HUGEBEACON_SystemCreate(HEAPID_MATSUDA_DEBUG, 
+				sizeof(wk->beacon_huge_send_data), 
+				wk->beacon_huge_send_data, 
+				wk->beacon_huge_receive_buf);
 			wk->seq++;
 		}
 		break;
 	case 2:
-		GFL_NET_ChangeoverConnect(NULL); // 自動接続
+	#if 0
+		if(GFL_UI_KEY_GetCont() & PAD_BUTTON_X){
+			//子
+			OS_TPrintf("子として起動：ビーコンを集める\n");
+			GFL_NET_StartBeaconScan();
+			wk->parent_child = 1;
+		}
+		else{
+			//親
+			OS_TPrintf("親として起動：ビーコンを発信する\n");
+			GFL_NET_InitServer();
+			wk->parent_child = 0;
+		}
+	#else
+		//親機、子機を繰り返しながら通信相手を探す
+		HUGEBEACON_Start();
+	#endif
 		wk->seq++;
 		break;
 	case 3:
-		//自動接続待ち
-		if(wk->connect_ok == TRUE){
-			OS_TPrintf("接続した\n");
-			wk->seq++;
+		HUGEBEACON_Main();
+		break;
+		
+		if(wk->parent_child == 1){
+			for(i = 0; i < SCAN_PARENT_COUNT_MAX; i++){
+				bcon_buff = GFL_NET_GetBeaconData(i);
+				if(bcon_buff != NULL){
+					OS_TPrintf("ビーコン受信　%d番 data_no = %d\n", i, bcon_buff->data_no);
+				}
+			}
 		}
 		break;
 	case 4:		//タイミングコマンド発行
@@ -387,13 +442,9 @@ static BOOL DebugMatsuda_WiressTest(D_MATSU_WORK *wk)
 }
 
 
-
-typedef struct{
-    int gameNo;   ///< ゲーム種類
-} _testBeaconStruct;
-
-static _testBeaconStruct _testBeacon = { WB_NET_DEBUG_MATSUDA_SERVICEID };
-
+//==============================================================================
+//	
+//==============================================================================
 //--------------------------------------------------------------
 /**
  * @brief   ビーコンデータ取得関数
@@ -408,6 +459,8 @@ static _testBeaconStruct _testBeacon = { WB_NET_DEBUG_MATSUDA_SERVICEID };
 
 static void* _netBeaconGetFunc(void* pWork)
 {
+//	OS_TPrintf("b-con pp : %d\n", _testBeacon.data_no);
+	_testBeacon.data_no++;
 	return &_testBeacon;
 }
 
@@ -421,6 +474,7 @@ static int _netBeaconGetSizeFunc(void* pWork)
 static BOOL _netBeaconCompFunc(GameServiceID myNo,GameServiceID beaconNo)
 {
     if(myNo != beaconNo){
+	    OS_TPrintf("b-con false\n");
         return FALSE;
     }
     OS_TPrintf("b-con true\n");
@@ -581,10 +635,10 @@ static void _RecvKeyData(const int netID, const int size, const void* pData, voi
  *
  */
 //----------------------------------------------------------
-const GFL_PROC_DATA DebugMatsudaNetProcData = {
-	DebugMatsudaMainProcInit,
-	DebugMatsudaMainProcMain,
-	DebugMatsudaMainProcEnd,
+const GFL_PROC_DATA DebugMatsudaBeaconProcData = {
+	DebugMatsudaBeaconProcInit,
+	DebugMatsudaBeaconProcMain,
+	DebugMatsudaBeaconProcEnd,
 };
 
 
