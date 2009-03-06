@@ -1,15 +1,13 @@
 //======================================================================
 /**
- * @file	dressup_system.h
- * @brief	ステージ 演技メイン
+ * @file	sta_act_effect.h
+ * @brief	ステージ用　エフェクト
  * @author	ariizumi
- * @data	09/03/02
+ * @data	09/03/03
  */
 //======================================================================
-#ifndef STA_ACTING_H__
-#define STA_ACTING_H__
-
-#include "musical/musical_system.h"
+#ifndef STA_ACT_EFFECT_H__
+#define STA_ACT_EFFECT_H__
 
 //======================================================================
 //	define
@@ -18,36 +16,25 @@
 //======================================================================
 //	enum
 //======================================================================
-typedef enum
-{
-	ACT_RET_CONTINUE,
-	ACT_RET_GO_END,
-}ACTING_RETURN;
 
 //======================================================================
 //	typedef struct
 //======================================================================
 
-typedef struct _ACTING_WORK ACTING_WORK;
-
-typedef struct
-{
-	HEAPID heapId;
-	MUSICAL_POKE_PARAM musPoke[MUSICAL_POKE_MAX];
-	u16		repertorie;	//演目
-}ACTING_INIT_WORK;
+typedef struct _STA_EFF_SYS STA_EFF_SYS;
+typedef struct _STA_EFF_WORK STA_EFF_WORK;
 
 //======================================================================
 //	proto
 //======================================================================
 
-ACTING_WORK*	STA_ACT_InitActing( ACTING_INIT_WORK *initWork );
-void	STA_ACT_InitActing_2nd( ACTING_WORK *work );
-void	STA_ACT_TermActing( ACTING_WORK *work );
-ACTING_RETURN	STA_ACT_LoopActing( ACTING_WORK *work );
 
-//--------------------------------------------------------------
-//	
-//--------------------------------------------------------------
+STA_EFF_SYS* STA_EFF_InitSystem( HEAPID heapId );
+void	STA_EFF_UpdateSystem( STA_EFF_SYS *work );
+void	STA_EFF_DrawSystem( STA_EFF_SYS *work );
+void	STA_EFF_ExitSystem( STA_EFF_SYS *work );
 
-#endif STA_ACTING_H__
+STA_EFF_WORK*	STA_EFF_CreateEffect( STA_EFF_SYS *work , int fileIdx );
+void	STA_EFF_CreateEmmitter( STA_EFF_WORK *effWork , u16 emmitNo , VecFx32 *pos );
+
+#endif STA_ACT_EFFECT_H__
