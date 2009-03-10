@@ -1,15 +1,16 @@
 //======================================================================
 /**
- * @file	dressup_system.h
- * @brief	ステージ 演技メイン
+ * @file	sta_act_script.h
+ * @brief	ステージ スクリプト処理
  * @author	ariizumi
- * @data	09/03/02
+ * @data	09/03/06
  */
 //======================================================================
-#ifndef STA_ACTING_H__
-#define STA_ACTING_H__
 
-#include "musical/musical_system.h"
+#ifndef STA_ACT_SCRIPT_H__
+#define STA_ACT_SCRIPT_H__
+
+#include "../sta_acting.h"
 
 //======================================================================
 //	define
@@ -18,31 +19,21 @@
 //======================================================================
 //	enum
 //======================================================================
-typedef enum
-{
-	ACT_RET_CONTINUE,
-	ACT_RET_GO_END,
-}ACTING_RETURN;
 
 //======================================================================
 //	typedef struct
 //======================================================================
 
-typedef struct _ACTING_WORK ACTING_WORK;
-
-typedef struct
-{
-	HEAPID heapId;
-	MUSICAL_POKE_PARAM musPoke[MUSICAL_POKE_MAX];
-	u16		repertorie;	//演目
-}ACTING_INIT_WORK;
+typedef struct _STA_SCRIPT_SYS STA_SCRIPT_SYS;
 
 //======================================================================
 //	proto
 //======================================================================
 
-ACTING_WORK*	STA_ACT_InitActing( ACTING_INIT_WORK *initWork );
-void	STA_ACT_TermActing( ACTING_WORK *work );
-ACTING_RETURN	STA_ACT_LoopActing( ACTING_WORK *work );
+STA_SCRIPT_SYS *STA_SCRIPT_InitSystem( HEAPID heapId ,ACTING_WORK *actWork);
+void STA_SCRIPT_ExitSystem( STA_SCRIPT_SYS *work );
+void STA_SCRIPT_UpdateSystem( STA_SCRIPT_SYS *work );
 
-#endif STA_ACTING_H__
+void STA_SCRIPT_SetScript( STA_SCRIPT_SYS *work , void *scriptData );
+
+#endif //STA_ACT_SCRIPT_H__
