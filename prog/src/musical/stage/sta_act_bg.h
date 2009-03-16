@@ -1,16 +1,13 @@
 //======================================================================
 /**
- * @file	sta_act_script.h
- * @brief	ステージ スクリプト処理
+ * @file	sta_act_bg.h
+ * @brief	ステージ用　背景(bbdでは大きいサイズが扱えないので独自実装
  * @author	ariizumi
- * @data	09/03/06
+ * @data	09/03/16
  */
 //======================================================================
-
-#ifndef STA_ACT_SCRIPT_H__
-#define STA_ACT_SCRIPT_H__
-
-#include "../sta_acting.h"
+#ifndef ACT_STA_BG_H__
+#define ACT_STA_BG_H__
 
 //======================================================================
 //	define
@@ -24,19 +21,22 @@
 //	typedef struct
 //======================================================================
 
-typedef struct _STA_SCRIPT_SYS STA_SCRIPT_SYS;
+typedef struct _STA_BG_SYS STA_BG_SYS;
 
 //======================================================================
 //	proto
 //======================================================================
 
-STA_SCRIPT_SYS *STA_SCRIPT_InitSystem( HEAPID heapId ,ACTING_WORK *actWork);
-void STA_SCRIPT_ExitSystem( STA_SCRIPT_SYS *work );
-void STA_SCRIPT_UpdateSystem( STA_SCRIPT_SYS *work );
+STA_BG_SYS* STA_BG_InitSystem( HEAPID heapId , ACTING_WORK* actWork );
+void	STA_BG_UpdateSystem( STA_BG_SYS *work );
+void	STA_BG_DrawSystem( STA_BG_SYS *work );
+void	STA_BG_ExitSystem( STA_BG_SYS *work );
 
-void STA_SCRIPT_SetScript( STA_SCRIPT_SYS *work , void *scriptData );
+//システム系
 
-const u8 STA_SCRIPT_GetRunningScriptNum( STA_SCRIPT_SYS *work );
+void	STA_BG_SetScrollOffset( STA_BG_SYS* work , const u16 bgOfs );
+void	STA_BG_CreateBg( STA_BG_SYS* work , const int arcId , const int datId );
+void	STA_BG_DeleteBg( STA_BG_SYS* work );
 
 
-#endif //STA_ACT_SCRIPT_H__
+#endif ACT_STA_BG_H__
