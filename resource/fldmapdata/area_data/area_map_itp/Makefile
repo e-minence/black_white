@@ -7,12 +7,12 @@
 #------------------------------------------------------------------------------
 #※コンバートを行う人のユーザーIDをここに書く
 #------------------------------------------------------------------------------
-USERS	= tomoya_takahashi fuchino
+USERS	= tomoya_takahashi
 
 #------------------------------------------------------------------------------
 #※ここに作成するnarc名を書く
 #------------------------------------------------------------------------------
-targetname = area_map_ita
+targetname = area_map_itp
 
 #------------------------------------------------------------------------------
 #※コピー先へのパスを書く（通常はPROJECT_ARCDIRでよい）
@@ -49,20 +49,22 @@ NCERFILE = $(NCEFILE:.nce=.NCER)
 NSCRFILE = $(NSCFILE:.nsc=.NSCR)
 	
 #3D
-NSBMDFILE = $(IMDFILE:.imd=.nsbmd)
+NSBTXFILE = $(IMDFILE:.imd=.nsbtx)
 NSBCAFILE = $(ICAFILE:.ica=.nsbca)
 NSBVAFILE = $(IVAFILE:.iva=.nsbva)
 NSBMAFILE = $(IMAFILE:.ima=.nsbma)
-NSBTPFILE = $(ITPFILE:.itp=.nsbtp)
+NSBTPFILE = $(ITPFILE:.itp=.itpdat)
 NSBTAFILE = $(ITAFILE:.ita=.nsbta)
 
 
 LIST_FILE 	= list.txt
 OBJ_FILE 	= $(NCLRFILE) $(NCERFILE) $(NSCRFILE) \
-			  $(NSBMDFILE) $(NSBCAFILE) $(NSBVAFILE) \
+			  $(NSBTXFILE) $(NSBCAFILE) $(NSBVAFILE) \
 			  $(NSBMAFILE) $(NSBTPFILE) $(NSBTAFILE)
 
 
+#ITPコンバータ
+ITP_CONV = $(PROJECT_ROOT)tools/imdtools/itp_conv/itp_conv.exe
 
 #------------------------------------------------------------------------------
 #	#サフィックス
@@ -71,7 +73,7 @@ OBJ_FILE 	= $(NCLRFILE) $(NCERFILE) $(NSCRFILE) \
 ifeq	($(CONVERTUSER),true)	
 
 
-.SUFFIXES: .ncl .nce .nsc .NCLR .NCER .NSCR .imd .ica .iva .ima .itp .ita .nsbmd .nsbtx .nsbca .nsbma .nsbva .nsbtp .nsbta
+.SUFFIXES: .ncl .nce .nsc .NCLR .NCER .NSCR .imd .ica .iva .ima .itp .ita .nsbmd .nsbtx .nsbca .nsbma .nsbva .itpdat .nsbta
 
 #コンバート環境
 #2d
@@ -85,8 +87,8 @@ ifeq	($(CONVERTUSER),true)
 	g2dcvtr $<
 
 #3d
-.imd.nsbmd:
-	g3dcvtr $<
+.imd.nsbtx:
+	g3dcvtr $< -etex
 
 .ica.nsbca:
 	g3dcvtr $<
@@ -97,9 +99,9 @@ ifeq	($(CONVERTUSER),true)
 .ima.nsbma:
 	g3dcvtr $<
 
-.itp.nsbtp:
-	g3dcvtr $<
-
+.itp.itpdat:
+	$(ITP_CONV) $< $@
+	
 .ita.nsbta:
 	g3dcvtr $<
 
@@ -128,7 +130,7 @@ $(TARGETDIR)/$(targetname).narc: $(targetname).narc
 ifeq	($(CONVERTUSER),true)	
 # コピー先のnarcが古い場合実行する
 $(targetname).narc: $(OBJ_FILE)
-	-ls *.N*R >> $(LIST_FILE)
+	-ls *.itpdat > $(LIST_FILE)
 	-ls *.nsb* >> $(LIST_FILE)
 	$(ARCLIST_MAKE) $(LIST_FILE)
 	nnsarc -c -l -n -i $(targetname) -S $(LIST_FILE)
@@ -147,7 +149,7 @@ clean:
 
 #コンバート対象者のみ、中間ファイル削除
 ifeq	($(CONVERTUSER),true)	
-	rm -f *.N*R
+	rm -f *.itpdat
 	rm -f *.nsb*
 	rm -f *.narc
 	rm -f *.naix
