@@ -30,13 +30,11 @@ include $(PROJECT_RSCDIR)\macro_define
 #------------------------------------------------------------------------------
 #※サブディレクトリでもMakeしたい場合、ここにディレクトリ名を書く
 #------------------------------------------------------------------------------
-ifeq ($(CONVERTUSER),true)
-SUBDIRS	= ../../../../pokemon_wb_doc/particle/battleeffect
-endif
+SUBDIRS	= 
 
 #コンバート対象のファイルツリーを生成
 
-.PHONY:	do-build clean sub_dir
+.PHONY:	do-build clean
 
 ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、コンバートのルールを有効にする
 .SUFFIXES:	
@@ -45,22 +43,23 @@ endif
 #------------------------------------------------------------------------------
 #	make do-build ルール
 #------------------------------------------------------------------------------
-do-build:
-	@$(MAKE_SUBDIR)
-	$(MAKE) -f mkbe.mk
+do-build:	$(TARGETDIR)/$(NARCNAME)
+
+$(TARGETDIR)/$(NARCNAME):	$(NARCNAME)
+	$(COPY)	$(NARCNAME) $(TARGETDIR)
+	$(COPY) $(NAIXNAME) $(TARGETDIR)
+	$(COPY) $(HEADNAME) $(TARGETDIR)
+
+ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、コンバートのルールを有効にする
+$(NARCNAME): *.spa
+	nnsarc -c -l -n -i $(NARCNAME) *.spa
+	$(NAIXCUT) $(NAIXNAME)
+	../../../tools/etd.exe $(NAIXNAME)
+endif
 
 #------------------------------------------------------------------------------
 #	make cleanルール
 #------------------------------------------------------------------------------
 clean:
-ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、コンバートのルールを有効にする
-	@$(MAKE_SUBDIR) clean
-	-rm -f *.spa
-	-rm -f *.h
-	-rm -f $(NARCNAME)
-	-rm -f $(NAIXNAME)
-endif
-	-rm -f $(TARGETDIR)/$(NARCNAME)
-	-rm -f $(TARGETDIR)/$(NAIXNAME)
 
 
