@@ -1,49 +1,20 @@
 #event data
-#save date:2009/05/26 20:44:51
+#save date:2009/05/26 21:03:23
 # linked worldmap file name
-c:\home\pokemon_wb\resource\fldmapdata\eventdata\data\t01r0101.wms
+C:\home\pokemon_wb\resource\fldmapdata\eventdata\data\t01R0201.wms
 #SECTION START:OBJ_EVENT
 #Map Event List data
-#save date:2009/05/26 20:44:51
+#save date:2009/05/26 21:03:23
 2
 #hold event type:
 1
 #hold event number:
-1
-#event number: 0
-#type
-1
-#ID name
-DUMMY_OBJ
-#OBJ CODE Number
-1
-#MOVE CODE Number
-1
-#EVENT TYPE Number
-1
-#Flag Name
 0
-#Event Script Name
-SCRID_DUMMY
-#Direction Type Number
-0
-#Parameter 0 Number
-0
-#Parameter 1 Number
-0
-#Parameter 2 Number
-0
-#Move Limit X Number
-0
-#Move Limit Z Number
-0
-#position
--160 0 176
 #Map Event List Data End
 #SECTION End:OBJ_EVENT
 #SECTION START:BG_EVENT
 #Map Event List data
-#save date:2009/05/26 20:44:51
+#save date:2009/05/26 21:03:23
 2
 #hold event type:
 1
@@ -53,7 +24,7 @@ SCRID_DUMMY
 #SECTION End:BG_EVENT
 #SECTION START:POS_EVENT
 #Map Event List data
-#save date:2009/05/26 20:44:51
+#save date:2009/05/26 21:03:23
 2
 #hold event type:
 1
@@ -63,19 +34,19 @@ SCRID_DUMMY
 #SECTION End:POS_EVENT
 #SECTION START:DOOR_EVENT
 #Map Event List data
-#save date:2009/05/26 20:44:51
+#save date:2009/05/26 21:03:23
 2
 #hold event type:
 1
 #hold event number:
-4
+3
 #event number: 0
 #Door Event Label
-DOOR_ID_T01R0101_EXIT01
+DOOR_ID_T01R0201_EXIT01
 #Next Zone ID Name
 ZONE_ID_T01
 #Next Door ID Name
-DOOR_ID_T01_EXIT01
+DOOR_ID_T01_EXIT02
 #Door Direction
 1
 #Door Type
@@ -84,11 +55,11 @@ DOOR_ID_T01_EXIT01
 -176 0 144
 #event number: 1
 #Door Event Label
-DOOR_ID_T01R0101_EXIT02
+DOOR_ID_T01R0201_EXIT02
 #Next Zone ID Name
 ZONE_ID_T01
 #Next Door ID Name
-DOOR_ID_T01_EXIT01
+DOOR_ID_T01_EXIT02
 #Door Direction
 1
 #Door Type
@@ -97,29 +68,16 @@ DOOR_ID_T01_EXIT01
 -160 0 144
 #event number: 2
 #Door Event Label
-DOOR_ID_T01R0101_EXIT03
+DOOR_ID_T01R0201_EXIT03
 #Next Zone ID Name
 ZONE_ID_T01
 #Next Door ID Name
-DOOR_ID_T01_EXIT01
+DOOR_ID_T01_EXIT02
 #Door Direction
 1
 #Door Type
 0
 #position
 -144 0 144
-#event number: 3
-#Door Event Label
-DOOR_ID_T01R0101_EXIT04
-#Next Zone ID Name
-ZONE_ID_T01R0102
-#Next Door ID Name
-DOOR_ID_T01R0102_EXIT01
-#Door Direction
-4
-#Door Type
-0
-#position
--208 8 224
 #Map Event List Data End
 #SECTION End:DOOR_EVENT
