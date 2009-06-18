@@ -1,50 +1,23 @@
+
 #! make -f
 #----------------------------------------------------------------------------
 # Project:  エリアデータ作成
 # File:     Makefile
 #
-# Copyright 2005 GameFreak.inc  All rights reserved.
-#
-#	2008.12.18	WB環境へ移植開始
+#	2009.06.16
 #----------------------------------------------------------------------------
 
-include area_common.def
-
-DQ		="
-#"
-#------------------------------------------------------------------------------
-#------------------------------------------------------------------------------
-#area_table.xls
-SRC_XLS_FILE	= $(subst $(DQ),,$(SRC_XLS_FILENAME))
-#area_table.txt
-SRC_TXT_FILE	= $(subst .xls,.txt,$(SRC_XLS_FILE))
-TEX_IMD_LIST	= $(subst $(DQ),,$(TEX_SRC_LIST_FILENAME))
-BUILDXLSLIST	=	build_xls_list.txt
-ORGAREAXLS	= org_areaxxo.xls
-ORGTEXSET	= org_tex_set.imd
-XLS	=	*.xls
-TXTDATA	=	*.txt
-TARGET_HEADER	=	$(subst $(DQ),,$(TARGET_HEADER_FILENAME))
-
-#"area_build_model
-BUILD_DIR		:= $(subst $(DQ),,$(BM_ARCHIVER_DIR))
-#AREABUILD_ARC	:= $(BUILD_DIR)/area_build.narc
-
-#NSBTXFILES_DIR	= nsbtx_files
-
-#AREA_TABLE	= area_table.txt
-
-TEX_DEPEND_FILES	= $(NSBTX_DEPEND_FILENAME) $(NNSARC_DEPEND_FILENAME) $(NNSARC_TEXLIST_FILENAME)
 
 #------------------------------------------------------------------------------
 #※コンバート作業が必要なユーザーの名前を記述する
 #------------------------------------------------------------------------------
-USERS	=	tamada nakatsui fuchino lee_hyunjung tomoya_takahashi
+USERS	=	tamada fuchino
 
 #------------------------------------------------------------------------------
 #※ここに作成するnarc名を書く
 #------------------------------------------------------------------------------
-TARGET		=	$(subst $(DQ),,$(TARGET_BIN_FILENAME))		#"area_data.bin
+TARGET		=	edgemarking.narc
+TARGET_HEADER = $(TARGET:.narc=.naix)
 
 #------------------------------------------------------------------------------
 #※コピー先へのパスを書く（通常はPROJECT_ARCDIRでよい）
@@ -54,7 +27,7 @@ TARGETDIR	= $(PROJECT_ARCDIR)fieldmap
 #------------------------------------------------------------------------------
 #※サブディレクトリでもMakeしたい場合、ここにディレクトリ名を書く
 #------------------------------------------------------------------------------
-SUBDIRS		=	edgemarking area_map_tex area_map_ita area_map_itp
+SUBDIRS		=	
 
 #共通ルールファイルのインクルード
 include $(PROJECT_RSCDIR)\macro_define
@@ -71,16 +44,15 @@ CLEANFILES	+=  $(TXTDATA)
 #----------------------------------------------------------------------------
 #	ツールへのパス指定
 #----------------------------------------------------------------------------
-LISTMK		= listmk.rb
-NEWFILE	= make_new_file.exe
-#TEXSET_MK	 = ruby mklst_texset.rb
 
+WKDIR	=	wkdir
 #----------------------------------------------------------------------------
 #	リスト作成時の読み込み元ファイル
 #----------------------------------------------------------------------------
-BUILD_LIST	=	build_list.txt
-TEX_LIST	=	$(subst $(DQ),,$(ARC_TEX_LIST_FILENAME))
-G_ANM_LIST	=	$(subst $(DQ),,$(ARC_ANM_LIST_FILENAME))
+SRC_XLS_FILE	= edgemarking.xls
+SRC_TXT_FILE	= $(SRC_XLS_FILE:.xls=.txt)
+
+LIST_FILE			= $(WKDIR)/edge.list
 
 #----------------------------------------------------------------------------
 #	中間ファイル
@@ -98,18 +70,14 @@ G_ANM_LIST	=	$(subst $(DQ),,$(ARC_ANM_LIST_FILENAME))
 #------------------------------------------------------------------------------
 #	make do-build ルール
 #------------------------------------------------------------------------------
-ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、バイナリ生成
-do-build:	area_map_tex.d  subdir $(TARGETDIR)/$(TARGET)
-else
 do-build:	subdir $(TARGETDIR)/$(TARGET)
-endif
 
 subdir:
 	$(MAKE_SUBDIR)
 
 $(TARGETDIR)/$(TARGET):	$(TARGET)
 	$(COPY) $(TARGET) $(TARGETDIR)
-	$(COPY) $(TARGET_HEADER) $(TARGETDIR)
+	#$(COPY) $(TARGET_HEADER) $(TARGETDIR)
 
 ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、バイナリ生成
 $(SRC_TXT_FILE):	$(SRC_XLS_FILE)
@@ -117,13 +85,12 @@ $(SRC_TXT_FILE):	$(SRC_XLS_FILE)
 	$(XLS2TAB) $(SRC_XLS_FILE) > $(SRC_TXT_FILE)
 
 $(TARGET):	$(SRC_TXT_FILE)
-	#エリアデータコンバート＋各種定義リスト生成
-	ruby area.rb $(SRC_TXT_FILE)
+	ruby make_edgemark.rb $(SRC_TXT_FILE)
+	nnsarc -c -l -n -i $(TARGET) -S $(LIST_FILE)
 
-area_map_tex.d: $(SRC_TXT_FILE)
-	#地形モデルテクスチャコンバート用定義生成
-	ruby area_map_tex.rb $(SRC_TXT_FILE)
 endif
+
+
 
 
 
@@ -132,7 +99,8 @@ endif
 clean:
 ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、バイナリ削除
 	-@rm $(TARGET) $(TARGET_HEADER)
-	-@rm $(subst $(DQ),,$(TEX_DEPEND_FILES))
+	-@rm $(SRC_TXT_FILE) $(LIST_FILE)
+	-@rm $(WKDIR)/*
 endif
 	@$(MAKE_SUBDIR)
 	-@rm $(CLEANFILES)
