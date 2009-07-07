@@ -3,14 +3,14 @@
 <imd version="1.6.0">
 
 <head>
-	<create user="lee_hyunjung" host="W00154A" date="2009-07-03T17:22:50" source="boy1.mb"/>
+	<create user="lee_hyunjung" host="W00154A" date="2009-07-03T17:30:45" source="boy2.mb"/>
 	<title>Model Data for NINTENDO NITRO-System</title>
 	<generator name="Maya 6.5 NNS_Export" version="1.6.0.20060417"/>
 </head>
 
 <body>
 
-<original_create user="lee_hyunjung" host="W00154A" date="2009-07-03T17:22:50" source="boy1.mb"/>
+<original_create user="lee_hyunjung" host="W00154A" date="2009-07-03T17:30:45" source="boy2.mb"/>
 <original_generator name="Maya 6.5 NNS_Export" version="1.6.0.20060417"/>
 
 <model_info
@@ -30,20 +30,20 @@
 <box_test pos_scale="3" xyz="-2.000000 0.000000 0.000000" whd="4.000000 4.000000 0.000000"/>
 
 <tex_image_array size="16">
-	<tex_image index="0" name="boy1.1"
+	<tex_image index="0" name="boy2.1"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.1.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.1.tga"
 	>
 		<bitmap size="256">
 			0000 0000 0000 0000 0000 1111 0000 0000
-			0000 1000 0111 1111 1111 1221 0000 0000
-			0000 1000 1122 1121 1212 1211 0000 0000
-			0000 1000 1212 1212 1212 1212 0000 0000
-			0000 1000 1122 1212 1121 1212 0000 0000
-			0000 1000 1212 1212 0121 1211 0001 0000
+			0000 1000 0111 1111 1111 1221 0001 0000
+			0000 1000 1122 1121 1212 2112 0001 0000
+			0000 1000 1212 1212 1212 2111 0001 0000
+			0000 1000 1122 1212 1121 1211 0001 0000
+			0000 1000 1212 1212 0121 1121 0001 0000
 			0000 1000 1122 1121 0121 2221 0001 0000
 			0000 1000 0111 0111 0111 1111 0001 0000
 			0000 0000 3200 5544 4455 0023 0000 0000
@@ -72,20 +72,20 @@
 			0000 0000 0000 0000 0000 0000 0000 0000
 		</bitmap>
 	</tex_image>
-	<tex_image index="1" name="boy1.10"
+	<tex_image index="1" name="boy2.10"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.10.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.10.tga"
 	>
 		<bitmap size="256">
 			0000 0000 0000 0000 0000 1111 0000 0000
-			0000 1000 0111 1111 1111 1221 0000 0000
-			0000 1000 1122 1121 1212 1211 0000 0000
-			0000 1000 1212 1212 1212 1212 0000 0000
-			0000 1000 1122 1212 1121 1212 0000 0000
-			0000 1000 1212 1212 0121 1211 0001 0000
+			0000 1000 0111 1111 1111 1221 0001 0000
+			0000 1000 1122 1121 1212 2112 0001 0000
+			0000 1000 1212 1212 1212 2111 0001 0000
+			0000 1000 1122 1212 1121 1211 0001 0000
+			0000 1000 1212 1212 0121 1121 0001 0000
 			0000 1000 1122 1121 0121 2221 0001 0000
 			0000 1000 0111 0111 0111 1111 0001 0000
 			0000 0000 4320 5555 4555 0024 0000 0000
@@ -114,20 +114,20 @@
 			0000 0000 0000 0000 0000 0000 0000 0000
 		</bitmap>
 	</tex_image>
-	<tex_image index="2" name="boy1.11"
+	<tex_image index="2" name="boy2.11"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.11.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.11.tga"
 	>
 		<bitmap size="256">
 			0000 0000 0000 0000 0000 1111 0000 0000
-			0000 1000 0111 1111 1111 1221 0000 0000
-			0000 1000 1122 1121 1212 1211 0000 0000
-			0000 1000 1212 1212 1212 1212 0000 0000
-			0000 1000 1122 1212 1121 1212 0000 0000
-			0000 1000 1212 1212 0121 1211 0001 0000
+			0000 1000 0111 1111 1111 1221 0001 0000
+			0000 1000 1122 1121 1212 2112 0001 0000
+			0000 1000 1212 1212 1212 2111 0001 0000
+			0000 1000 1122 1212 1121 1211 0001 0000
+			0000 1000 1212 1212 0121 1121 0001 0000
 			0000 1000 1122 1121 0121 2221 0001 0000
 			0000 1000 0111 0111 0111 1111 0001 0000
 			0000 0000 3200 5554 4455 0023 0000 0000
@@ -156,20 +156,20 @@
 			0000 0000 0000 0000 0000 0000 0000 0000
 		</bitmap>
 	</tex_image>
-	<tex_image index="3" name="boy1.12"
+	<tex_image index="3" name="boy2.12"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.12.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.12.tga"
 	>
 		<bitmap size="256">
 			0000 0000 0000 0000 0000 1111 0000 0000
-			0000 1000 0111 1111 1111 1221 0000 0000
-			0000 1000 1122 1121 1212 1211 0000 0000
-			0000 1000 1212 1212 1212 1212 0000 0000
-			0000 1000 1122 1212 1121 1212 0000 0000
-			0000 1000 1212 1212 0121 1211 0001 0000
+			0000 1000 0111 1111 1111 1221 0001 0000
+			0000 1000 1122 1121 1212 2112 0001 0000
+			0000 1000 1212 1212 1212 2111 0001 0000
+			0000 1000 1122 1212 1121 1211 0001 0000
+			0000 1000 1212 1212 0121 1121 0001 0000
 			0000 1000 1122 1121 0121 2221 0001 0000
 			0000 1000 0111 0111 0111 1111 0001 0000
 			0000 0000 4320 5555 4555 0024 0000 0000
@@ -198,20 +198,20 @@
 			0000 0000 0000 0000 0000 0000 0000 0000
 		</bitmap>
 	</tex_image>
-	<tex_image index="4" name="boy1.13"
+	<tex_image index="4" name="boy2.13"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.13.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.13.tga"
 	>
 		<bitmap size="256">
 			0000 0000 1111 0000 0000 0000 0000 0000
-			0000 0000 1221 1111 1111 1110 0001 0000
-			0000 0000 1121 2121 1211 2211 0001 0000
-			0000 0000 2121 2121 2121 2121 0001 0000
-			0000 0000 2121 1211 2121 2211 0001 0000
-			0000 1000 1121 1210 2121 2121 0001 0000
+			0000 1000 1221 1111 1111 1110 0001 0000
+			0000 1000 2112 2121 1211 2211 0001 0000
+			0000 1000 1112 2121 2121 2121 0001 0000
+			0000 1000 1121 1211 2121 2211 0001 0000
+			0000 1000 1211 1210 2121 2121 0001 0000
 			0000 1000 1222 1210 1211 2211 0001 0000
 			0000 1000 1111 1110 1110 1110 0001 0000
 			0000 0000 3200 5544 4555 0023 0000 0000
@@ -240,20 +240,20 @@
 			0000 0000 0000 0000 0000 0000 0000 0000
 		</bitmap>
 	</tex_image>
-	<tex_image index="5" name="boy1.14"
+	<tex_image index="5" name="boy2.14"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.14.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.14.tga"
 	>
 		<bitmap size="256">
 			0000 0000 1111 0000 0000 0000 0000 0000
-			0000 0000 1221 1111 1111 1110 0001 0000
-			0000 0000 1121 2121 1211 2211 0001 0000
-			0000 0000 2121 2121 2121 2121 0001 0000
-			0000 0000 2121 1211 2121 2211 0001 0000
-			0000 1000 1121 1210 2121 2121 0001 0000
+			0000 1000 1221 1111 1111 1110 0001 0000
+			0000 1000 2112 2121 1211 2211 0001 0000
+			0000 1000 1112 2121 2121 2121 0001 0000
+			0000 1000 1121 1211 2121 2211 0001 0000
+			0000 1000 1211 1210 2121 2121 0001 0000
 			0000 1000 1222 1210 1211 2211 0001 0000
 			0000 1000 1111 1110 1110 1110 0001 0000
 			0000 0000 4200 5554 5555 0234 0000 0000
@@ -282,20 +282,20 @@
 			0000 0000 0000 0000 0000 0000 0000 0000
 		</bitmap>
 	</tex_image>
-	<tex_image index="6" name="boy1.15"
+	<tex_image index="6" name="boy2.15"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.15.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.15.tga"
 	>
 		<bitmap size="256">
 			0000 0000 1111 0000 0000 0000 0000 0000
-			0000 0000 1221 1111 1111 1110 0001 0000
-			0000 0000 1121 2121 1211 2211 0001 0000
-			0000 0000 2121 2121 2121 2121 0001 0000
-			0000 0000 2121 1211 2121 2211 0001 0000
-			0000 1000 1121 1210 2121 2121 0001 0000
+			0000 1000 1221 1111 1111 1110 0001 0000
+			0000 1000 2112 2121 1211 2211 0001 0000
+			0000 1000 1112 2121 2121 2121 0001 0000
+			0000 1000 1121 1211 2121 2211 0001 0000
+			0000 1000 1211 1210 2121 2121 0001 0000
 			0000 1000 1222 1210 1211 2211 0001 0000
 			0000 1000 1111 1110 1110 1110 0001 0000
 			0000 0000 3200 5544 4555 0023 0000 0000
@@ -324,20 +324,20 @@
 			0000 0000 0000 0000 0000 0000 0000 0000
 		</bitmap>
 	</tex_image>
-	<tex_image index="7" name="boy1.16"
+	<tex_image index="7" name="boy2.16"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.16.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.16.tga"
 	>
 		<bitmap size="256">
 			0000 0000 1111 0000 0000 0000 0000 0000
-			0000 0000 1221 1111 1111 1110 0001 0000
-			0000 0000 1121 2121 1211 2211 0001 0000
-			0000 0000 2121 2121 2121 2121 0001 0000
-			0000 0000 2121 1211 2121 2211 0001 0000
-			0000 1000 1121 1210 2121 2121 0001 0000
+			0000 1000 1221 1111 1111 1110 0001 0000
+			0000 1000 2112 2121 1211 2211 0001 0000
+			0000 1000 1112 2121 2121 2121 0001 0000
+			0000 1000 1121 1211 2121 2211 0001 0000
+			0000 1000 1211 1210 2121 2121 0001 0000
 			0000 1000 1222 1210 1211 2211 0001 0000
 			0000 1000 1111 1110 1110 1110 0001 0000
 			0000 0000 4200 5554 5555 0234 0000 0000
@@ -366,20 +366,20 @@
 			0000 0000 0000 0000 0000 0000 0000 0000
 		</bitmap>
 	</tex_image>
-	<tex_image index="8" name="boy1.2"
+	<tex_image index="8" name="boy2.2"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.2.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.2.tga"
 	>
 		<bitmap size="256">
 			0000 0000 0000 0000 0000 1111 0000 0000
-			0000 1000 0111 1111 1111 1221 0000 0000
-			0000 1000 1122 1121 1212 1211 0000 0000
-			0000 1000 1212 1212 1212 1212 0000 0000
-			0000 1000 1122 1212 1121 1212 0000 0000
-			0000 1000 1212 1212 0121 1211 0001 0000
+			0000 1000 0111 1111 1111 1221 0001 0000
+			0000 1000 1122 1121 1212 2112 0001 0000
+			0000 1000 1212 1212 1212 2111 0001 0000
+			0000 1000 1122 1212 1121 1211 0001 0000
+			0000 1000 1212 1212 0121 1121 0001 0000
 			0000 1000 1122 1121 0121 2221 0001 0000
 			0000 1000 0111 0111 0111 1111 0001 0000
 			0000 0000 4320 5554 4555 0234 0000 0000
@@ -408,20 +408,20 @@
 			0000 0000 0000 0000 0000 0000 0000 0000
 		</bitmap>
 	</tex_image>
-	<tex_image index="9" name="boy1.3"
+	<tex_image index="9" name="boy2.3"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.3.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.3.tga"
 	>
 		<bitmap size="256">
 			0000 0000 0000 0000 0000 1111 0000 0000
-			0000 1000 0111 1111 1111 1221 0000 0000
-			0000 1000 1122 1121 1212 1211 0000 0000
-			0000 1000 1212 1212 1212 1212 0000 0000
-			0000 1000 1122 1212 1121 1212 0000 0000
-			0000 1000 1212 1212 0121 1211 0001 0000
+			0000 1000 0111 1111 1111 1221 0001 0000
+			0000 1000 1122 1121 1212 2112 0001 0000
+			0000 1000 1212 1212 1212 2111 0001 0000
+			0000 1000 1122 1212 1121 1211 0001 0000
+			0000 1000 1212 1212 0121 1121 0001 0000
 			0000 1000 1122 1121 0121 2221 0001 0000
 			0000 1000 0111 0111 0111 1111 0001 0000
 			0000 0000 3200 5544 4455 0023 0000 0000
@@ -450,20 +450,20 @@
 			0000 0000 0000 0000 0000 0000 0000 0000
 		</bitmap>
 	</tex_image>
-	<tex_image index="10" name="boy1.4"
+	<tex_image index="10" name="boy2.4"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.4.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.4.tga"
 	>
 		<bitmap size="256">
 			0000 0000 0000 0000 0000 1111 0000 0000
-			0000 1000 0111 1111 1111 1221 0000 0000
-			0000 1000 1122 1121 1212 1211 0000 0000
-			0000 1000 1212 1212 1212 1212 0000 0000
-			0000 1000 1122 1212 1121 1212 0000 0000
-			0000 1000 1212 1212 0121 1211 0001 0000
+			0000 1000 0111 1111 1111 1221 0001 0000
+			0000 1000 1122 1121 1212 2112 0001 0000
+			0000 1000 1212 1212 1212 2111 0001 0000
+			0000 1000 1122 1212 1121 1211 0001 0000
+			0000 1000 1212 1212 0121 1121 0001 0000
 			0000 1000 1122 1121 0121 2221 0001 0000
 			0000 1000 0111 0111 0111 1111 0001 0000
 			0000 0000 4320 5554 4555 0234 0000 0000
@@ -492,20 +492,20 @@
 			0000 0000 0000 0000 0000 0000 0000 0000
 		</bitmap>
 	</tex_image>
-	<tex_image index="11" name="boy1.5"
+	<tex_image index="11" name="boy2.5"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.5.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.5.tga"
 	>
 		<bitmap size="256">
 			0000 0000 0000 0000 0000 1111 0000 0000
-			0000 1000 0111 1111 1111 1221 0000 0000
-			0000 1000 1122 1121 1212 1211 0000 0000
-			0000 1000 1212 1212 1212 1212 0000 0000
-			0000 1000 1122 1212 1121 1212 0000 0000
-			0000 1000 1212 1212 0121 1211 0001 0000
+			0000 1000 0111 1111 1111 1221 0001 0000
+			0000 1000 1122 1121 1212 2112 0001 0000
+			0000 1000 1212 1212 1212 2111 0001 0000
+			0000 1000 1122 1212 1121 1211 0001 0000
+			0000 1000 1212 1212 0121 1121 0001 0000
 			0000 1000 1122 1121 0121 2221 0001 0000
 			0000 1000 0111 0111 0111 1111 0001 0000
 			0000 0000 3200 5544 4455 0023 0000 0000
@@ -534,20 +534,20 @@
 			0000 0000 0000 0000 0000 0000 0000 0000
 		</bitmap>
 	</tex_image>
-	<tex_image index="12" name="boy1.6"
+	<tex_image index="12" name="boy2.6"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.6.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.6.tga"
 	>
 		<bitmap size="256">
 			0000 0000 0000 0000 0000 1111 0000 0000
-			0000 1000 0111 1111 1111 1221 0000 0000
-			0000 1000 1122 1121 1212 1211 0000 0000
-			0000 1000 1212 1212 1212 1212 0000 0000
-			0000 1000 1122 1212 1121 1212 0000 0000
-			0000 1000 1212 1212 0121 1211 0001 0000
+			0000 1000 0111 1111 1111 1221 0001 0000
+			0000 1000 1122 1121 1212 2112 0001 0000
+			0000 1000 1212 1212 1212 2111 0001 0000
+			0000 1000 1122 1212 1121 1211 0001 0000
+			0000 1000 1212 1212 0121 1121 0001 0000
 			0000 1000 1122 1121 0121 2221 0001 0000
 			0000 1000 0111 0111 0111 1111 0001 0000
 			0000 0000 4320 5554 4555 0234 0000 0000
@@ -576,20 +576,20 @@
 			0000 0000 0000 0000 0000 0000 0000 0000
 		</bitmap>
 	</tex_image>
-	<tex_image index="13" name="boy1.7"
+	<tex_image index="13" name="boy2.7"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.7.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.7.tga"
 	>
 		<bitmap size="256">
 			0000 0000 0000 0000 0000 1111 0000 0000
-			0000 1000 0111 1111 1111 1221 0000 0000
-			0000 1000 1122 1121 1212 1211 0000 0000
-			0000 1000 1212 1212 1212 1212 0000 0000
-			0000 1000 1122 1212 1121 1212 0000 0000
-			0000 1000 1212 1212 0121 1211 0001 0000
+			0000 1000 0111 1111 1111 1221 0001 0000
+			0000 1000 1122 1121 1212 2112 0001 0000
+			0000 1000 1212 1212 1212 2111 0001 0000
+			0000 1000 1122 1212 1121 1211 0001 0000
+			0000 1000 1212 1212 0121 1121 0001 0000
 			0000 1000 1122 1121 0121 2221 0001 0000
 			0000 1000 0111 0111 0111 1111 0001 0000
 			0000 0000 3200 5544 4455 0023 0000 0000
@@ -618,20 +618,20 @@
 			0000 0000 0000 0000 0000 0000 0000 0000
 		</bitmap>
 	</tex_image>
-	<tex_image index="14" name="boy1.8"
+	<tex_image index="14" name="boy2.8"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.8.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.8.tga"
 	>
 		<bitmap size="256">
 			0000 0000 0000 0000 0000 1111 0000 0000
-			0000 1000 0111 1111 1111 1221 0000 0000
-			0000 1000 1122 1121 1212 1211 0000 0000
-			0000 1000 1212 1212 1212 1212 0000 0000
-			0000 1000 1122 1212 1121 1212 0000 0000
-			0000 1000 1212 1212 0121 1211 0001 0000
+			0000 1000 0111 1111 1111 1221 0001 0000
+			0000 1000 1122 1121 1212 2112 0001 0000
+			0000 1000 1212 1212 1212 2111 0001 0000
+			0000 1000 1122 1212 1121 1211 0001 0000
+			0000 1000 1212 1212 0121 1121 0001 0000
 			0000 1000 1122 1121 0121 2221 0001 0000
 			0000 1000 0111 0111 0111 1111 0001 0000
 			0000 0000 4320 5554 4555 0234 0000 0000
@@ -660,20 +660,20 @@
 			0000 0000 0000 0000 0000 0000 0000 0000
 		</bitmap>
 	</tex_image>
-	<tex_image index="15" name="boy1.9"
+	<tex_image index="15" name="boy2.9"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
 		color0_mode="transparency"
-		palette_name="boy1"
-		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy1/boy1.9.tga"
+		palette_name="boy2"
+		path="C:/home/pokemon_wb/resource/fldmmdl/mmdl_pict/boy2/boy2.9.tga"
 	>
 		<bitmap size="256">
 			0000 0000 0000 0000 0000 1111 0000 0000
-			0000 1000 0111 1111 1111 1221 0000 0000
-			0000 1000 1122 1121 1212 1211 0000 0000
-			0000 1000 1212 1212 1212 1212 0000 0000
-			0000 1000 1122 1212 1121 1212 0000 0000
-			0000 1000 1212 1212 0121 1211 0001 0000
+			0000 1000 0111 1111 1111 1221 0001 0000
+			0000 1000 1122 1121 1212 2112 0001 0000
+			0000 1000 1212 1212 1212 2111 0001 0000
+			0000 1000 1122 1212 1121 1211 0001 0000
+			0000 1000 1212 1212 0121 1121 0001 0000
 			0000 1000 1122 1121 0121 2221 0001 0000
 			0000 1000 0111 0111 0111 1111 0001 0000
 			0000 0000 3200 5554 4455 0023 0000 0000
@@ -705,7 +705,7 @@
 </tex_image_array>
 
 <tex_palette_array size="1">
-	<tex_palette index="0" name="boy1" color_size="16">
+	<tex_palette index="0" name="boy2" color_size="16">
 		4631 7fff 0000 3166 4a06 5ea9 20e4 3a7a
 		0ca8 56b5 2573 5f5f 363e 5dea 76f2 10cc
 	</tex_palette>
