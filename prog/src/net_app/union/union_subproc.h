@@ -1,19 +1,18 @@
 //==============================================================================
 /**
- * @file    union_event_check.h
- * @brief   ユニオン：イベント起動チェックのヘッダ
+ * @file    union_subproc.h
+ * @brief   
  * @author  matsuda
- * @date    2009.07.09(木)
+ * @date    2009.07.16(木)
  */
 //==============================================================================
 #pragma once
-
-#include "net_app/union/union_main.h"
 
 
 //==============================================================================
 //  外部関数宣言
 //==============================================================================
-extern GMEVENT * UnionEvent_CommCheck( GAMESYS_WORK *gsys, FIELDMAP_WORK *fieldWork );
-extern GMEVENT * UnionEvent_TalkCheck( GAMESYS_WORK *gsys, FIELDMAP_WORK *fieldWork );
+extern GMEVENT * UnionSubProc_Create(GAMESYS_WORK * gsys, FIELD_MAIN_WORK * fieldWork, UNION_SYSTEM_PTR unisys);
+extern void UnionSubProc_EventSet(UNION_SYSTEM_PTR unisys, UNION_SUBPROC_ID sub_proc_id, void *parent_wk);
+extern BOOL UnionSubProc_IsExits(UNION_SYSTEM_PTR unisys);
 
