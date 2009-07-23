@@ -1,31 +1,28 @@
 //==============================================================================
 /**
- * @file    union_subproc.h
- * @brief   
+ * @file    event_colosseum_battle.h
+ * @brief   コロシアムバトルイベント
  * @author  matsuda
- * @date    2009.07.16(木)
+ * @date    2009.07.22(水)
  */
 //==============================================================================
 #pragma once
-
-#include "app/pokelist.h"
-#include "app/p_status.h"
 
 
 //==============================================================================
 //  構造体定義
 //==============================================================================
-///ポケモンリストサブProc呼び出しようのParentWork
+///コロシアム戦闘用パラメータ
 typedef struct{
-  PLIST_DATA plist;
-  PSTATUS_DATA pstatus;
-}UNION_SUBPROC_PARENT_POKELIST;
+  POKEPARTY*      partyPlayer;  ///< プレイヤーのパーティ
+  POKEPARTY*      partyPartner; ///< 2vs2時の味方AI（不要ならnull）
+  POKEPARTY*      partyEnemy1;  ///< 1vs1時の敵AI, 2vs2時の１番目敵AI用
+  POKEPARTY*      partyEnemy2;  ///< 2vs2時の２番目敵AI用（不要ならnull）
+}COLOSSEUM_BATTLE_SETUP;
 
 
 //==============================================================================
 //  外部関数宣言
 //==============================================================================
-extern GMEVENT * UnionSubProc_Create(GAMESYS_WORK * gsys, FIELD_MAIN_WORK * fieldWork, UNION_SYSTEM_PTR unisys);
-extern void UnionSubProc_EventSet(UNION_SYSTEM_PTR unisys, UNION_SUBPROC_ID sub_proc_id, void *parent_wk);
-extern BOOL UnionSubProc_IsExits(UNION_SYSTEM_PTR unisys);
+extern GMEVENT* EVENT_ColosseumBattle(GAMESYS_WORK * gsys, FIELD_MAIN_WORK * fieldmap, UNION_PLAY_CATEGORY play_category, const COLOSSEUM_BATTLE_SETUP *setup);
 
