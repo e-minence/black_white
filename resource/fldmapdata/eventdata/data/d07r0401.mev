@@ -1,10 +1,10 @@
 #event data
-#save date:2009/07/25 15:22:10
+#save date:2009/07/25 15:15:01
 # linked worldmap file name
-C:\home\pokemon_wb\resource\fldmapdata\eventdata\data\c07.wms
+C:\home\pokemon_wb\resource\fldmapdata\eventdata\data\d07r0401.wms
 #SECTION START:OBJ_EVENT
 #Map Event List data
-#save date:2009/07/25 15:22:10
+#save date:2009/07/25 15:15:01
 2
 #hold event type:
 1
@@ -14,7 +14,7 @@ C:\home\pokemon_wb\resource\fldmapdata\eventdata\data\c07.wms
 #SECTION End:OBJ_EVENT
 #SECTION START:BG_EVENT
 #Map Event List data
-#save date:2009/07/25 15:22:10
+#save date:2009/07/25 15:15:01
 2
 #hold event type:
 1
@@ -24,7 +24,7 @@ C:\home\pokemon_wb\resource\fldmapdata\eventdata\data\c07.wms
 #SECTION End:BG_EVENT
 #SECTION START:POS_EVENT
 #Map Event List data
-#save date:2009/07/25 15:22:10
+#save date:2009/07/25 15:15:01
 2
 #hold event type:
 1
@@ -34,7 +34,7 @@ C:\home\pokemon_wb\resource\fldmapdata\eventdata\data\c07.wms
 #SECTION End:POS_EVENT
 #SECTION START:DOOR_EVENT
 #Map Event List data
-#save date:2009/07/25 15:22:10
+#save date:2009/07/25 15:15:01
 2
 #hold event type:
 1
@@ -42,107 +42,107 @@ C:\home\pokemon_wb\resource\fldmapdata\eventdata\data\c07.wms
 8
 #event number: 0
 #Door Event Label
-DOOR_ID_C07_C07R0201_EXIT01
+DOOR_ID_D07R0401_D07R0101_EXIT03
 #Next Zone ID Name
-ZONE_ID_C07R0201
+ZONE_ID_D07R0101
 #Next Door ID Name
-DOOR_ID_C07R0201_C07_EXIT02
+DOOR_ID_D07R0101_D07R0401_EXIT03
 #Door Direction
-EXIT_DIR_DOWN
+EXIT_DIR_UP
 #Door Type
-EXIT_TYPE_DOOR
+EXIT_TYPE_MAT
 #position
-208 3 -320
+16 0 -720
 #event number: 1
 #Door Event Label
-DOOR_ID_C07_C07R0101_EXIT01
+DOOR_ID_D07R0401_D07R0101_EXIT01
 #Next Zone ID Name
-ZONE_ID_C07R0101
+ZONE_ID_D07R0101
 #Next Door ID Name
-DOOR_ID_C07R0101_C07_EXIT02
+DOOR_ID_D07R0101_D07R0401_EXIT01
 #Door Direction
-EXIT_DIR_DOWN
+EXIT_DIR_UP
 #Door Type
-EXIT_TYPE_DOOR
+EXIT_TYPE_MAT
 #position
-320 3 -336
+-160 0 -144
 #event number: 2
 #Door Event Label
-DOOR_ID_C07_C07PC0101_EXIT01
+DOOR_ID_D07R0401_D07R0101_EXIT02
 #Next Zone ID Name
-ZONE_ID_C07PC0101
+ZONE_ID_D07R0101
 #Next Door ID Name
-DOOR_ID_C07PC0101_C07_EXIT02
+DOOR_ID_D07R0101_D07R0401_EXIT02
 #Door Direction
-EXIT_DIR_DOWN
+EXIT_DIR_UP
 #Door Type
-EXIT_TYPE_DOOR
+EXIT_TYPE_MAT
 #position
-432 32 -368
+528 0 -208
 #event number: 3
 #Door Event Label
-DOOR_ID_C07_C07R0301_EXIT01
+DOOR_ID_D07R0401_C07_EXIT01
 #Next Zone ID Name
-ZONE_ID_C07R0301
+ZONE_ID_C07
 #Next Door ID Name
-DOOR_ID_C07R0301_C07_EXIT02
+DOOR_ID_C07_D07R0401_EXIT01
 #Door Direction
-EXIT_DIR_RIGHT
+EXIT_DIR_LEFT
 #Door Type
-EXIT_TYPE_DOOR
+EXIT_TYPE_MAT
 #position
--80 32 -336
+736 0 32
 #event number: 4
 #Door Event Label
-DOOR_ID_C07_C07R0401_EXIT01
+DOOR_ID_D07R0401_D07R0301_EXIT01
 #Next Zone ID Name
-ZONE_ID_C07R0401
+ZONE_ID_D07R0301
 #Next Door ID Name
-DOOR_ID_C07R0401_C07_EXIT02
+DOOR_ID_D07R0301_D07R0401_EXIT01
 #Door Direction
-EXIT_DIR_RIGHT
+EXIT_DIR_UP
 #Door Type
-EXIT_TYPE_DOOR
+EXIT_TYPE_MAT
 #position
--80 32 -208
+64 0 144
 #event number: 5
 #Door Event Label
-DOOR_ID_C07_C07GYM0101_EXIT01
+DOOR_ID_D07R0401_D07R0501_EXIT01
 #Next Zone ID Name
-ZONE_ID_C07GYM0101
+ZONE_ID_D07R0501
 #Next Door ID Name
-DOOR_ID_C07GYM0101_C07_EXIT02
+DOOR_ID_D07R0501_D07R0401_EXIT01
 #Door Direction
 EXIT_DIR_DOWN
 #Door Type
-EXIT_TYPE_DOOR
+EXIT_TYPE_MAT
 #position
--80 0 112
+16 -48 -464
 #event number: 6
 #Door Event Label
-DOOR_ID_C07_D07R0401_EXIT01
+DOOR_ID_D07R0401_D07R0601_EXIT01
 #Next Zone ID Name
-ZONE_ID_D07R0401
+ZONE_ID_D07R0601
 #Next Door ID Name
-DOOR_ID_D07R0401_C07_EXIT01
+DOOR_ID_D07R0601_D07R0401_EXIT01
 #Door Direction
 EXIT_DIR_RIGHT
 #Door Type
 EXIT_TYPE_MAT
 #position
--144 32 -480
+544 0 -512
 #event number: 7
 #Door Event Label
-DOOR_ID_C07_D07R0401_EXIT02
+DOOR_ID_D07R0401_D07R0301_EXIT02
 #Next Zone ID Name
-ZONE_ID_D07R0401
+ZONE_ID_D07R0301
 #Next Door ID Name
-DOOR_ID_D07R0401_C07_EXIT01
+DOOR_ID_D07R0301_D07R0401_EXIT02
 #Door Direction
-EXIT_DIR_RIGHT
+EXIT_DIR_UP
 #Door Type
 EXIT_TYPE_MAT
 #position
--144 32 -496
+336 0 160
 #Map Event List Data End
 #SECTION End:DOOR_EVENT
