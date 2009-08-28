@@ -7,12 +7,12 @@
 #------------------------------------------------------------------------------
 #※コンバートを行う人のユーザーIDをここに書く
 #------------------------------------------------------------------------------
-USERS	= ohno
+USERS	= ohno ibe_mana
 
 #------------------------------------------------------------------------------
 #※ここに作成するnarc名を書く
 #------------------------------------------------------------------------------
-targetname = ircbattle
+targetname = trade
 
 #------------------------------------------------------------------------------
 #※コピー先へのパスを書く（通常はPROJECT_ARCDIRでよい）
@@ -26,6 +26,8 @@ SUBDIRS	=
 
 #共通ルールファイルのインクルード
 include	$(PROJECT_RSCDIR)\macro_define
+
+BTNTBL = ruby $(PROJECT_ROOT)/tools/btndata/gfl_hittbl.rb
 
 # 自動でリソースを集める
 lsources:=$(wildcard *.ncl)
@@ -77,11 +79,10 @@ $(TARGETDIR)/$(targetname).narc: $(targetname).narc
 
 ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、元ファイルからコンバートするルールを有効にする
 # コピー先のnarcが古い場合実行する
-$(targetname).narc: $(lobjects) $(gobjects) $(eobjects) $(cobjects) $(aobjects)
+$(targetname).narc: $(lobjects) $(gobjects) $(eobjects) $(cobjects) $(aobjects) Makefile
 	nnsarc -r -l -n -i $(targetname) $^
 	$(NAIXCUT) $(targetname).naix
-	$(DIFFCOPY) box_m_obj_NANR_LBLDEFS.h  $(TARGETDIR)../src/net_app/poke_trade
-	$(DIFFCOPY) p_st_obj_d_NANR_LBLDEFS.h  $(TARGETDIR)../src/net_app/poke_trade
+	$(DIFFCOPY) wb_trade_obj01_NANR_LBLDEFS.h  $(TARGETDIR)../src/net_app/poke_trade
 endif
 
 #------------------------------------------------------------------------------
@@ -98,6 +99,7 @@ ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、中間ファイル削除
 	rm -f *.NCLR
 	rm -f *.narc
 	rm -f *.naix
+	rm -r *.h
 	rm -f $(targetname).narc
 	rm -f $(targetname).naix
 endif
