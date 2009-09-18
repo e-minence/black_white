@@ -7,73 +7,88 @@
 #------------------------------------------------------------------------------
 #※コンバートを行う人のユーザーIDをここに書く
 #------------------------------------------------------------------------------
-#include ../land_data/users_def
-USERS	= tomoya_takahashi
+USERS	= tomoya_takahashi nakatsui tamada fuchino
 
 #------------------------------------------------------------------------------
 #※ここに作成するnarc名を書く
 #------------------------------------------------------------------------------
-targetname = 
+targetname = camera_scroll_original
 
 #------------------------------------------------------------------------------
 #※コピー先へのパスを書く（通常はPROJECT_ARCDIRでよい）
 #------------------------------------------------------------------------------
-TARGETDIR = $(PROJECT_ARCDIR)/fieldmap/
+TARGETDIR = $(PROJECT_ARCDIR)fieldmap
 
 #------------------------------------------------------------------------------
 #※サブディレクトリでもMakeしたい場合、ここにディレクトリ名を書く
 #------------------------------------------------------------------------------
-SUBDIRS	= indoor original
+SUBDIRS	=
 
 #共通ルールファイルのインクルード
 include	$(PROJECT_RSCDIR)\macro_define
 
 
-#情報
-LIST_FILE 	= list.txt
-
-#マップマトリックス
-MAP_MATRIX = ../map_matrix/map_matrix.xls
-MAP_MATRIX_FILE = map_matrix.txt
-
+#------------------------------------------------------------------------------
+#データ
+#------------------------------------------------------------------------------
+XLSFILE = original_camera_scroll.xls
+XLS_CSV_FILE = original_camera_scroll.txt
 #エクセルコンバーター
 CSV_CVTR	= $(PROJECT_ROOT)/tools/exceltool/ExcelSeetConv.exe
 
-#imdフォルダ
-IMD_FOLDER = ../land_data/land_res/
-IMD_FILE = $(wildcard $(IMD_FOLDER)*.imd)
+LIST_FILE 	= list.txt
+
+#------------------------------------------------------------------------------
+#ヘッダ参照先
+#------------------------------------------------------------------------------
+HEADERDIR = $(PROJECT_PROGDIR)src/field/
+
+HEADERDUMMY_TARGET = headerdummy.txt
+
+#------------------------------------------------------------------------------
+#	#サフィックス
+#	#コンバート対象者のみ、コンバートのルールを有効にする
+#------------------------------------------------------------------------------
+ifeq	($(CONVERTUSER),true)	
 
 
-ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、コンバートのルールを有効にする
-# サフィックスルールを定義することで 依存関係を自動で判断してくれる
-.SUFFIXES: 
+.SUFFIXES:
 
 endif
+
+
 
 .PHONY:	do-build clean subdir
 
 #------------------------------------------------------------------------------
 #	make do-build ルール
 #------------------------------------------------------------------------------
-do-build:	subdir 
+do-build:	subdir $(TARGETDIR)/$(targetname).narc
 
 subdir:
 	@$(MAKE_SUBDIR)
 
 # narc のコピーだけ実行する
-$(TARGETDIR)/$(targetname).narc: $(targetname).narc
+$(TARGETDIR)/$(targetname).narc: $(HEADERDUMMY_TARGET) $(targetname).narc 
 	$(COPY) $(targetname).narc $(TARGETDIR)
 	$(COPY) $(targetname).naix $(TARGETDIR)
 
 
-ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、元ファイルからコンバートするルールを有効にする
+#コンバート対象者のみ、元ファイルからコンバートするルールを有効にする
+ifeq	($(CONVERTUSER),true)	
 # コピー先のnarcが古い場合実行する
-$(targetname).narc: Makefile $(IMD_FILE) $(MAP_MATRIX)
-
-	$(CSV_CVTR) -o $(MAP_MATRIX_FILE) -p 1 $(MAP_MATRIX)
-	perl conv.pl $(MAP_MATRIX_FILE) $(IMD_FOLDER) $(LIST_FILE)
-	nnsarc -r -l -n -i $(targetname) -S $(LIST_FILE)
+$(targetname).narc: $(XLSFILE) $(HEADERDUMMY_TARGET)
+	$(CSV_CVTR) -o $(XLS_CSV_FILE) -p 1 $(XLSFILE)
+	perl conv.pl $(XLS_CSV_FILE) $(HEADERDIR)field_camera.h
+	-ls *.bin > $(LIST_FILE)
+	$(ARCLIST_MAKE) $(LIST_FILE)
+	nnsarc -c -l -n -i $(targetname) -S $(LIST_FILE)
 	$(NAIXCUT) $(targetname).naix
+	-rm	$(LIST_FILE)
+
+$(HEADERDUMMY_TARGET):$(HEADERDIR)field_camera.h
+	rm -f *.bin
+	echo このファイルは、headerが更新されたときにbinを作り直すために用意されています。 > $(HEADERDUMMY_TARGET)
 endif
 
 #------------------------------------------------------------------------------
@@ -82,12 +97,16 @@ endif
 #------------------------------------------------------------------------------
 clean:
 	@$(MAKE_SUBDIR)
-ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、中間ファイル削除
-	rm -r *.bin
+	rm -f $(TARGETDIR)/$(targetname).narc
+	rm -f $(TARGETDIR)/$(targetname).naix
+
+#コンバート対象者のみ、中間ファイル削除
+ifeq	($(CONVERTUSER),true)	
+	rm -f *.bin
 	rm -f $(targetname).narc
 	rm -f $(targetname).naix
 endif
-	rm -f $(TARGETDIR)/$(targetname).narc
-	rm -f $(TARGETDIR)/$(targetname).naix
+
+
 
 
