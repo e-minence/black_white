@@ -22,7 +22,7 @@ TARGETDIR = $(PROJECT_ARCDIR)
 #------------------------------------------------------------------------------
 #※サブディレクトリでもMakeしたい場合、ここにディレクトリ名を書く
 #------------------------------------------------------------------------------
-SUBDIRS	= ball
+SUBDIRS	=
 
 #共通ルールファイルのインクルード
 include	$(PROJECT_RSCDIR)\macro_define
@@ -71,14 +71,16 @@ subdir:
 
 # narc のコピーだけ実行する
 $(TARGETDIR)/$(targetname).narc: $(targetname).narc
-	$(COPY) $(targetname).narc $(TARGETDIR)
-	$(COPY) $(targetname).naix $(TARGETDIR)
+#	$(COPY) $(targetname).narc $(TARGETDIR)
+#	$(COPY) $(targetname).naix $(TARGETDIR)
 
 ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、元ファイルからコンバートするルールを有効にする
 # コピー先のnarcが古い場合実行する
 $(targetname).narc: $(lobjects) $(gobjects) $(sobjects) $(eobjects) $(aobjects) $(cobjects)
-	nnsarc -c -l -n -i $(targetname) -S app_menu_common.scr
-	$(NAIXCUT) $(targetname).naix
+	CP *.NCGR ./../
+	CP *.NCLR ./../
+	CP *.NCER ./../
+	CP *.NANR ./../
 endif
 
 #------------------------------------------------------------------------------
@@ -92,13 +94,6 @@ ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、中間ファイル削除
 	rm -f *.NCLR
 	rm -f *.NCER
 	rm -f *.NANR
-	rm -f *.NSCR
-	rm -f *.narc
-	rm -f *.naix
-	rm -f $(targetname).narc
-	rm -f $(targetname).naix
 endif
-	rm -f $(TARGETDIR)/$(targetname).narc
-	rm -f $(TARGETDIR)/$(targetname).naix
 
 
