@@ -71,10 +71,10 @@ BOOL SODATEYA_WORK_IsValidPokemon( const SODATEYA_WORK* work, int index );
 //===========================================================================================
 
 // 飼育ポケモンの数
-int SODATEYA_WORK_GetPokemonNum( const SODATEYA_WORK* work );
+int SODATEYA_WORK_GetPokemonNum( SODATEYA_WORK* work );
 
 // 飼育ポケモンの成長経験値
-u32 SODATEYA_WORK_GetGrowUpExp( const SODATEYA_WORK* work, int index );
+u32 SODATEYA_WORK_GetGrowUpExp( SODATEYA_WORK* work, int index );
 
 
 //===========================================================================================
@@ -83,9 +83,6 @@ u32 SODATEYA_WORK_GetGrowUpExp( const SODATEYA_WORK* work, int index );
 
 // 飼育ポケモンを並べ替える
 void SODATEYA_WORK_ExchangePokemon( SODATEYA_WORK* work, int index1, int index2 );
-
-// 成長経験値を増やす
-void SODATEYA_WORK_AddGrowUpExp( SODATEYA_WORK* work, u32 exp );
 
 
 //===========================================================================================

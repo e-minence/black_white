@@ -15,7 +15,7 @@
 #include "poke_tool/pokeparty.h"
 #include "savedata/save_tbl.h"
 #include "savedata/save_control.h"
-#include "savedata/sodateya_work.h"
+#include "savedata/sodateya_wors.h"
 
 
 //===========================================================================================
@@ -42,8 +42,8 @@ typedef struct
 //===========================================================================================
 struct _SODATEYA_WORK
 {
-  SODATEYA_POKE_DATA poke[SODATEYA_POKE_MAX]; // 飼育ポケモン
-  SODATEYA_EGG_DATA  egg;                     // タマゴ
+  SODATEYA_POKE_DATA poke[ SODATEYA_POKE_MAX ];  // 飼育ポケモン
+  SODATEYA_EGG_DATA  egg;   // タマゴ
 };
 
 
@@ -85,10 +85,8 @@ void SODATEYA_WORK_SetEgg( SODATEYA_WORK* work, const POKEMON_PARAM* egg )
     OBATA_Printf( "------------------------------------------------\n" );
     OBATA_Printf( "SODATEYA_WORK_SetEgg: すでにタマゴが存在します。\n" );
     OBATA_Printf( "------------------------------------------------\n" );
-    return;
   }
   work->egg.param = *egg;
-  work->egg.valid = TRUE;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -241,7 +239,7 @@ BOOL SODATEYA_WORK_IsValidPokemon( const SODATEYA_WORK* work, int index )
  * @return 飼育ポケモンの数
  */
 //-------------------------------------------------------------------------------------------
-int SODATEYA_WORK_GetPokemonNum( const SODATEYA_WORK* work )
+int SODATEYA_WORK_GetPokemonNum( SODATEYA_WORK* work )
 {
   int i;
   int num = 0;
@@ -263,7 +261,7 @@ int SODATEYA_WORK_GetPokemonNum( const SODATEYA_WORK* work )
  * @return 指定した飼育ポケモンの成長経験値
  */
 //-------------------------------------------------------------------------------------------
-u32 SODATEYA_WORK_GetGrowUpExp( const SODATEYA_WORK* work, int index )
+u32 SODATEYA_WORK_GetGrowUpExp( SODATEYA_WORK* work, int index )
 {
   // インデックスの有効判定
   if( (index < 0) || (SODATEYA_POKE_MAX <= index) )
@@ -309,28 +307,6 @@ void SODATEYA_WORK_ExchangePokemon( SODATEYA_WORK* work, int index1, int index2 
   temp               = work->poke[index1];
   work->poke[index1] = work->poke[index2];
   work->poke[index2] = temp;
-}
-
-//-------------------------------------------------------------------------------------------
-/**
- * @brief 成長経験値を増やす
- *
- * @param work 育て屋ワーク
- * @param exp  加算する経験値
- */
-//-------------------------------------------------------------------------------------------
-void SODATEYA_WORK_AddGrowUpExp( SODATEYA_WORK* work, u32 exp )
-{
-  int i;
-
-  // 有効な飼育ポケモンデータのみ, 経験値を加算する
-  for( i=0; i<SODATEYA_POKE_MAX; i++ )
-  {
-    if( work->poke[i].valid == TRUE )
-    {
-      work->poke[i].growUpExp += exp;
-    }
-  }
 }
 
 
