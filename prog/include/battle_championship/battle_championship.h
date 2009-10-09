@@ -1,15 +1,14 @@
 //======================================================================
 /**
- * @file	irc_battle.h
- * @brief	赤外線バトル
+ * @file	battle_championship.h
+ * @brief	大会メニュー
  * @author	ariizumi
- * @data	09/10/06
+ * @data	09/10/08
  *
- * モジュール名：IRC_BATTLE
+ * モジュール名：BATTLE_CHAMPINONSHIP
  */
 //======================================================================
 #pragma once
-#include "battle_championship/battle_championship_def.h"
 
 //======================================================================
 //	define
@@ -26,19 +25,12 @@
 //	typedef struct
 //======================================================================
 #pragma mark [> struct
-typedef struct
-{
-  BATTLE_CHAMPIONSHIP_DATA *csData;
-  MYSTATUS    *statusPlayer; ///< プレイヤーのステータス
-  MYITEM      *itemData;     ///< アイテムデータ
-  BAG_CURSOR  *bagCursor;    ///< バッグカーソルデータ
-}IRC_BATTLE_INIT_WORK;
 
 //======================================================================
 //	proto
 //======================================================================
 #pragma mark [> proto
-extern GFL_PROC_DATA IRC_BATTLE_ProcData;
+extern GFL_PROC_DATA BATTLE_CHAMPIONSHIP_ProcData;
 
 //--------------------------------------------------------------
 //	
