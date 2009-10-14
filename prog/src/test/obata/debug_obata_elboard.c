@@ -1,5 +1,5 @@
 #include <gflib.h>
-#include "debug_obata_ica_test_setup.h"
+#include "debug_obata_elboard_setup.h"
 #include "system/ica_anime.h"
 #include "system/main.h"
 #include "arc/arc_def.h"
@@ -7,16 +7,14 @@
 
 
 //============================================================================================
-/**
- * @brief 3Dデータ
- */
+// ■リソース
 //============================================================================================
 
-// サイコロ
 static const GFL_G3D_UTIL_RES res_table_dice[] = 
 {
   { ARCID_OBATA_DEBUG, NARC_debug_obata_dice_nsbmd, GFL_G3D_UTIL_RESARC },
 };
+
 static const GFL_G3D_UTIL_OBJ obj_table_dice[] = 
 {
   {
@@ -42,18 +40,6 @@ static const GFL_G3D_UTIL_SETUP setup[] =
 };
 
 // アニメーションデータ
-typedef enum
-{
-  ANIME_SRT,
-  ANIME_SR,
-  ANIME_ST,
-  ANIME_RT,
-  ANIME_S,
-  ANIME_R,
-  ANIME_T,
-  ANIME_MODE_NUM
-} ANIME_MODE;
-
 static ARCDATID anime_dat_id[] = 
 {
   NARC_debug_obata_dice_anime_srt_bin,
@@ -73,11 +59,10 @@ static ARCDATID anime_dat_id[] =
 //============================================================================================
 typedef struct
 {
+  u32 frame;
   GFL_G3D_UTIL* g3dUtil;
   u16 unitIndex[ SETUP_INDEX_MAX ];
 
-  ANIME_MODE animeMode;
-  ICA_ANIME* icaAnime;
   GFL_G3D_CAMERA* camera;
 }
 PROC_WORK;
@@ -92,8 +77,7 @@ static void Initialize( PROC_WORK* work );
 static void Finalize( PROC_WORK* work );
 static BOOL Main( PROC_WORK* work );
 static void Draw( PROC_WORK* work );
-static void DrawDice( GFL_G3D_OBJ* obj, ICA_ANIME* anime );
-static void SetAnimeMode( PROC_WORK* work, ANIME_MODE );
+static void UpdateCamera( PROC_WORK* work );
 
 
 //============================================================================================
@@ -101,7 +85,7 @@ static void SetAnimeMode( PROC_WORK* work, ANIME_MODE );
  * @brief 初期化関数
  */
 //============================================================================================
-static GFL_PROC_RESULT DEBUG_OBATA_ICA_TEST_MainProcFunc_Init( GFL_PROC* proc, int* seq, void* pwk, void* mywk )
+static GFL_PROC_RESULT DEBUG_OBATA_ELBOARD_MainProcFunc_Init( GFL_PROC* proc, int* seq, void* pwk, void* mywk )
 {
 	PROC_WORK* work = NULL;
 
@@ -112,9 +96,8 @@ static GFL_PROC_RESULT DEBUG_OBATA_ICA_TEST_MainProcFunc_Init( GFL_PROC* proc, i
 	work = GFL_PROC_AllocWork( proc, sizeof( PROC_WORK ), HEAPID_OBATA_DEBUG );
 
   // 初期化処理
-  DEBUG_OBATA_ICA_TEST_Init( HEAPID_OBATA_DEBUG );
+  DEBUG_OBATA_ELBOARD_Init( HEAPID_OBATA_DEBUG );
   Initialize( work );
-  SetAnimeMode( work, ANIME_SRT );
 
 	return GFL_PROC_RES_FINISH;
 }
@@ -125,7 +108,7 @@ static GFL_PROC_RESULT DEBUG_OBATA_ICA_TEST_MainProcFunc_Init( GFL_PROC* proc, i
  * @brief メイン関数
  */
 //============================================================================================
-static GFL_PROC_RESULT DEBUG_OBATA_ICA_TEST_MainProcFunc_Main( GFL_PROC* proc, int* seq, void* pwk, void* mywk )
+static GFL_PROC_RESULT DEBUG_OBATA_ELBOARD_MainProcFunc_Main( GFL_PROC* proc, int* seq, void* pwk, void* mywk )
 {
 	PROC_WORK* work = mywk;
   BOOL end = FALSE;
@@ -153,7 +136,7 @@ static GFL_PROC_RESULT DEBUG_OBATA_ICA_TEST_MainProcFunc_Main( GFL_PROC* proc, i
  * @brief 終了関数
  */
 //============================================================================================
-static GFL_PROC_RESULT DEBUG_OBATA_ICA_TEST_MainProcFunc_End( GFL_PROC* proc, int* seq, void* pwk, void* mywk )
+static GFL_PROC_RESULT DEBUG_OBATA_ELBOARD_MainProcFunc_End( GFL_PROC* proc, int* seq, void* pwk, void* mywk )
 {
 	PROC_WORK* work = mywk;
 
@@ -161,10 +144,9 @@ static GFL_PROC_RESULT DEBUG_OBATA_ICA_TEST_MainProcFunc_End( GFL_PROC* proc, in
   Finalize( work );
 
 	// ワークを破棄
-  ICA_ANIME_Delete( work->icaAnime );
 	GFL_PROC_FreeWork( proc );
 
-  DEBUG_OBATA_ICA_TEST_Exit();
+  DEBUG_OBATA_ELBOARD_Exit();
 
   // ヒープを破棄
   GFL_HEAP_DeleteHeap( HEAPID_OBATA_DEBUG );
@@ -178,11 +160,11 @@ static GFL_PROC_RESULT DEBUG_OBATA_ICA_TEST_MainProcFunc_End( GFL_PROC* proc, in
  * @brief プロセス定義データ
  */
 //============================================================================================
-const GFL_PROC_DATA DebugObataIcaTestMainProcData = 
+const GFL_PROC_DATA DebugObataElboardMainProcData = 
 {
-	DEBUG_OBATA_ICA_TEST_MainProcFunc_Init,
-	DEBUG_OBATA_ICA_TEST_MainProcFunc_Main,
-	DEBUG_OBATA_ICA_TEST_MainProcFunc_End,
+	DEBUG_OBATA_ELBOARD_MainProcFunc_Init,
+	DEBUG_OBATA_ELBOARD_MainProcFunc_Main,
+	DEBUG_OBATA_ELBOARD_MainProcFunc_End,
 };
 
 
@@ -226,13 +208,9 @@ static void Initialize( PROC_WORK* work )
     }
   }
 
-  // icaデータをロード
-  work->icaAnime = ICA_ANIME_CreateStreamingAlloc(
-      HEAPID_OBATA_DEBUG, ARCID_OBATA_DEBUG, NARC_debug_obata_dice_anime_srt_bin, 10 );
-
   // カメラ作成
   {
-    VecFx32    pos = { 0, 0, 50 * FX32_ONE };
+    VecFx32    pos = { 0, 0, 5*FX32_ONE };
     VecFx32 target = { 0, 0, 0 };
     VecFx32     up = { 0, FX32_ONE, 0 };
     fx32       far = FX32_ONE * 4096;
@@ -240,6 +218,9 @@ static void Initialize( PROC_WORK* work )
     GFL_G3D_CAMERA_GetCamUp( work->camera, &up );
     GFL_G3D_CAMERA_SetFar( work->camera, &far );
   }
+
+  // その他初期化
+  work->frame = 0;
 }
 
 //--------------------------------------------------------------------------------------------
@@ -273,16 +254,11 @@ static void Finalize( PROC_WORK* work )
 static BOOL Main( PROC_WORK* work )
 {
   int trg = GFL_UI_KEY_GetTrg();
-  int key = GFL_UI_KEY_GetCont();
+  int key = GFL_UI_KEY_GetCont(); 
+  if( trg & PAD_BUTTON_SELECT ) return TRUE; // セレクトで終了
 
-  // モード切替
-  if( trg & PAD_BUTTON_A )
-  {
-    ANIME_MODE next = (work->animeMode + 1) % ANIME_MODE_NUM;
-    SetAnimeMode( work, next );
-  }
-  // セレクトで終了
-  if( trg & PAD_BUTTON_SELECT ) return TRUE;
+  // フレームカウンタ更新
+  work->frame++;
   return FALSE;
 }
 
@@ -293,14 +269,13 @@ static BOOL Main( PROC_WORK* work )
 //-------------------------------------------------------------------------------------------- 
 static void Draw( PROC_WORK* work )
 {
-  const fx32 anime_speed = FX32_ONE;
-  GFL_G3D_OBJSTATUS status;
-
+  GFL_G3D_OBJSTATUS status; 
   VEC_Set( &status.trans, 0, 0, 0 );
   VEC_Set( &status.scale, FX32_ONE, FX32_ONE, FX32_ONE );
   MTX_Identity33( &status.rotate );
 
   // カメラ更新
+  UpdateCamera( work );
   GFL_G3D_CAMERA_Switching( work->camera );
 
   // 描画
@@ -308,71 +283,17 @@ static void Draw( PROC_WORK* work )
   GFL_G3D_DRAW_SetLookAt();
   {
     GFL_G3D_OBJ* obj = GFL_G3D_UTIL_GetObjHandle( work->g3dUtil, work->unitIndex[SETUP_INDEX_DICE] );
-    DrawDice( obj, work->icaAnime );
+    GFL_G3D_DRAW_DrawObject( obj, &status );
   }
   GFL_G3D_DRAW_End();
-
-  // アニメーションを進める
-  ICA_ANIME_IncAnimeFrame( work->icaAnime, anime_speed );
-}
-
+} 
 
 //--------------------------------------------------------------------------------------------
 /**
- * @breif サイコロ描画
+ * @breif カメラを更新する
  */
 //-------------------------------------------------------------------------------------------- 
-static void DrawDice( GFL_G3D_OBJ* obj, ICA_ANIME* anime )
+static void UpdateCamera( PROC_WORK* work )
 {
-  VecFx32 scaleval, rotval, transval;
-  BOOL havescale, haverot, havetrans;
-  GFL_G3D_OBJSTATUS status;
-
-  VEC_Set( &status.trans, 0, 0, 0 );
-  VEC_Set( &status.scale, FX32_ONE, FX32_ONE, FX32_ONE );
-  MTX_Identity33( &status.rotate );
-
-  havetrans = ICA_ANIME_GetTranslate( anime, &transval );
-  haverot   = ICA_ANIME_GetRotate( anime, &rotval );
-  havescale = ICA_ANIME_GetScale( anime, &scaleval );
-
-  if( havetrans )
-  {
-    VEC_Set( &status.trans, transval.x, transval.y, transval.z );
-  }
-  if( haverot )
-  {
-    float x, y, z;
-    u16 rx, ry, rz;
-    x = FX_FX32_TO_F32( rotval.x );
-    y = FX_FX32_TO_F32( rotval.y );
-    z = FX_FX32_TO_F32( rotval.z );
-    while( x < 0 ) x += 360.0f;
-    while( y < 0 ) y += 360.0f;
-    while( z < 0 ) z += 360.0f;
-    rx = x / 360.0f * 0xffff;
-    ry = y / 360.0f * 0xffff;
-    rz = z / 360.0f * 0xffff; 
-    GFL_CALC3D_MTX_CreateRot( rx, ry, rz, &status.rotate );
-  }
-  if( havescale )
-  {
-    VEC_Set( &status.scale, scaleval.x, scaleval.y, scaleval.z );
-  }
-
-  // 描画
-  GFL_G3D_DRAW_DrawObject( obj, &status );
-}
-
-//--------------------------------------------------------------------------------------------
-/**
- * @breif サイコロ描画
- */
-//-------------------------------------------------------------------------------------------- 
-static void SetAnimeMode( PROC_WORK* work, ANIME_MODE mode )
-{ 
-  work->animeMode = mode;
-  ICA_ANIME_Delete( work->icaAnime );
-  work->icaAnime = ICA_ANIME_CreateStreamingAlloc(
-      HEAPID_OBATA_DEBUG, ARCID_OBATA_DEBUG, anime_dat_id[ mode ], 10 );
+  GFL_G3D_CAMERA_Switching( work->camera );
 }
