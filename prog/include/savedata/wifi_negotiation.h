@@ -1,14 +1,15 @@
 #pragma once
 //============================================================================================
 /**
- * @file	  c_gear_data.h
- * @brief	  CGEARでセーブしておくデータ
+ * @file	  wifi_negotiation.h
+ * @brief	  WIFIネゴシエーション用ともだち履歴データ
  * @author	k.ohno
- * @date	  2009.05.14
+ * @date	  2009.10.16
  */
 //============================================================================================
 
 #include <gflib.h>
+#include <dwc.h>
 #include "savedata/save_control.h"	//SAVE_CONTROL_WORK
 
 
@@ -17,35 +18,25 @@
  * @brief	C-GEARの保存情報
  */
 //----------------------------------------------------------
-typedef struct _CGEAR_SAVEDATA CGEAR_SAVEDATA;
+typedef struct _WIFI_NEGOTIATION_SAVEDATA WIFI_NEGOTIATION_SAVEDATA;
 
-#define C_GEAR_PANEL_WIDTH   (9)
-#define C_GEAR_PANEL_HEIGHT  (4)
-
-/// 
-typedef enum {
-  CGEAR_PANELTYPE_NONE,
-  CGEAR_PANELTYPE_IR,
-  CGEAR_PANELTYPE_WIRELESS,
-  CGEAR_PANELTYPE_WIFI,
-  CGEAR_PANELTYPE_MAX,
-} CGEAR_PANELTYPE_ENUM;
+#define WIFI_NEGOTIATION_DATAMAX   (100)
 
 
 
 //----------------------------------------------------------
 //	セーブデータシステムが依存する関数
 //----------------------------------------------------------
-extern int CGEAR_SV_GetWorkSize(void);
-extern CGEAR_SAVEDATA* CGEAR_SV_AllocWork(HEAPID heapID);
-extern void CGEAR_SV_Init(CGEAR_SAVEDATA* pSV);
+extern int WIFI_NEGOTIATION_SV_GetWorkSize(void);
+extern WIFI_NEGOTIATION_SAVEDATA* WIFI_NEGOTIATION_SV_AllocWork(HEAPID heapID);
+extern void WIFI_NEGOTIATION_SV_Init(WIFI_NEGOTIATION_SAVEDATA* pSV);
 
-extern CGEAR_PANELTYPE_ENUM CGEAR_SV_GetPanelType(CGEAR_SAVEDATA* pSV,int x, int y);
-extern void CGEAR_SV_SetPanelType(CGEAR_SAVEDATA* pSV,int x, int y, CGEAR_PANELTYPE_ENUM type);
+extern void WIFI_NEGOTIATION_SV_SetFriend(WIFI_NEGOTIATION_SAVEDATA* pSV,DWCAccFriendData* pFriendData);
+extern DWCAccFriendData* WIFI_NEGOTIATION_SV_GetFriend(WIFI_NEGOTIATION_SAVEDATA* pSV,int index);
 
 //----------------------------------------------------------
 //	セーブデータ取得のための関数
 //----------------------------------------------------------
-extern CGEAR_SAVEDATA* CGEAR_SV_GetCGearSaveData(SAVE_CONTROL_WORK* pSave);
+extern WIFI_NEGOTIATION_SAVEDATA* WIFI_NEGOTIATION_SV_GetSaveData(SAVE_CONTROL_WORK* pSave);
 
 
