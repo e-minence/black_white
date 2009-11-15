@@ -4,7 +4,7 @@
 <gmml version="4.5">
 
 <head>
-	<create user="ohno" host="W00141" date="2009-11-15T17:53:11"/>
+	<create user="ohno" host="W00141" date="2009-11-15T20:01:22"/>
 	<generator name="MessageEditor" version="4.9.2.5"/>
 </head>
 
@@ -274,7 +274,7 @@
 	</tag-table>
 
 	<columns>
-		<id position="0" width="237"/>
+		<id position="0" width="117"/>
 		<group default=" 0:デフォルト" position="-1" width="100">
 			<list entry="0" japanese="デフォルト" english="Default" colorID="0"/>
 		</group>
@@ -305,15 +305,15 @@
 		</language>
 	</columns>
 
-	<dialog left="35" top="235" right="740" bottom="863" maximized="no" rayout="Vertical2">
+	<dialog left="248" top="176" right="953" bottom="796" maximized="no" rayout="Vertical2">
 		<comment-input left="733" top="589" right="1080" bottom="739" visible="no"/>
-		<tag-palette left="647" top="229" right="1175" bottom="751" visible="no"/>
+		<tag-palette left="736" top="133" right="1209" bottom="531" visible="no"/>
 		<band id="0" index="0" style="0000" width="530"/>
 		<band id="1" index="1" style="0000" width="165"/>
 		<band id="2" index="2" style="0000" width="697"/>
 		<band id="3" index="3" style="0000" width="697"/>
 		<edit entry="0" language="JPN" mode="Edit" spell-check="-1"/>
-		<edit entry="1" language="JPN_KANJI" mode="Edit" spell-check="-1"/>
+		<edit entry="1" language="JPN" mode="Preview" spell-check="-1"/>
 		<edit entry="2" language="JPN" mode="Source" spell-check="-1"/>
 		<edit entry="3" language="JPN" mode="Source" spell-check="-1"/>
 	</dialog>
@@ -333,447 +333,38 @@
 	</lock>
 
 
-	<row id="DEBUG_FIELD_STR00">
-		<language name="JPN" width="80">▲</language>
-		<language name="JPN_KANJI" width="80">▲</language>
+	<row id="GTSNEGO_001">
+		<language name="JPN" width="256">Wi-Fiコネクション に
+せつぞく　しますか？</language>
+		<language name="JPN_KANJI" width="256">Wi-Fiコネクション に
+せつぞく　しますか？</language>
 	</row>
 
-	<row id="DEBUG_FIELD_STR01">
-		<language name="JPN" width="80">テスト</language>
-		<language name="JPN_KANJI" width="80">テスト</language>
+	<row id="GTSNEGO_002">
+		<language name="JPN" width="256">はい</language>
+		<language name="JPN_KANJI" width="256">はい</language>
 	</row>
 
-	<row id="DEBUG_FIELD_STR02">
-		<language name="JPN" width="80">カメラ操作</language>
-		<language name="JPN_KANJI" width="80">カメラ操作</language>
+	<row id="GTSNEGO_003">
+		<language name="JPN" width="256">いいえ</language>
+		<language name="JPN_KANJI" width="256">いいえ</language>
 	</row>
 
-	<row id="DEBUG_FIELD_STR03">
-		<language name="JPN" width="80">スケールきりかえ</language>
-		<language name="JPN_KANJI" width="80">スケール切かえ</language>
+	<row id="GTSNEGO_004">
+		<language name="JPN" width="256">Wi-Fiコネクションに　せつぞく
+しています。しばらく　おまちください</language>
+		<language name="JPN_KANJI" width="256">Wi-Fiコネクションに　せつぞく
+しています。しばらく　おまちください</language>
 	</row>
 
-	<row id="DEBUG_FIELD_STR04">
-		<language name="JPN" width="80">スケール調節</language>
-		<language name="JPN_KANJI" width="80">スケール調節</language>
+	<row id="GTSNEGO_005">
+		<language name="JPN" width="256">だれでも　こうかん</language>
+		<language name="JPN_KANJI" width="256">だれでも　こうかん</language>
 	</row>
 
-	<row id="DEBUG_FIELD_C_CHOICE00">
-		<language name="JPN" width="80">通信開始</language>
-		<language name="JPN_KANJI" width="80">通信開始</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_CHOICE01">
-		<language name="JPN" width="80">侵入開始</language>
-		<language name="JPN_KANJI" width="80">侵入開始</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_CHOICE02">
-		<language name="JPN" width="80">はい</language>
-		<language name="JPN_KANJI" width="80">はい</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_CHOICE03">
-		<language name="JPN" width="80">いいえ</language>
-		<language name="JPN_KANJI" width="80">いいえ</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_CHOICE04">
-		<language name="JPN" width="80">カード</language>
-		<language name="JPN_KANJI" width="80">カード</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_CHOICE05">
-		<language name="JPN" width="80">バトル</language>
-		<language name="JPN_KANJI" width="80">バトル</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_CHOICE06">
-		<language name="JPN" width="80">やめる</language>
-		<language name="JPN_KANJI" width="80">やめる</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_CHOICE07">
-		<language name="JPN" width="80">通信終了</language>
-		<language name="JPN_KANJI" width="80">通信終了</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_CHOICE08">
-		<language name="JPN" width="80">パレス募集</language>
-		<language name="JPN_KANJI" width="80">パレス募集</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_CHOICE09">
-		<language name="JPN" width="80">パレス侵入</language>
-		<language name="JPN_KANJI" width="80">パレス侵入</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_STR00">
-		<language name="JPN" width="80">通信を開始します。
-よろしいですか？</language>
-		<language name="JPN_KANJI" width="80">通信を開始します。
-よろしいですか？</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_STR01">
-		<language name="JPN" width="80">侵入を開始します。
-よろしいですか？</language>
-		<language name="JPN_KANJI" width="80">侵入を開始します。
-よろしいですか？</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_STR02">
-		<language name="JPN" width="80">話しかけました。</language>
-		<language name="JPN_KANJI" width="80">話しかけました。</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_STR03">
-		<language name="JPN" width="80">話しかけられました。</language>
-		<language name="JPN_KANJI" width="80">話しかけられました。</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_STR04">
-		<language name="JPN" width="80">相手の終了を待っています。</language>
-		<language name="JPN_KANJI" width="80">相手の終了を待っています。</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_STR05">
-		<language name="JPN" width="80">トレーナーカードを
-見せてくれないか？</language>
-		<language name="JPN_KANJI" width="80">トレーナーカードを
-見せてくれないか？</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_STR06">
-		<language name="JPN" width="80">バトルを　しないか？</language>
-		<language name="JPN_KANJI" width="80">バトルを　しないか？</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_STR07">
-		<language name="JPN" width="80">相手の返事を　待っています。</language>
-		<language name="JPN_KANJI" width="80">相手の返事を　待っています。</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_STR08">
-		<language name="JPN" width="80">何をしますか？</language>
-		<language name="JPN_KANJI" width="80">何をしますか？</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_STR09">
-		<language name="JPN" width="80">相手が終了しました。</language>
-		<language name="JPN_KANJI" width="80">相手が終了しました。</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_STR10">
-		<language name="JPN" width="80">しばらくお待ちください</language>
-		<language name="JPN_KANJI" width="80">しばらくお待ちください</language>
-	</row>
-
-	<row id="DEBUG_FIELD_C_STR11">
-		<language name="JPN" width="80">断られました。</language>
-		<language name="JPN_KANJI" width="80">断られました。</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR05">
-		<language name="JPN" width="80">マップせんい</language>
-		<language name="JPN_KANJI" width="80">マップせん移</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR06">
-		<language name="JPN" width="80">四季ジャンプ</language>
-		<language name="JPN_KANJI" width="80">四季ジャンプ</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR07">
-		<language name="JPN" width="80">カメラサンプル</language>
-		<language name="JPN_KANJI" width="80">カメラサンプル</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR08">
-		<language name="JPN" width="80">リセット</language>
-		<language name="JPN_KANJI" width="80">リセット</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR09">
-		<language name="JPN" width="80">すぎもり</language>
-		<language name="JPN_KANJI" width="80">すぎもり</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR10">
-		<language name="JPN" width="80">ますだ０</language>
-		<language name="JPN_KANJI" width="80">ますだ０</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR11">
-		<language name="JPN" width="80">ますだ１</language>
-		<language name="JPN_KANJI" width="80">ますだ１</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR12">
-		<language name="JPN" width="80">せきがいせん</language>
-		<language name="JPN_KANJI" width="80">赤外線</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR13">
-		<language name="JPN" width="80">MMODEL LIST</language>
-		<language name="JPN_KANJI" width="80">MMODEL LIST</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR14">
-		<language name="JPN" width="80">ともだちこーど</language>
-		<language name="JPN_KANJI" width="80">ともだちこーど</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR15">
-		<language name="JPN" width="80">ライト</language>
-		<language name="JPN_KANJI" width="80">ライト</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR16">
-		<language name="JPN" width="80">てんき</language>
-		<language name="JPN_KANJI" width="80">てんき</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR17">
-		<language name="JPN" width="80">ざひょう</language>
-		<language name="JPN_KANJI" width="80">座標</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR18">
-		<language name="JPN" width="160">ブロック\[1:01:ニックネーム:0\]＿\[1:01:ニックネーム:1\]
-グリッド\[1:03:トレーナー名:2\]＿\[1:03:トレーナー名:3\]</language>
-		<language name="JPN_KANJI" width="160">ブロック\[1:01:ニックネーム:0\]＿\[1:01:ニックネーム:1\]
-グリッド\[1:03:トレーナー名:2\]＿\[1:03:トレーナー名:3\]</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR19">
-		<language name="JPN" width="160">WIFICLUB</language>
-		<language name="JPN_KANJI" width="160">WIFICLUB</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR20">
-		<language name="JPN" width="160">ターゲットそうさ</language>
-		<language name="JPN_KANJI" width="160">ターゲット操作</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR21">
-		<language name="JPN" width="160">ミュージカル</language>
-		<language name="JPN_KANJI" width="160">ミュージカル</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR22">
-		<language name="JPN" width="160">じかん</language>
-		<language name="JPN_KANJI" width="160">時間</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR23">
-		<language name="JPN" width="160">08:00</language>
-		<language name="JPN_KANJI" width="160">08:00</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR24">
-		<language name="JPN" width="160">12:00</language>
-		<language name="JPN_KANJI" width="160">12:00</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR25">
-		<language name="JPN" width="160">18:00</language>
-		<language name="JPN_KANJI" width="160">18:00</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR26">
-		<language name="JPN" width="160">22:00</language>
-		<language name="JPN_KANJI" width="160">22:00</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR27">
-		<language name="JPN" width="160">02:00</language>
-		<language name="JPN_KANJI" width="160">02:00</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR28">
-		<language name="JPN" width="160">じかん600ばい</language>
-		<language name="JPN_KANJI" width="160">時間600倍</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR29">
-		<language name="JPN" width="160">じかん60ばい</language>
-		<language name="JPN_KANJI" width="160">時間60倍</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR30">
-		<language name="JPN" width="160">DSじかん</language>
-		<language name="JPN_KANJI" width="160">DS時間</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR_SPRING">
-		<language name="JPN" width="160">はる</language>
-		<language name="JPN_KANJI" width="160">春</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR_SUMMER">
-		<language name="JPN" width="160">なつ</language>
-		<language name="JPN_KANJI" width="160">夏</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR_AUTUMN">
-		<language name="JPN" width="160">あき</language>
-		<language name="JPN_KANJI" width="160">秋</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR_WINTER">
-		<language name="JPN" width="160">ふゆ</language>
-		<language name="JPN_KANJI" width="160">冬</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR_SUBSCRN">
-		<language name="JPN" width="160">したがめん</language>
-		<language name="JPN_KANJI" width="160">下画面</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR_SUBSCRN01">
-		<language name="JPN" width="160">カメラそうさ</language>
-		<language name="JPN_KANJI" width="160">カメラ操作</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR_SUBSCRN02">
-		<language name="JPN" width="160">サウンドビューワー</language>
-		<language name="JPN_KANJI" width="160">サウンドビューワー</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR_SUBSCRN03">
-		<language name="JPN" width="160">ＣＧＥＲＡ</language>
-		<language name="JPN_KANJI" width="160">ＣＧＥＲＡ</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR_SUBSCRN04">
-		<language name="JPN" width="160">メニュー</language>
-		<language name="JPN_KANJI" width="160">メニュー</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR_SUBSCRN05">
-		<language name="JPN" width="160">ユニオン</language>
-		<language name="JPN_KANJI" width="160">ユニオン</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR_MUSICAL1">
-		<language name="JPN" width="160">ドレスアップ</language>
-		<language name="JPN_KANJI" width="160">ドレスアップ</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR_MUSICAL2">
-		<language name="JPN" width="160">ショーパート</language>
-		<language name="JPN_KANJI" width="160">ショーパート</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR_MUSICAL3">
-		<language name="JPN" width="160">ミュージカル</language>
-		<language name="JPN_KANJI" width="160">ミュージカル</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR31">
-		<language name="JPN" width="160">なみのり</language>
-		<language name="JPN_KANJI" width="160">波乗り</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR32">
-		<language name="JPN" width="160">アイテムさくせい</language>
-		<language name="JPN_KANJI" width="160">アイテム作成</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR33">
-		<language name="JPN" width="160">[1:09:どうぐ名:1]</language>
-		<language name="JPN_KANJI" width="160">[1:09:どうぐ名:1]</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR34">
-		<language name="JPN" width="160">×[2:02:３桁:2]</language>
-		<language name="JPN_KANJI" width="160">×[2:02:３桁:2]</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR35">
-		<language name="JPN" width="160">[2:02:３桁:0]</language>
-		<language name="JPN_KANJI" width="160">[2:02:３桁:0]</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR36">
-		<language name="JPN" width="160">フォグそうさ</language>
-		<language name="JPN_KANJI" width="160">フォグ操作</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR37">
-		<language name="JPN" width="160">ポケボックスMAX</language>
-		<language name="JPN_KANJI" width="160">ポケボックスMAX</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR38">
-		<language name="JPN" width="160">そらをとぶ</language>
-		<language name="JPN_KANJI" width="160">空を飛ぶ</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR39">
-		<language name="JPN" width="160">アイテムMAX</language>
-		<language name="JPN_KANJI" width="160">アイテムMAX</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR40">
-		<language name="JPN" width="160">性別変更</language>
-		<language name="JPN_KANJI" width="160">性別変更</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR41">
-		<language name="JPN" width="160">ポケモンさくせい</language>
-		<language name="JPN_KANJI" width="160">ポケモン作成</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR42">
-		<language name="JPN" width="160">GTS</language>
-		<language name="JPN_KANJI" width="160">GTS</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR43">
-		<language name="JPN" width="160">ジャンプ</language>
-		<language name="JPN_KANJI" width="160">ジャンプ</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR44">
-		<language name="JPN" width="160">UIテンプレート</language>
-		<language name="JPN_KANJI" width="160">UIテンプレート</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR45">
-		<language name="JPN" width="160">怪力</language>
-		<language name="JPN_KANJI" width="160">怪力</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR46">
-		<language name="JPN" width="160">線形カメラ操作</language>
-		<language name="JPN_KANJI" width="160">線形カメラ操作</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR47">
-		<language name="JPN" width="160">Yボタン登録操作</language>
-		<language name="JPN_KANJI" width="160">Yボタン登録操作</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR48">
-		<language name="JPN" width="160">GDS</language>
-		<language name="JPN_KANJI" width="160">GDS</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR49">
-		<language name="JPN" width="160">友達コード配信</language>
-		<language name="JPN_KANJI" width="160">友達コード配信</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR50">
-		<language name="JPN" width="160">わざおしえ</language>
-		<language name="JPN_KANJI" width="160">技教え</language>
-	</row>
-
-	<row id="DEBUG_FIELD_STR51">
-		<language name="JPN" width="160">GTSネゴ</language>
-		<language name="JPN_KANJI" width="160">GTSネゴ</language>
+	<row id="GTSNEGO_006">
+		<language name="JPN" width="256">しりあい　こうかん</language>
+		<language name="JPN_KANJI" width="256">しりあい　こうかん</language>
 	</row>
 
 	<flowchart-group-list>
