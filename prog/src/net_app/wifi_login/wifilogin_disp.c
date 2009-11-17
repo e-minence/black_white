@@ -11,7 +11,6 @@
 #include <dwc.h>
 
 #include "arc_def.h"
-#include "net_app/gsync.h"
 
 #include "infowin/infowin.h"
 #include "system/main.h"
@@ -34,13 +33,13 @@
 #include "../../field/event_ircbattle.h"
 #include "app/app_taskmenu.h"  //APP_TASKMENU_INITWORK
 
-#include "gtsnego_local.h"
-#include "msg/msg_gtsnego.h"
-#include "gtsnego.naix"
+#include "wifilogin_local.h"
+//#include "msg/msg_gtsnego.h"
+#include "wifi_login.naix"
 
 
 
-struct _GTSNEGO_DISP_WORK {
+struct _WIFILOGIN_DISP_WORK {
 	u32 subchar;
   u32 mainchar;
   HEAPID heapID;
@@ -73,13 +72,13 @@ static GFL_BG_SYS_HEADER BGsys_data = {
   GX_DISPMODE_GRAPHICS, GX_BGMODE_0, GX_BGMODE_0, GX_BG0_AS_2D,
 };
 
-static void dispInit(GTSNEGO_DISP_WORK* pWork);
-static void settingSubBgControl(GTSNEGO_DISP_WORK* pWork);
+static void dispInit(WIFILOGIN_DISP_WORK* pWork);
+static void settingSubBgControl(WIFILOGIN_DISP_WORK* pWork);
 
 
-GTSNEGO_DISP_WORK* GTSNEGO_DISP_Init(HEAPID id)
+WIFILOGIN_DISP_WORK* WIFILOGIN_DISP_Init(HEAPID id)
 {
-  GTSNEGO_DISP_WORK* pWork = GFL_HEAP_AllocClearMemory(id, sizeof(GTSNEGO_DISP_WORK));
+  WIFILOGIN_DISP_WORK* pWork = GFL_HEAP_AllocClearMemory(id, sizeof(WIFILOGIN_DISP_WORK));
   pWork->heapID = id;
 
 
@@ -100,11 +99,11 @@ GTSNEGO_DISP_WORK* GTSNEGO_DISP_Init(HEAPID id)
   return pWork;
 }
 
-void GTSNEGO_DISP_Main(GTSNEGO_DISP_WORK* pWork)
+void WIFILOGIN_DISP_Main(WIFILOGIN_DISP_WORK* pWork)
 {
 }
 
-void GTSNEGO_DISP_End(GTSNEGO_DISP_WORK* pWork)
+void WIFILOGIN_DISP_End(WIFILOGIN_DISP_WORK* pWork)
 {
   GFL_BG_FillCharacterRelease( GFL_BG_FRAME1_S, 1, 0);
   GFL_BG_FillCharacterRelease( GFL_BG_FRAME2_S, 1, 0);
@@ -117,7 +116,7 @@ void GTSNEGO_DISP_End(GTSNEGO_DISP_WORK* pWork)
 }
 
 
-static void settingSubBgControl(GTSNEGO_DISP_WORK* pWork)
+static void settingSubBgControl(WIFILOGIN_DISP_WORK* pWork)
 {
 
   // 背景面
@@ -196,32 +195,32 @@ static void settingSubBgControl(GTSNEGO_DISP_WORK* pWork)
   }
 }
 
-static void dispInit(GTSNEGO_DISP_WORK* pWork)
+static void dispInit(WIFILOGIN_DISP_WORK* pWork)
 {
 	{
-    ARCHANDLE* p_handle = GFL_ARC_OpenDataHandle( ARCID_GTSNEGO, pWork->heapID );
+    ARCHANDLE* p_handle = GFL_ARC_OpenDataHandle( ARCID_WIFI_LOGIN, pWork->heapID );
 
-    GFL_ARCHDL_UTIL_TransVramPalette( p_handle, NARC_gtsnego_nego_under_bg_NCLR,
+    GFL_ARCHDL_UTIL_TransVramPalette( p_handle, NARC_wifi_login_conect_NCLR,
                                       PALTYPE_SUB_BG, 0, 0,  pWork->heapID);
     // サブ画面BG0キャラ転送
-    pWork->subchar = GFL_ARCHDL_UTIL_TransVramBgCharacterAreaMan( p_handle, NARC_gtsnego_nego_under_bg_NCGR,
+    pWork->subchar = GFL_ARCHDL_UTIL_TransVramBgCharacterAreaMan( p_handle, NARC_wifi_login_conect_sub_NCGR,
                                                                   GFL_BG_FRAME0_S, 0, 0, pWork->heapID);
 
     // サブ画面BG0スクリーン転送
-    GFL_ARCHDL_UTIL_TransVramScreenCharOfs(   p_handle, NARC_gtsnego_nego_under_bg1_NSCR,
+    GFL_ARCHDL_UTIL_TransVramScreenCharOfs(   p_handle, NARC_wifi_login_conect_sub_NSCR,
                                               GFL_BG_FRAME0_S, 0,
                                               GFL_ARCUTIL_TRANSINFO_GetPos(pWork->subchar), 0, 0,
                                               pWork->heapID);
 
 
-    GFL_ARCHDL_UTIL_TransVramPalette( p_handle, NARC_gtsnego_nego_back_NCLR,
+    GFL_ARCHDL_UTIL_TransVramPalette( p_handle, NARC_wifi_login_conect_NCLR,
                                       PALTYPE_MAIN_BG, 0, 0,  pWork->heapID);
     // サブ画面BG0キャラ転送
-    pWork->mainchar = GFL_ARCHDL_UTIL_TransVramBgCharacterAreaMan( p_handle, NARC_gtsnego_nego_back_NCGR,
+    pWork->mainchar = GFL_ARCHDL_UTIL_TransVramBgCharacterAreaMan( p_handle, NARC_wifi_login_conect_NCGR,
                                                                   GFL_BG_FRAME0_M, 0, 0, pWork->heapID);
 
     // サブ画面BG0スクリーン転送
-    GFL_ARCHDL_UTIL_TransVramScreenCharOfs(   p_handle, NARC_gtsnego_nego_back_NSCR,
+    GFL_ARCHDL_UTIL_TransVramScreenCharOfs(   p_handle, NARC_wifi_login_conect_01_NSCR,
                                               GFL_BG_FRAME0_M, 0,
                                               GFL_ARCUTIL_TRANSINFO_GetPos(pWork->mainchar), 0, 0,
                                               pWork->heapID);

@@ -11,7 +11,7 @@
 #include <dwc.h>
 
 #include "arc_def.h"
-#include "net_app/gtsnego.h"
+#include "net_app/wifi_login.h"
 #include "net/network_define.h"
 #include "net/dwc_rap.h"
 
@@ -38,9 +38,9 @@
 //#include "msg/msg_gtsnego.h"
 #include "msg/msg_wifi_system.h"
 #include "../../field/event_gtsnego.h"
-#include "gtsnego.naix"
+#include "wifi_login.naix"
 #include "app/app_taskmenu.h"  //APP_TASKMENU_INITWORK
-#include "gtsnego_local.h"
+#include "wifilogin_local.h"
 
 #if PM_DEBUG
 #define _NET_DEBUG (1)  //デバッグ時は１
@@ -75,6 +75,56 @@ static void* _getFriendData(void* pWork);  //DWCFriendData
 static void _deleteFriendList(int deletedIndex,int srcIndex, void* pWork);
 
 
+///通信コマンドテーブル
+static const NetRecvFuncTable _PacketTbl[] = {
+  {_RecvFirstData,         NULL},    ///NET_CMD_FIRST
+};
+
+#define _MAXNUM   (2)         // 最大接続人数
+#define _MAXSIZE  (100)        // 最大送信バイト数
+#define _BCON_GET_NUM (16)    // 最大ビーコン収集数
+
+static GFLNetInitializeStruct aGFLNetInit = {
+  _PacketTbl,  // 受信関数テーブル
+  NELEMS(_PacketTbl), // 受信テーブル要素数
+  NULL,    ///< ハードで接続した時に呼ばれる
+  _connectCallBack,    ///< ネゴシエーション完了時にコール
+  NULL,   // ユーザー同士が交換するデータのポインタ取得関数
+  NULL,   // ユーザー同士が交換するデータのサイズ取得関数
+  _BeaconGetFunc,  // ビーコンデータ取得関数
+  _BeaconGetSizeFunc,  // ビーコンデータサイズ取得関数
+  _BeaconCompFunc,  // ビーコンのサービスを比較して繋いで良いかどうか判断する
+  NULL,            // 普通のエラーが起こった場合 通信終了
+  FatalError_Disp,  // 通信不能なエラーが起こった場合呼ばれる 切断するしかない
+  NULL, //_endCallBack,  // 通信切断時に呼ばれる関数
+  NULL,  // オート接続で親になった場合
+  NULL,     ///< wifi接続時に自分のデータをセーブする必要がある場合に呼ばれる関数
+  NULL, ///< wifi接続時にフレンドコードの入れ替えを行う必要がある場合呼ばれる関数
+  _deleteFriendList,  ///< wifiフレンドリスト削除コールバック
+  _getFriendData,   ///< DWC形式の友達リスト
+  _getMyUserData,  ///< DWCのユーザデータ（自分のデータ）
+  GFL_NET_DWC_HEAPSIZE,   ///< DWCへのHEAPサイズ
+  TRUE,        ///< デバック用サーバにつなぐかどうか
+  SYASHI_NETWORK_GGID,  
+  GFL_HEAPID_APP,  //元になるheapid
+  HEAPID_NETWORK,  //通信用にcreateされるHEAPID
+  HEAPID_WIFI,  //wifi用にcreateされるHEAPID
+  HEAPID_IRC,   //※check　赤外線通信用にcreateされるHEAPID
+  GFL_WICON_POSX, GFL_WICON_POSY,        // 通信アイコンXY位置
+  _MAXNUM,     // 最大接続人数
+  _MAXSIZE,  //最大送信バイト数
+  _BCON_GET_NUM,    // 最大ビーコン収集数
+  TRUE,     // CRC計算
+  FALSE,     // MP通信＝親子型通信モードかどうか
+  GFL_NET_TYPE_WIFI,  //wifi通信を行うかどうか
+  TRUE,     // 親が再度初期化した場合、つながらないようにする場合TRUE
+  WB_NET_COMPATI_CHECK,  //GameServiceID
+  0xfffe,	// 赤外線タイムアウト時間
+  0,//MP通信親機送信バイト数
+  0,//dummy
+};
+
+
 
 //--------------------------------------------
 // 内部ワーク
@@ -90,11 +140,11 @@ enum _IBMODE_SELECT {
 
 
 
-typedef void (StateFunc)(GTSNEGO_WORK* pState);
-typedef BOOL (TouchFunc)(int no, GTSNEGO_WORK* pState);
+typedef void (StateFunc)(WIFILOGIN_WORK* pState);
+typedef BOOL (TouchFunc)(int no, WIFILOGIN_WORK* pState);
 
 
-struct _GTSNEGO_WORK {
+struct _WIFILOGIN_WORK {
   StateFunc* state;      ///< ハンドルのプログラム状態
   TouchFunc* touch;
   int selectType;   // 接続タイプ
@@ -107,8 +157,8 @@ struct _GTSNEGO_WORK {
   BOOL bSaving;
   SAVE_CONTROL_WORK* pSave;
   APP_TASKMENU_WORK* pAppTask;
-  GTSNEGO_DISP_WORK* pDispWork;  // 描画系
-  GTSNEGO_MESSAGE_WORK* pMessageWork; //メッセージ系
+  WIFILOGIN_DISP_WORK* pDispWork;  // 描画系
+  WIFILOGIN_MESSAGE_WORK* pMessageWork; //メッセージ系
   WIFI_LIST* pList;
   EVENT_GTSNEGO_WORK * dbw;  //親のワーク
   GAMESYS_WORK *gameSys_;
@@ -121,18 +171,18 @@ struct _GTSNEGO_WORK {
 //-----------------------------------------------
 //static 定義
 //-----------------------------------------------
-static void _changeState(GTSNEGO_WORK* pWork,StateFunc* state);
-static void _changeStateDebug(GTSNEGO_WORK* pWork,StateFunc* state, int line);
+static void _changeState(WIFILOGIN_WORK* pWork,StateFunc* state);
+static void _changeStateDebug(WIFILOGIN_WORK* pWork,StateFunc* state, int line);
 
-static void _modeSelectMenuInit(GTSNEGO_WORK* pWork);
-static void _modeSelectMenuWait(GTSNEGO_WORK* pWork);
-static void _profileIDCheck(GTSNEGO_WORK* pWork);
+static void _modeSelectMenuInit(WIFILOGIN_WORK* pWork);
+static void _modeSelectMenuWait(WIFILOGIN_WORK* pWork);
+static void _profileIDCheck(WIFILOGIN_WORK* pWork);
 
-static void _modeReportInit(GTSNEGO_WORK* pWork);
-static void _modeReportWait(GTSNEGO_WORK* pWork);
-static void _modeReportWait2(GTSNEGO_WORK* pWork);
-static BOOL _modeSelectMenuButtonCallback(int bttnid,GTSNEGO_WORK* pWork);
-static void _modeSelectBattleTypeInit(GTSNEGO_WORK* pWork);
+static void _modeReportInit(WIFILOGIN_WORK* pWork);
+static void _modeReportWait(WIFILOGIN_WORK* pWork);
+static void _modeReportWait2(WIFILOGIN_WORK* pWork);
+static BOOL _modeSelectMenuButtonCallback(int bttnid,WIFILOGIN_WORK* pWork);
+static void _modeSelectBattleTypeInit(WIFILOGIN_WORK* pWork);
 
 
 
@@ -155,7 +205,7 @@ static void _modeSelectBattleTypeInit(GTSNEGO_WORK* pWork);
  */
 //------------------------------------------------------------------------------
 
-static void _changeState(GTSNEGO_WORK* pWork,StateFunc state)
+static void _changeState(WIFILOGIN_WORK* pWork,StateFunc state)
 {
   pWork->state = state;
 }
@@ -167,7 +217,7 @@ static void _changeState(GTSNEGO_WORK* pWork,StateFunc state)
  */
 //------------------------------------------------------------------------------
 #ifdef GFL_NET_DEBUG
-static void _changeStateDebug(GTSNEGO_WORK* pWork,StateFunc state, int line)
+static void _changeStateDebug(WIFILOGIN_WORK* pWork,StateFunc state, int line)
 {
   NET_PRINT("neg: %d\n",line);
   _changeState(pWork, state);
@@ -184,7 +234,7 @@ static void _changeStateDebug(GTSNEGO_WORK* pWork,StateFunc state, int line)
 //--------------------------------------------------------------
 static void _connectCallBack(void* pWk, int netID)
 {
-  GTSNEGO_WORK* pWork = pWk;
+  WIFILOGIN_WORK* pWork = pWk;
   u32 temp;
 
   OS_TPrintf("ネゴシエーション完了 netID = %d\n", netID);
@@ -209,7 +259,7 @@ static void _connectCallBack(void* pWk, int netID)
 //--------------------------------------------------------------
 static void _RecvFirstData(const int netID, const int size, const void* pData, void* pWk, GFL_NETHANDLE* pNetHandle)
 {
-  GTSNEGO_WORK *pWork = pWk;
+  WIFILOGIN_WORK *pWork = pWk;
 
   if(pNetHandle != GFL_NET_HANDLE_GetCurrentHandle()){
     return;	//自分のハンドルと一致しない場合、親としてのデータ受信なので無視する
@@ -265,19 +315,19 @@ static BOOL _BeaconCompFunc(GameServiceID myNo,GameServiceID beaconNo)
 
 static void* _getMyUserData(void* pWork)  //DWCUserData
 {
-  GTSNEGO_WORK *wk = pWork;
+  WIFILOGIN_WORK *wk = pWork;
   return WifiList_GetMyUserInfo(SaveData_GetWifiListData(wk->pSave));
 }
 
 static void* _getFriendData(void* pWork)  //DWCFriendData
 {
-  GTSNEGO_WORK *wk = pWork;
+  WIFILOGIN_WORK *wk = pWork;
   return WifiList_GetDwcDataPtr(SaveData_GetWifiListData(wk->pSave),0);
 }
 
 static void _deleteFriendList(int deletedIndex,int srcIndex, void* pWork)
 {
-  GTSNEGO_WORK *wk = pWork;
+  WIFILOGIN_WORK *wk = pWork;
   WifiList_DataMarge(SaveData_GetWifiListData(wk->pSave), deletedIndex, srcIndex);
 }
 
@@ -293,7 +343,7 @@ static void _deleteFriendList(int deletedIndex,int srcIndex, void* pWork)
 //-----------------------------------------------------------------------------
 static void _BttnCallBack( u32 bttnid, u32 event, void* p_work )
 {
-  GTSNEGO_WORK *pWork = p_work;
+  WIFILOGIN_WORK *pWork = p_work;
   u32 friendNo;
 
   switch( event ){
@@ -310,9 +360,9 @@ static void _BttnCallBack( u32 bttnid, u32 event, void* p_work )
 }
 
 
-static void _exitEnd( GTSNEGO_WORK* pWork)
+static void _exitEnd( WIFILOGIN_WORK* pWork)
 {
-  if( !GTSNEGO_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork) ){
+  if( !WIFILOGIN_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork) ){
     return;
   }
   pWork->timer--;
@@ -329,9 +379,9 @@ static void _exitEnd( GTSNEGO_WORK* pWork)
  */
 //------------------------------------------------------------------
 
-static void _exitExiting( GTSNEGO_WORK *pWork )
+static void _exitExiting( WIFILOGIN_WORK *pWork )
 {
-  if( !GTSNEGO_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)  ){
+  if( !WIFILOGIN_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)  ){
     return;
   }
   if(pWork->timer == 1){
@@ -340,7 +390,7 @@ static void _exitExiting( GTSNEGO_WORK *pWork )
   }
   if(!GFL_NET_IsInit()){
     WifiList_FormUpData(pWork->pList);  // 切断した時にフレンドコードを詰める
-    GTSNEGO_MESSAGE_InfoMessageDisp(pWork->pMessageWork, dwc_message_0012);
+    WIFILOGIN_MESSAGE_InfoMessageDisp(pWork->pMessageWork, dwc_message_0012);
     _CHANGE_STATE(pWork, _exitEnd);
     pWork->timer = STOP_TIME_;
   }
@@ -355,14 +405,14 @@ static void _exitExiting( GTSNEGO_WORK *pWork )
  */
 //------------------------------------------------------------------
 
-static void _CheckAndEnd( GTSNEGO_WORK *pWork )
+static void _CheckAndEnd( WIFILOGIN_WORK *pWork )
 {
   if(pWork->timer > 0){
     pWork->timer--;
     return;
   }
   if( GFL_UI_KEY_GetTrg() ){
-    GTSNEGO_MESSAGE_InfoMessageDisp(pWork->pMessageWork, dwc_message_0011);
+    WIFILOGIN_MESSAGE_InfoMessageDisp(pWork->pMessageWork, dwc_message_0011);
     _CHANGE_STATE(pWork, _exitExiting);
 
   }
@@ -377,7 +427,7 @@ static void _CheckAndEnd( GTSNEGO_WORK *pWork )
  */
 //------------------------------------------------------------------
 
-static void _retryInit(GTSNEGO_WORK* pWork)
+static void _retryInit(WIFILOGIN_WORK* pWork)
 {
 }
 
@@ -391,7 +441,7 @@ static void _retryInit(GTSNEGO_WORK* pWork)
  */
 //------------------------------------------------------------------
 
-static void _errorDisp(GTSNEGO_WORK* pWork)
+static void _errorDisp(WIFILOGIN_WORK* pWork)
 {
   GFL_NETSTATE_DWCERROR* pErr = GFL_NET_StateGetWifiError();
   int msgno,no = pErr->errorCode;
@@ -418,8 +468,8 @@ static void _errorDisp(GTSNEGO_WORK* pWork)
   // エラーメッセージを表示しておくシンク数
   pWork->timer = STOP_TIME_;
 
-  GTSNEGO_MESSAGE_ErrorMessageDisp(pWork->pMessageWork, msgno, no);
-//  GTSNEGO_MESSAGE_SystemMessageDisp(pWork->pMessageWork, msgno);
+  WIFILOGIN_MESSAGE_ErrorMessageDisp(pWork->pMessageWork, msgno, no);
+//  WIFILOGIN_MESSAGE_SystemMessageDisp(pWork->pMessageWork, msgno);
   
   switch(type){
   case 1:
@@ -455,10 +505,10 @@ static void _errorDisp(GTSNEGO_WORK* pWork)
 //------------------------------------------------------------------------------
 
 
-static void _saveEndWait(GTSNEGO_WORK* pWork)
+static void _saveEndWait(WIFILOGIN_WORK* pWork)
 {
   if(GFL_UI_KEY_GetTrg()  || GFL_UI_TP_GetTrg()){
-    GTSNEGO_MESSAGE_SystemMessageEnd(pWork->pMessageWork);
+    WIFILOGIN_MESSAGE_SystemMessageEnd(pWork->pMessageWork);
     _CHANGE_STATE(pWork, NULL);  //接続完了
   }
 }
@@ -470,12 +520,12 @@ static void _saveEndWait(GTSNEGO_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-static void _connectingCommonWait(GTSNEGO_WORK* pWork)
+static void _connectingCommonWait(WIFILOGIN_WORK* pWork)
 {
   if(GFL_NET_StateIsWifiLoginState()){
     if( pWork->bInitMessage ){     // 初回接続時にはセーブが完了した事を通知
-      GTSNEGO_MESSAGE_InfoMessageEnd(pWork->pMessageWork);
-      GTSNEGO_MESSAGE_SystemMessageDisp(pWork->pMessageWork, dwc_message_0004);
+      WIFILOGIN_MESSAGE_InfoMessageEnd(pWork->pMessageWork);
+      WIFILOGIN_MESSAGE_SystemMessageDisp(pWork->pMessageWork, dwc_message_0004);
       _CHANGE_STATE(pWork, _saveEndWait);
     }
     else{
@@ -494,7 +544,7 @@ static void _connectingCommonWait(GTSNEGO_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _saveingWait(GTSNEGO_WORK* pWork)
+static void _saveingWait(WIFILOGIN_WORK* pWork)
 {
   if(GFL_NET_DWC_GetSaving()){
     SAVE_RESULT result = GFL_NET_DWC_SaveAsyncMain(pWork->pSave);
@@ -515,9 +565,9 @@ static void _saveingWait(GTSNEGO_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _saveingStart(GTSNEGO_WORK* pWork)
+static void _saveingStart(WIFILOGIN_WORK* pWork)
 {
-  if(!GTSNEGO_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
+  if(!WIFILOGIN_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
     _connectingCommonWait(pWork);
   }
   else{
@@ -534,13 +584,13 @@ static void _saveingStart(GTSNEGO_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _connectingWait(GTSNEGO_WORK* pWork)
+static void _connectingWait(WIFILOGIN_WORK* pWork)
 {
-  if(!GTSNEGO_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
+  if(!WIFILOGIN_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
     return;
   }
   if( GFL_NET_DWC_GetSaving() && pWork->bSaving==FALSE) {  //セーブの必要が生じた
-    GTSNEGO_MESSAGE_InfoMessageDisp(pWork->pMessageWork, dwc_message_0015);
+    WIFILOGIN_MESSAGE_InfoMessageDisp(pWork->pMessageWork, dwc_message_0015);
     _CHANGE_STATE(pWork, _saveingStart);
   }
   else{
@@ -556,10 +606,12 @@ static void _connectingWait(GTSNEGO_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _connectionStart(GTSNEGO_WORK* pWork)
+static void _connectionStart(WIFILOGIN_WORK* pWork)
 {
+  GFL_NET_Init(&aGFLNetInit, NULL, pWork);	//通信初期化
+  GFL_NET_StateWifiEnterLogin();
 
-  GTSNEGO_MESSAGE_InfoMessageDisp(pWork->pMessageWork, dwc_message_0008);
+  WIFILOGIN_MESSAGE_InfoMessageDisp(pWork->pMessageWork, dwc_message_0008);
   _CHANGE_STATE(pWork,_connectingWait);
   
 }
@@ -570,7 +622,7 @@ static void _connectionStart(GTSNEGO_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _modeProfileWait2(GTSNEGO_WORK* pWork)
+static void _modeProfileWait2(WIFILOGIN_WORK* pWork)
 {
   if(APP_TASKMENU_IsFinish(pWork->pAppTask)){
     int selectno = APP_TASKMENU_GetCursorPos(pWork->pAppTask);
@@ -582,7 +634,7 @@ static void _modeProfileWait2(GTSNEGO_WORK* pWork)
       GFL_BG_ClearScreen(GFL_BG_FRAME3_M);
       _CHANGE_STATE(pWork,NULL);
     }
-    GTSNEGO_MESSAGE_SystemMessageEnd(pWork->pMessageWork);
+    WIFILOGIN_MESSAGE_SystemMessageEnd(pWork->pMessageWork);
     APP_TASKMENU_CloseMenu(pWork->pAppTask);
     pWork->pAppTask=NULL;
     G2S_SetBlendBrightness( GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_OBJ , 0 );
@@ -595,12 +647,12 @@ static void _modeProfileWait2(GTSNEGO_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _modeProfileWait(GTSNEGO_WORK* pWork)
+static void _modeProfileWait(WIFILOGIN_WORK* pWork)
 {
-  if(!GTSNEGO_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
+  if(!WIFILOGIN_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
     return;
   }
-  pWork->pAppTask = GTSNEGO_MESSAGE_YesNoStart(pWork->pMessageWork,GTSNEGO_YESNOTYPE_SYS);
+  pWork->pAppTask = WIFILOGIN_MESSAGE_YesNoStart(pWork->pMessageWork,WIFILOGIN_YESNOTYPE_SYS);
   _CHANGE_STATE(pWork,_modeProfileWait2);
 }
 
@@ -611,33 +663,34 @@ static void _modeProfileWait(GTSNEGO_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _profileIDCheck(GTSNEGO_WORK* pWork)
+static void _profileIDCheck(WIFILOGIN_WORK* pWork)
 {
   // 初めての場合
   if( !DWC_CheckHasProfile( WifiList_GetMyUserInfo(pWork->pList) ) )
   {
     pWork->bInitMessage=TRUE;
-    GTSNEGO_MESSAGE_SystemMessageDisp(pWork->pMessageWork, dwc_message_0003);
+    WIFILOGIN_MESSAGE_SystemMessageDisp(pWork->pMessageWork, dwc_message_0003);
   }
   else if( !DWC_CheckValidConsole(WifiList_GetMyUserInfo(pWork->pList)) )
   {  //別DSの場合
-    GTSNEGO_MESSAGE_SystemMessageDisp(pWork->pMessageWork, dwc_message_0005);
+    WIFILOGIN_MESSAGE_SystemMessageDisp(pWork->pMessageWork, dwc_message_0005);
   }
   else  //普通の接続
   {
-    GTSNEGO_MESSAGE_InfoMessageDisp(pWork->pMessageWork, dwc_message_0002);
+    WIFILOGIN_MESSAGE_InfoMessageDisp(pWork->pMessageWork, dwc_message_0002);
   }
   _CHANGE_STATE(pWork,_modeProfileWait);
 
 }
 
 
-static void _modeSelectMenuInit(GTSNEGO_WORK* pWork)
+static void _modeSelectMenuInit(WIFILOGIN_WORK* pWork)
 { 
-  //GTSNEGO_MESSAGE_Disp(GTSNEGO_005);
-  //GTSNEGO_MESSAGE_Disp(GTSNEGO_006);
+  int aMsgBuff[]={dwc_message_0013,dwc_message_0014};
 
-  pWork->touch = &_modeSelectMenuButtonCallback;
+  WIFILOGIN_MESSAGE_ButtonWindowCreate(NELEMS(aMsgBuff), aMsgBuff, pWork->pMessageWork, _BttnCallBack, pWork);
+
+	pWork->touch = &_modeSelectMenuButtonCallback;
 
 	_CHANGE_STATE(pWork,_modeSelectMenuWait);
 
@@ -650,7 +703,7 @@ static void _modeSelectMenuInit(GTSNEGO_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-static void _modeFadeout(GTSNEGO_WORK* pWork)
+static void _modeFadeout(WIFILOGIN_WORK* pWork)
 {
 	if(WIPE_SYS_EndCheck()){
 		_CHANGE_STATE(pWork, NULL);        // 終わり
@@ -663,7 +716,7 @@ static void _modeFadeout(GTSNEGO_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static BOOL _modeSelectMenuButtonCallback(int bttnid,GTSNEGO_WORK* pWork)
+static BOOL _modeSelectMenuButtonCallback(int bttnid,WIFILOGIN_WORK* pWork)
 {
   switch( bttnid ){
   case _SELECTMODE_GSYNC:
@@ -695,10 +748,10 @@ static BOOL _modeSelectMenuButtonCallback(int bttnid,GTSNEGO_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _modeSelectMenuWait(GTSNEGO_WORK* pWork)
+static void _modeSelectMenuWait(WIFILOGIN_WORK* pWork)
 {
 	if(WIPE_SYS_EndCheck()){
-		GTSNEGO_MESSAGE_ButtonWindowMain( pWork->pMessageWork );
+		WIFILOGIN_MESSAGE_ButtonWindowMain( pWork->pMessageWork );
 	}
 }
 
@@ -709,19 +762,21 @@ static void _modeSelectMenuWait(GTSNEGO_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _modeReportInit(GTSNEGO_WORK* pWork)
+static void _modeReportInit(WIFILOGIN_WORK* pWork)
 {
 
+  //    GAMEDATA_Save(GAMESYSTEM_GetGameData(GMEVENT_GetGameSysWork(event)));
 
   GFL_BG_ClearScreenCodeVReq(GFL_BG_FRAME1_S,0);
   
+ // WIFILOGIN_MESSAGE_InfoMessageDisp(pWork->pMessageWork,GAMESYNC_004);
 
   
   _CHANGE_STATE(pWork,_modeReportWait);
 }
 
 
-static void _FadeWait(GTSNEGO_WORK* pWork)
+static void _FadeWait(WIFILOGIN_WORK* pWork)
 {
   if(GFL_FADE_CheckFade()){
     return;
@@ -737,10 +792,10 @@ static void _FadeWait(GTSNEGO_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _modeReporting(GTSNEGO_WORK* pWork)
+static void _modeReporting(WIFILOGIN_WORK* pWork)
 {
 
-  if(!GTSNEGO_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
+  if(!WIFILOGIN_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
     return;
   }
 
@@ -749,7 +804,7 @@ static void _modeReporting(GTSNEGO_WORK* pWork)
     SAVE_RESULT svr = SaveControl_SaveAsyncMain(pWork->dbw->ctrl);
 
     if(svr == SAVE_RESULT_OK){
-      GTSNEGO_MESSAGE_InfoMessageEnd(pWork->pMessageWork);
+      WIFILOGIN_MESSAGE_InfoMessageEnd(pWork->pMessageWork);
 
       GFL_FADE_SetMasterBrightReq(GFL_FADE_MASTER_BRIGHT_WHITEOUT, 0, 16, 1);
 
@@ -764,7 +819,7 @@ static void _modeReporting(GTSNEGO_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _modeReportWait2(GTSNEGO_WORK* pWork)
+static void _modeReportWait2(WIFILOGIN_WORK* pWork)
 {
 
   if(APP_TASKMENU_IsFinish(pWork->pAppTask)){
@@ -773,12 +828,14 @@ static void _modeReportWait2(GTSNEGO_WORK* pWork)
     if(selectno==0){
 
 
+//      WIFILOGIN_MESSAGE_InfoMessageDisp(pWork->pMessageWork,GAMESYNC_007);
 
       SaveControl_SaveAsyncInit(pWork->dbw->ctrl );
       _CHANGE_STATE(pWork,_modeReporting);
     }
     else{
       GFL_BG_ClearScreen(GFL_BG_FRAME3_M);
+   //   pWork->selectType = GAMESYNC_RETURNMODE_NONE;
       _CHANGE_STATE(pWork,NULL);
     }
     APP_TASKMENU_CloseMenu(pWork->pAppTask);
@@ -795,12 +852,12 @@ static void _modeReportWait2(GTSNEGO_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _modeReportWait(GTSNEGO_WORK* pWork)
+static void _modeReportWait(WIFILOGIN_WORK* pWork)
 {
-  if(!GTSNEGO_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
+  if(!WIFILOGIN_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
     return;
   }
-  pWork->pAppTask = GTSNEGO_MESSAGE_YesNoStart(pWork->pMessageWork,GTSNEGO_YESNOTYPE_INFO);
+  pWork->pAppTask = WIFILOGIN_MESSAGE_YesNoStart(pWork->pMessageWork,WIFILOGIN_YESNOTYPE_INFO);
   _CHANGE_STATE(pWork,_modeReportWait2);
 }
 
@@ -811,19 +868,19 @@ static void _modeReportWait(GTSNEGO_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static GFL_PROC_RESULT GameSyncMenuProcInit( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
+static GFL_PROC_RESULT WiFiLogin_ProcInit( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
 {
   EVENT_GTSNEGO_WORK* pEv=pwk;
 	
   GFL_HEAP_CreateHeap( GFL_HEAPID_APP, HEAPID_IRCBATTLE, 0x18000 );
 
   {
-    GTSNEGO_WORK *pWork = GFL_PROC_AllocWork( proc, sizeof( GTSNEGO_WORK ), HEAPID_IRCBATTLE );
-    GFL_STD_MemClear(pWork, sizeof(GTSNEGO_WORK));
+    WIFILOGIN_WORK *pWork = GFL_PROC_AllocWork( proc, sizeof( WIFILOGIN_WORK ), HEAPID_IRCBATTLE );
+    GFL_STD_MemClear(pWork, sizeof(WIFILOGIN_WORK));
     pWork->heapID = HEAPID_IRCBATTLE;
 
-    pWork->pDispWork = GTSNEGO_DISP_Init(pWork->heapID);
-    pWork->pMessageWork = GTSNEGO_MESSAGE_Init(pWork->heapID, NARC_message_wifi_system_dat);
+    pWork->pDispWork = WIFILOGIN_DISP_Init(pWork->heapID);
+    pWork->pMessageWork = WIFILOGIN_MESSAGE_Init(pWork->heapID, NARC_message_wifi_system_dat);
     pWork->pSave = GAMEDATA_GetSaveControlWork(GAMESYSTEM_GetGameData(pEv->gsys));
     pWork->pList = SaveData_GetWifiListData(
       GAMEDATA_GetSaveControlWork(
@@ -832,8 +889,8 @@ static GFL_PROC_RESULT GameSyncMenuProcInit( GFL_PROC * proc, int * seq, void * 
 
 
 		{
-//			GAME_COMM_SYS_PTR pGC = GAMESYSTEM_GetGameCommSysPtr(pEv->gsys);
-	//		INFOWIN_Init( _SUBSCREEN_BGPLANE , _SUBSCREEN_PALLET , pGC , pWork->heapID);
+			GAME_COMM_SYS_PTR pGC = GAMESYSTEM_GetGameCommSysPtr(pEv->gsys);
+			INFOWIN_Init( _SUBSCREEN_BGPLANE , _SUBSCREEN_PALLET , pGC , pWork->heapID);
 		}
 
 
@@ -841,9 +898,15 @@ static GFL_PROC_RESULT GameSyncMenuProcInit( GFL_PROC * proc, int * seq, void * 
     WIPE_SYS_Start( WIPE_PATTERN_S , WIPE_TYPE_FADEIN , WIPE_TYPE_FADEIN , 
 									WIPE_FADE_BLACK , WIPE_DEF_DIV , WIPE_DEF_SYNC , pWork->heapID );
 
-    pWork->dbw = pwk;
+      pWork->dbw = pwk;
     
-    _CHANGE_STATE(pWork,_modeSelectMenuInit);
+    if(GFL_NET_IsInit()){       // 接続中
+      _CHANGE_STATE(pWork,_modeSelectMenuInit);
+    }
+    else{
+      //接続開始 プロファイル検査
+      _CHANGE_STATE(pWork,_profileIDCheck);
+    }
 
   }
   
@@ -856,9 +919,9 @@ static GFL_PROC_RESULT GameSyncMenuProcInit( GFL_PROC * proc, int * seq, void * 
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static GFL_PROC_RESULT GameSyncMenuProcMain( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
+static GFL_PROC_RESULT WiFiLogin_ProcMain( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
 {
-  GTSNEGO_WORK* pWork = mywk;
+  WIFILOGIN_WORK* pWork = mywk;
   GFL_PROC_RESULT retCode = GFL_PROC_RES_FINISH;
 
   StateFunc* state = pWork->state;
@@ -871,11 +934,11 @@ static GFL_PROC_RESULT GameSyncMenuProcMain( GFL_PROC * proc, int * seq, void * 
     APP_TASKMENU_UpdateMenu(pWork->pAppTask);
   }
 
-  GTSNEGO_DISP_Main(pWork->pDispWork);
-  GTSNEGO_MESSAGE_Main(pWork->pMessageWork);
+  WIFILOGIN_DISP_Main(pWork->pDispWork);
+  WIFILOGIN_MESSAGE_Main(pWork->pMessageWork);
 
   
-	//INFOWIN_Update();
+	INFOWIN_Update();
 
   return retCode;
 }
@@ -886,21 +949,21 @@ static GFL_PROC_RESULT GameSyncMenuProcMain( GFL_PROC * proc, int * seq, void * 
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static GFL_PROC_RESULT GameSyncMenuProcEnd( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
+static GFL_PROC_RESULT WiFiLogin_ProcEnd( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
 {
   EVENT_GTSNEGO_WORK* pEv=pwk;
-  GTSNEGO_WORK* pWork = mywk;
+  WIFILOGIN_WORK* pWork = mywk;
 
 //  EVENT_IrcBattleSetType(pParentWork, pWork->selectType);
 
   GFL_PROC_FreeWork(proc);
 
-	//INFOWIN_Exit();
+	INFOWIN_Exit();
 	GFL_BG_FreeBGControl(_SUBSCREEN_BGPLANE);
 
 
-  GTSNEGO_MESSAGE_End(pWork->pMessageWork);
-  GTSNEGO_DISP_End(pWork->pDispWork);
+  WIFILOGIN_MESSAGE_End(pWork->pMessageWork);
+  WIFILOGIN_DISP_End(pWork->pDispWork);
 
 	GFL_HEAP_DeleteHeap(HEAPID_IRCBATTLE);
   //EVENT_IrcBattle_SetEnd(pParentWork);
@@ -915,10 +978,10 @@ static GFL_PROC_RESULT GameSyncMenuProcEnd( GFL_PROC * proc, int * seq, void * p
  *
  */
 //----------------------------------------------------------
-const GFL_PROC_DATA GtsNego_ProcData = {
-  GameSyncMenuProcInit,
-  GameSyncMenuProcMain,
-  GameSyncMenuProcEnd,
+const GFL_PROC_DATA WiFiLogin_ProcData = {
+  WiFiLogin_ProcInit,
+  WiFiLogin_ProcMain,
+  WiFiLogin_ProcEnd,
 };
 
 

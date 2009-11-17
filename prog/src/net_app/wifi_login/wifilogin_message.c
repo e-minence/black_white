@@ -11,7 +11,6 @@
 #include <dwc.h>
 
 #include "arc_def.h"
-#include "net_app/gsync.h"
 
 #include "infowin/infowin.h"
 #include "system/main.h"
@@ -34,8 +33,8 @@
 #include "../../field/event_ircbattle.h"
 #include "app/app_taskmenu.h"  //APP_TASKMENU_INITWORK
 
-#include "gtsnego_local.h"
-#include "gtsnego.naix"
+#include "wifilogin_local.h"
+#include "wifi_login.naix"
 #include "msg/msg_wifi_system.h"
 
 //--------------------------------------------
@@ -92,7 +91,7 @@ static _WINDOWPOS wind4[]={
 
 
 
-struct _GTSNEGO_MESSAGE_WORK {
+struct _WIFILOGIN_MESSAGE_WORK {
   u32 bgchar;  //GFL_ARCUTIL_TRANSINFO
   u32 bgchar2S;  //SystemMsg
 
@@ -138,9 +137,9 @@ static const GFL_UI_TP_HITTBL bttndata[] = {
 
 
 
-GTSNEGO_MESSAGE_WORK* GTSNEGO_MESSAGE_Init(HEAPID id,int msg_dat)
+WIFILOGIN_MESSAGE_WORK* WIFILOGIN_MESSAGE_Init(HEAPID id,int msg_dat)
 {
-  GTSNEGO_MESSAGE_WORK* pWork = GFL_HEAP_AllocClearMemory(id, sizeof(GTSNEGO_MESSAGE_WORK));
+  WIFILOGIN_MESSAGE_WORK* pWork = GFL_HEAP_AllocClearMemory(id, sizeof(WIFILOGIN_MESSAGE_WORK));
   pWork->heapID = id;
 
   GFL_BMPWIN_Init(pWork->heapID);
@@ -164,21 +163,21 @@ GTSNEGO_MESSAGE_WORK* GTSNEGO_MESSAGE_Init(HEAPID id,int msg_dat)
   return pWork;
 }
 
-void GTSNEGO_MESSAGE_Main(GTSNEGO_MESSAGE_WORK* pWork)
+void WIFILOGIN_MESSAGE_Main(WIFILOGIN_MESSAGE_WORK* pWork)
 {
   GFL_TCBL_Main( pWork->pMsgTcblSys );
   PRINTSYS_QUE_Main(pWork->SysMsgQue);
 
 }
 
-void GTSNEGO_MESSAGE_End(GTSNEGO_MESSAGE_WORK* pWork)
+void WIFILOGIN_MESSAGE_End(WIFILOGIN_MESSAGE_WORK* pWork)
 {
   GFL_BG_FreeCharacterArea(GFL_BG_FRAME1_S,GFL_ARCUTIL_TRANSINFO_GetPos(pWork->bgchar),
                            GFL_ARCUTIL_TRANSINFO_GetSize(pWork->bgchar));
   GFL_BG_FreeCharacterArea(GFL_BG_FRAME2_S,GFL_ARCUTIL_TRANSINFO_GetPos(pWork->bgchar2S),
                            GFL_ARCUTIL_TRANSINFO_GetSize(pWork->bgchar2S));
 
-  GTSNEGO_MESSAGE_ButtonWindowDelete(pWork);
+  WIFILOGIN_MESSAGE_ButtonWindowDelete(pWork);
 
   GFL_FONTSYS_SetDefaultColor();
   GFL_MSG_Delete( pWork->pMsgData );
@@ -209,7 +208,7 @@ void GTSNEGO_MESSAGE_End(GTSNEGO_MESSAGE_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-void GTSNEGO_MESSAGE_InfoMessageDisp(GTSNEGO_MESSAGE_WORK* pWork,int msgid)
+void WIFILOGIN_MESSAGE_InfoMessageDisp(WIFILOGIN_MESSAGE_WORK* pWork,int msgid)
 {
   GFL_BMPWIN* pwin;
 
@@ -244,7 +243,7 @@ void GTSNEGO_MESSAGE_InfoMessageDisp(GTSNEGO_MESSAGE_WORK* pWork,int msgid)
  */
 //------------------------------------------------------------------------------
 
-BOOL GTSNEGO_MESSAGE_InfoMessageEndCheck(GTSNEGO_MESSAGE_WORK* pWork)
+BOOL WIFILOGIN_MESSAGE_InfoMessageEndCheck(WIFILOGIN_MESSAGE_WORK* pWork)
 {
   if(pWork->pStream){
     int state = PRINTSYS_PrintStreamGetState( pWork->pStream );
@@ -273,7 +272,7 @@ BOOL GTSNEGO_MESSAGE_InfoMessageEndCheck(GTSNEGO_MESSAGE_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-void GTSNEGO_MESSAGE_InfoMessageEnd(GTSNEGO_MESSAGE_WORK* pWork)
+void WIFILOGIN_MESSAGE_InfoMessageEnd(WIFILOGIN_MESSAGE_WORK* pWork)
 {
   BmpWinFrame_Clear(pWork->infoDispWin, WINDOW_TRANS_OFF);
   GFL_BMPWIN_ClearScreen(pWork->infoDispWin);
@@ -289,7 +288,7 @@ void GTSNEGO_MESSAGE_InfoMessageEnd(GTSNEGO_MESSAGE_WORK* pWork)
 
 
 
-APP_TASKMENU_WORK* GTSNEGO_MESSAGE_YesNoStart(GTSNEGO_MESSAGE_WORK* pWork,int type)
+APP_TASKMENU_WORK* WIFILOGIN_MESSAGE_YesNoStart(WIFILOGIN_MESSAGE_WORK* pWork,int type)
 {
   int i;
   APP_TASKMENU_INITWORK appinit;
@@ -300,12 +299,12 @@ APP_TASKMENU_WORK* GTSNEGO_MESSAGE_YesNoStart(GTSNEGO_MESSAGE_WORK* pWork,int ty
   appinit.itemWork =  &pWork->appitem[0];
 
   switch(type){
-  case GTSNEGO_YESNOTYPE_INFO:
+  case WIFILOGIN_YESNOTYPE_INFO:
     appinit.charPosX = 32;
     appinit.charPosY = 14;
     appinit.posType = ATPT_RIGHT_DOWN;
     break;
-  case GTSNEGO_YESNOTYPE_SYS:
+  case WIFILOGIN_YESNOTYPE_SYS:
     appinit.charPosX = 32;
     appinit.charPosY = 24;
     appinit.posType = ATPT_RIGHT_DOWN;
@@ -334,7 +333,7 @@ APP_TASKMENU_WORK* GTSNEGO_MESSAGE_YesNoStart(GTSNEGO_MESSAGE_WORK* pWork,int ty
  */
 //------------------------------------------------------------------------------
 
-void GTSNEGO_MESSAGE_ButtonWindowCreate(int num,int* pMsgBuff,GTSNEGO_MESSAGE_WORK* pWork,pBmnCallBackFunc callback,void* pParentWork)
+void WIFILOGIN_MESSAGE_ButtonWindowCreate(int num,int* pMsgBuff,WIFILOGIN_MESSAGE_WORK* pWork,pBmnCallBackFunc callback,void* pParentWork)
 {
   int i;
   u32 cgx;
@@ -397,7 +396,7 @@ void GTSNEGO_MESSAGE_ButtonWindowCreate(int num,int* pMsgBuff,GTSNEGO_MESSAGE_WO
  */
 //-----------------------------------------------------------------------------
 
-void GTSNEGO_MESSAGE_ButtonWindowDelete(GTSNEGO_MESSAGE_WORK* pWork)
+void WIFILOGIN_MESSAGE_ButtonWindowDelete(WIFILOGIN_MESSAGE_WORK* pWork)
 {
   int i;
 
@@ -427,7 +426,7 @@ void GTSNEGO_MESSAGE_ButtonWindowDelete(GTSNEGO_MESSAGE_WORK* pWork)
  */
 //-----------------------------------------------------------------------------
 
-void GTSNEGO_MESSAGE_ButtonWindowMain(GTSNEGO_MESSAGE_WORK* pWork)
+void WIFILOGIN_MESSAGE_ButtonWindowMain(WIFILOGIN_MESSAGE_WORK* pWork)
 {
   GFL_BMN_Main( pWork->pButton );
 }
@@ -439,7 +438,7 @@ void GTSNEGO_MESSAGE_ButtonWindowMain(GTSNEGO_MESSAGE_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-void GTSNEGO_MESSAGE_SystemMessageDisp(GTSNEGO_MESSAGE_WORK* pWork,int msgid)
+void WIFILOGIN_MESSAGE_SystemMessageDisp(WIFILOGIN_MESSAGE_WORK* pWork,int msgid)
 {
   GFL_BMPWIN* pwin;
 
@@ -470,7 +469,7 @@ void GTSNEGO_MESSAGE_SystemMessageDisp(GTSNEGO_MESSAGE_WORK* pWork,int msgid)
  */
 //------------------------------------------------------------------------------
 
-void GTSNEGO_MESSAGE_SystemMessageEnd(GTSNEGO_MESSAGE_WORK* pWork)
+void WIFILOGIN_MESSAGE_SystemMessageEnd(WIFILOGIN_MESSAGE_WORK* pWork)
 {
   BmpWinFrame_Clear(pWork->systemDispWin, WINDOW_TRANS_OFF);
   GFL_BMPWIN_ClearScreen(pWork->systemDispWin);
@@ -485,9 +484,9 @@ void GTSNEGO_MESSAGE_SystemMessageEnd(GTSNEGO_MESSAGE_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-void GTSNEGO_MESSAGE_ErrorMessageDisp(GTSNEGO_MESSAGE_WORK* pWork,int msgid,int no)
+void WIFILOGIN_MESSAGE_ErrorMessageDisp(WIFILOGIN_MESSAGE_WORK* pWork,int msgid,int no)
 {
   WORDSET_RegisterNumber(pWork->pWordSet, 0, no,
                          5, STR_NUM_DISP_ZERO, STR_NUM_CODE_DEFAULT);
-  GTSNEGO_MESSAGE_SystemMessageDisp(pWork, msgid);
+  WIFILOGIN_MESSAGE_SystemMessageDisp(pWork, msgid);
 }
