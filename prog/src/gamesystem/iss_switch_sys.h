@@ -1,30 +1,51 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * @brief ISSゾーンシステム
- * @file iss_zone_sys.h
+ * @brief ISSスイッチシステム
+ * @file iss_switch_sys.h
  * @author obata
- * @date 2009.11.06
+ * @date 2009.11.17
  */
 ////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
+
 
 //==========================================================================================
 // ■関数一覧
 //==========================================================================================
 /*
-ISS_ZONE_SYS* ISS_ZONE_SYS_Create( HEAPID heap_id );
-void ISS_ZONE_SYS_Delete( ISS_ZONE_SYS* sys );
-void ISS_ZONE_SYS_Update( ISS_ZONE_SYS* sys );
-void ISS_ZONE_SYS_ZoneChange( ISS_ZONE_SYS* sys, u16 next_zone_id );
-void ISS_ZONE_SYS_On( ISS_ZONE_SYS* sys, u16 zone_id );
-void ISS_ZONE_SYS_Off( ISS_ZONE_SYS* sys );
+ISS_SWITCH_SYS* ISS_SWITCH_SYS_Create( HEAPID heap_id );
+void ISS_SWITCH_SYS_Delete( ISS_SWITCH_SYS* sys );
+void ISS_SWITCH_SYS_Update( ISS_SWITCH_SYS* sys );
+void ISS_SWITCH_SYS_On( ISS_SWITCH_SYS* sys );
+void ISS_SWITCH_SYS_Off( ISS_SWITCH_SYS* sys );
+void ISS_SWITCH_SYS_SwitchOn( ISS_SWITCH_SYS* sys, SWITCH_INDEX idx );
+void ISS_SWITCH_SYS_SwitchOff( ISS_SWITCH_SYS* sys, SWITCH_INDEX idx );
 */
 
 
 //==========================================================================================
 // ■システムの不完全型宣言
 //==========================================================================================
-typedef struct _ISS_ZONE_SYS ISS_ZONE_SYS;
+typedef struct _ISS_SWITCH_SYS ISS_SWITCH_SYS;
+
+
+//==========================================================================================
+// ■定数
+//==========================================================================================
+// スイッチ番号
+typedef enum{
+  SWITCH_00,  // 特殊スイッチ ==> 押すとリセットさせる
+  SWITCH_01,  // 通常スイッチ1
+  SWITCH_02,  // 通常スイッチ2
+  SWITCH_03,  // 通常スイッチ3
+  SWITCH_04,  // 通常スイッチ4
+  SWITCH_05,  // 通常スイッチ5
+  SWITCH_06,  // 通常スイッチ6
+  SWITCH_07,  // 通常スイッチ7
+  SWITCH_08,  // 通常スイッチ8
+  SWITCH_NUM,
+  SWITCH_MAX = SWITCH_NUM - 1
+} SWITCH_INDEX;
 
 
 //==========================================================================================
@@ -33,23 +54,23 @@ typedef struct _ISS_ZONE_SYS ISS_ZONE_SYS;
 
 //------------------------------------------------------------------------------------------
 /**
- * @brief ISSゾーンシステムを作成する
+ * @brief ISSスイッチシステムを作成する
  * 
  * @param heap_id 使用するヒープID
  *
  * @return 作成したシステム
  */
 //------------------------------------------------------------------------------------------
-extern ISS_ZONE_SYS* ISS_ZONE_SYS_Create( HEAPID heap_id );
+extern ISS_SWITCH_SYS* ISS_SWITCH_SYS_Create( HEAPID heap_id );
 
 //------------------------------------------------------------------------------------------
 /**
- * @brief ISSゾーンシステムを破棄する
+ * @brief ISSスイッチシステムを破棄する
  *
  * @param sys 破棄するシステム
  */
 //------------------------------------------------------------------------------------------
-extern void ISS_ZONE_SYS_Delete( ISS_ZONE_SYS* sys );
+extern void ISS_SWITCH_SYS_Delete( ISS_SWITCH_SYS* sys );
 
 
 //==========================================================================================
@@ -63,38 +84,52 @@ extern void ISS_ZONE_SYS_Delete( ISS_ZONE_SYS* sys );
  * @param sys 動かすシステム
  */
 //------------------------------------------------------------------------------------------
-extern void ISS_ZONE_SYS_Update( ISS_ZONE_SYS* sys );
+extern void ISS_SWITCH_SYS_Update( ISS_SWITCH_SYS* sys );
 
 
 //==========================================================================================
-// ■制御
+// ■システム制御
 //==========================================================================================
-
-//------------------------------------------------------------------------------------------
-/**
- * @brief ゾーン切り替えを通知する
- *
- * @param sys          通知対象のシステム
- * @param next_zone_id 新しいゾーンID
- */
-//------------------------------------------------------------------------------------------
-extern void ISS_ZONE_SYS_ZoneChange( ISS_ZONE_SYS* sys, u16 next_zone_id );
 
 //------------------------------------------------------------------------------------------
 /**
  * @brief システムを起動する
  *
- * @param sys     起動するシステム
- * @param zone_id 起動時のゾーンID
+ * @param sys 起動するシステム
  */
 //------------------------------------------------------------------------------------------
-extern void ISS_ZONE_SYS_On( ISS_ZONE_SYS* sys, u16 zone_id );
+extern void ISS_SWITCH_SYS_On( ISS_SWITCH_SYS* sys );
 
 //------------------------------------------------------------------------------------------
 /**
  * @brief システムを停止する
  *
- * @param sys     停止するシステム
+ * @param sys 停止するシステム
  */
 //------------------------------------------------------------------------------------------
-extern void ISS_ZONE_SYS_Off( ISS_ZONE_SYS* sys );
+extern void ISS_SWITCH_SYS_Off( ISS_SWITCH_SYS* sys );
+
+
+//==========================================================================================
+// ■スイッチ制御
+//==========================================================================================
+
+//------------------------------------------------------------------------------------------
+/**
+ * @brief スイッチを ON にする
+ *
+ * @param sys スイッチを押すシステム
+ * @param idx 押すスイッチのインデックス
+ */
+//------------------------------------------------------------------------------------------
+extern void ISS_SWITCH_SYS_SwitchOn( ISS_SWITCH_SYS* sys, SWITCH_INDEX idx );
+
+//------------------------------------------------------------------------------------------
+/**
+ * @brief スイッチを OFF にする
+ *
+ * @param sys スイッチを押すシステム
+ * @param idx 放すスイッチのインデックス
+ */
+//------------------------------------------------------------------------------------------
+extern void ISS_SWITCH_SYS_SwitchOff( ISS_SWITCH_SYS* sys, SWITCH_INDEX idx );
