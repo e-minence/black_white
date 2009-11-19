@@ -1,11 +1,11 @@
 //======================================================================
 /**
- * @file	mb_child_sys.h
- * @brief	マルチブート・子機メイン
+ * @file	mb_select_sys.h
+ * @brief	マルチブート・ポケモン選択
  * @author	ariizumi
- * @data	09/11/16
+ * @data	09/11/19
  *
- * モジュール名：MB_CHILD
+ * モジュール名：MB_SELECT
  */
 //======================================================================
 #include <gflib.h>
@@ -19,9 +19,7 @@
 #include "arc_def.h"
 #include "mb_child_gra.naix"
 
-#include "multiboot/mb_child_sys.h"
 #include "multiboot/mb_select_sys.h"
-#include "multiboot/mb_comm_sys.h"
 #include "multiboot/mb_util_msg.h"
 #include "multiboot/mb_local_def.h"
 
@@ -30,10 +28,10 @@
 //	define
 //======================================================================
 #pragma mark [> define
-#define MB_CHILD_FRAME_MSG (GFL_BG_FRAME1_M)
-#define MB_CHILD_FRAME_BG  (GFL_BG_FRAME3_M)
+#define MB_SELECT_FRAME_MSG (GFL_BG_FRAME1_M)
+#define MB_SELECT_FRAME_BG  (GFL_BG_FRAME3_M)
 
-#define MB_CHILD_FRAME_SUB_BG  (GFL_BG_FRAME3_S)
+#define MB_SELECT_FRAME_SUB_BG  (GFL_BG_FRAME3_S)
 
 //======================================================================
 //	enum
@@ -41,23 +39,12 @@
 #pragma mark [> enum
 typedef enum
 {
-  MCS_FADEIN,
-  MCS_WAIT_FADEIN,
-  MCS_FADEOUT,
-  MCS_WAIT_FADEOUT,
+  MSS_FADEIN,
+  MSS_WAIT_FADEIN,
+  MSS_FADEOUT,
+  MSS_WAIT_FADEOUT,
   
-  MCS_WAIT_COMM_INIT,
-  MCS_WAIT_CONNECT,
-  MCS_CHECK_ROM,
-  
-  MCS_SELECT_FADEOUT,
-  MCS_SELECT_FADEOUT_WAIT,
-  MCS_SELECT_MAIN,
-  MCS_SELECT_TERM,
-  MCS_SELECT_FADEIN,
-  MCS_SELECT_FADEIN_WAIT,
-  
-}MB_CHILD_STATE;
+}MB_SELECT_STATE;
 
 //======================================================================
 //	typedef struct
@@ -66,18 +53,15 @@ typedef enum
 typedef struct
 {
   HEAPID heapId;
+  MB_SELECT_INIT_WORK *initWork;
   
-  MB_COMM_INIT_DATA *initData;
+  MB_SELECT_STATE  state;
+  
   void  *sndData;
-  
-  MB_CHILD_STATE  state;
-  GFL_PROCSYS   *procSys;
-  
-
+  //メッセージ用
   MB_MSG_WORK *msgWork;
-  MB_COMM_WORK *commWork;
   
-}MB_CHILD_WORK;
+}MB_SELECT_WORK;
 
 
 //======================================================================
@@ -85,14 +69,14 @@ typedef struct
 //======================================================================
 #pragma mark [> proto
 
-static void MB_CHILD_Init( MB_CHILD_WORK *work );
-static void MB_CHILD_Term( MB_CHILD_WORK *work );
-static const BOOL MB_CHILD_Main( MB_CHILD_WORK *work );
+static void MB_SELECT_Init( MB_SELECT_WORK *work );
+static void MB_SELECT_Term( MB_SELECT_WORK *work );
+static const BOOL MB_SELECT_Main( MB_SELECT_WORK *work );
 
-static void MB_CHILD_InitGraphic( MB_CHILD_WORK *work );
-static void MB_CHILD_TermGraphic( MB_CHILD_WORK *work );
-static void MB_CHILD_SetupBgFunc( const GFL_BG_BGCNT_HEADER *bgCont , u8 bgPlane , u8 mode );
-static void MB_CHILD_LoadResource( MB_CHILD_WORK *work );
+static void MB_SELECT_InitGraphic( MB_SELECT_WORK *work );
+static void MB_SELECT_TermGraphic( MB_SELECT_WORK *work );
+static void MB_SELECT_SetupBgFunc( const GFL_BG_BGCNT_HEADER *bgCont , u8 bgPlane , u8 mode );
+static void MB_SELECT_LoadResource( MB_SELECT_WORK *work );
 
 static const GFL_DISP_VRAM vramBank = {
   GX_VRAM_BG_128_A,             // メイン2DエンジンのBG
@@ -113,174 +97,72 @@ static const GFL_DISP_VRAM vramBank = {
 //--------------------------------------------------------------
 //  初期化
 //--------------------------------------------------------------
-static void MB_CHILD_Init( MB_CHILD_WORK *work )
+static void MB_SELECT_Init( MB_SELECT_WORK *work )
 {
-  work->state = MCS_FADEIN;
-  work->msgWork = NULL;
-
-  MB_CHILD_InitGraphic( work );
-  MB_CHILD_LoadResource( work );
-  work->msgWork = MB_MSG_MessageInit( work->heapId , MB_CHILD_FRAME_MSG );
+  work->state = MSS_FADEIN;
   
-  work->commWork = MB_COMM_CreateSystem( work->heapId );
+  MB_SELECT_InitGraphic( work );
+  MB_SELECT_LoadResource( work );
+  work->msgWork = MB_MSG_MessageInit( work->heapId , MB_SELECT_FRAME_MSG );
   
-  work->sndData = GFL_ARC_UTIL_Load( ARCID_MB_CHILD ,
-                                     NARC_mb_child_gra_wb_sound_palpark_sdat ,
-                                     FALSE ,
-                                     work->heapId );
-                                     
-  PMSND_InitMultiBoot( work->sndData );
-  
-  work->procSys = GFL_PROC_LOCAL_boot( work->heapId );
 }
 
 //--------------------------------------------------------------
 //  開放
 //--------------------------------------------------------------
-static void MB_CHILD_Term( MB_CHILD_WORK *work )
+static void MB_SELECT_Term( MB_SELECT_WORK *work )
 {
-  GFL_PROC_LOCAL_Exit( work->procSys );
-  
-  PMSND_Exit();
-  GFL_HEAP_FreeMemory( work->sndData );
-  MB_COMM_DeleteSystem( work->commWork );
 
   MB_MSG_MessageTerm( work->msgWork );
-  MB_CHILD_TermGraphic( work );
+  MB_SELECT_TermGraphic( work );
 }
 
 //--------------------------------------------------------------
 //  更新
 //--------------------------------------------------------------
-static const BOOL MB_CHILD_Main( MB_CHILD_WORK *work )
+static const BOOL MB_SELECT_Main( MB_SELECT_WORK *work )
 {
-
-  MB_COMM_UpdateSystem( work->commWork );
-
   switch( work->state )
   {
-  case MCS_FADEIN:
+  case MSS_FADEIN:
     WIPE_SYS_Start( WIPE_PATTERN_WMS , WIPE_TYPE_FADEIN , WIPE_TYPE_FADEIN , 
                 WIPE_FADE_BLACK , WIPE_DEF_DIV , WIPE_DEF_SYNC , work->heapId );
 
-    PMSND_PlayBGM( SEQ_BGM_PALPARK_BOX );
-    work->state = MCS_WAIT_FADEIN;
+    work->state = MSS_WAIT_FADEIN;
     break;
     
-  case MCS_WAIT_FADEIN:
+  case MSS_WAIT_FADEIN:
     if( WIPE_SYS_EndCheck() == TRUE )
     {
-      MB_COMM_InitComm( work->commWork );
-      MB_MSG_MessageDispNoWait( work->msgWork , MSG_MB_CHILD_01 );
-      work->state = MCS_WAIT_COMM_INIT;
+      if( GFL_UI_KEY_GetTrg() & PAD_BUTTON_A )
+      {
+        u8 i;
+        for( i=0;i<MB_CAP_POKE_NUM;i++ )
+        {
+          PPP_Setup( work->initWork->ppp[i] ,
+                     GFUser_GetPublicRand0(493)+1 ,
+                     GFUser_GetPublicRand0(100)+1 ,
+                     PTL_SETUP_ID_AUTO );
+        }
+        
+        work->state = MSS_FADEOUT;
+      }
     }
     break;
-  case MCS_FADEOUT:
+
+  case MSS_FADEOUT:
     WIPE_SYS_Start( WIPE_PATTERN_WMS , WIPE_TYPE_FADEOUT , WIPE_TYPE_FADEOUT , 
                 WIPE_FADE_BLACK , WIPE_DEF_DIV , WIPE_DEF_SYNC , work->heapId );
-    work->state = MCS_WAIT_FADEOUT;
+    work->state = MSS_WAIT_FADEOUT;
     break;
-  case MCS_WAIT_FADEOUT:
+    
+  case MSS_WAIT_FADEOUT:
     if( WIPE_SYS_EndCheck() == TRUE )
     {
       return TRUE;
     }
     break;
-    
-  //--------------------------------------------------------
-  //起動～チェック
-  case MCS_WAIT_COMM_INIT:
-    if( MB_COMM_IsInitComm(work->commWork) == TRUE )
-    {
-      //親機情報
-      //u8 addTemp[6] = {0x00,0x09,0xbf,0xf4,0x33,0x15};
-      const MBParentBssDesc *desc = MB_GetMultiBootParentBssDesc();
-      MB_COMM_InitChild( work->commWork , (u8*)desc->bssid );
-      
-      MB_MSG_MessageDispNoWait( work->msgWork , MSG_MB_CHILD_01 );
-      work->state = MCS_WAIT_CONNECT;
-    }
-    break;
-  
-  case MCS_WAIT_CONNECT:
-    if( MB_COMM_IsPostInitData( work->commWork ) == TRUE )
-    {
-      work->initData = MB_COMM_GetInitData( work->commWork );
-      work->state = MCS_CHECK_ROM;
-    }
-    break;
-  case MCS_CHECK_ROM:
-    if( GFL_UI_KEY_GetTrg() & PAD_BUTTON_A )
-    {
-      work->state = MCS_SELECT_FADEOUT;
-    }
-    break;
-  
-  //--------------------------------------------------------
-  //ボックスセレクト画面
-  case MCS_SELECT_FADEOUT:
-    WIPE_SYS_Start( WIPE_PATTERN_WMS , WIPE_TYPE_FADEOUT , WIPE_TYPE_FADEOUT , 
-                WIPE_FADE_BLACK , WIPE_DEF_DIV , WIPE_DEF_SYNC , work->heapId );
-    work->state = MCS_SELECT_FADEOUT_WAIT;
-    break;
-    
-  case MCS_SELECT_FADEOUT_WAIT:
-    if( WIPE_SYS_EndCheck() == TRUE )
-    {
-      MB_MSG_MessageTerm( work->msgWork );
-      MB_CHILD_TermGraphic( work );
-      work->msgWork = NULL;
-      
-      GFL_PROC_LOCAL_CallProc( work->procSys , 
-                               NO_OVERLAY_ID ,
-                               &MultiBootSelect_ProcData ,
-                               NULL );
-      
-      work->state = MCS_SELECT_MAIN;
-    }
-    break;
-    
-  case MCS_SELECT_MAIN:
-    {
-      const GFL_PROC_MAIN_STATUS ret = GFL_PROC_LOCAL_Main( work->procSys );
-      if( ret == GFL_PROC_MAIN_NULL )
-      {
-        work->state = MCS_SELECT_TERM;
-      }
-    }
-    break;
-    
-  case MCS_SELECT_TERM:
-    work->state = MCS_SELECT_FADEIN;
-
-    MB_CHILD_InitGraphic( work );
-    MB_CHILD_LoadResource( work );
-    work->msgWork = MB_MSG_MessageInit( work->heapId , MB_CHILD_FRAME_MSG );
-
-    break;
-    
-  case MCS_SELECT_FADEIN:
-    WIPE_SYS_Start( WIPE_PATTERN_WMS , WIPE_TYPE_FADEIN , WIPE_TYPE_FADEIN , 
-                WIPE_FADE_BLACK , WIPE_DEF_DIV , WIPE_DEF_SYNC , work->heapId );
-    work->state = MCS_SELECT_FADEIN_WAIT;
-    break;
-
-  case MCS_SELECT_FADEIN_WAIT:
-    if( WIPE_SYS_EndCheck() == TRUE )
-    {
-      work->state = MCS_CHECK_ROM;
-    }
-    break;
-    
-
   }
-  
-  if( work->msgWork != NULL )
-  {
-    MB_MSG_MessageMain( work->msgWork );
-  }
-  PMSND_Main();
-  
   
   if( GFL_UI_KEY_GetTrg() & PAD_BUTTON_START &&
       GFL_UI_KEY_GetTrg() & PAD_BUTTON_SELECT )
@@ -294,7 +176,7 @@ static const BOOL MB_CHILD_Main( MB_CHILD_WORK *work )
 //--------------------------------------------------------------
 //  グラフィック系初期化
 //--------------------------------------------------------------
-static void MB_CHILD_InitGraphic( MB_CHILD_WORK *work )
+static void MB_SELECT_InitGraphic( MB_SELECT_WORK *work )
 {
   GFL_DISP_SetDispOn();
   GFL_DISP_GX_InitVisibleControl();
@@ -349,20 +231,20 @@ static void MB_CHILD_InitGraphic( MB_CHILD_WORK *work )
     };
     GFL_BG_SetBGMode( &sys_data );
 
-    MB_CHILD_SetupBgFunc( &header_main1 , MB_CHILD_FRAME_MSG , GFL_BG_MODE_TEXT );
-    //MB_CHILD_SetupBgFunc( &header_main2 , LTVT_FRAME_CHARA , GFL_BG_MODE_TEXT );
-    MB_CHILD_SetupBgFunc( &header_main3 , MB_CHILD_FRAME_BG , GFL_BG_MODE_TEXT );
-    MB_CHILD_SetupBgFunc( &header_sub3  , MB_CHILD_FRAME_SUB_BG , GFL_BG_MODE_TEXT );
+    MB_SELECT_SetupBgFunc( &header_main1 , MB_SELECT_FRAME_MSG , GFL_BG_MODE_TEXT );
+    //MB_SELECT_SetupBgFunc( &header_main2 , LTVT_FRAME_CHARA , GFL_BG_MODE_TEXT );
+    MB_SELECT_SetupBgFunc( &header_main3 , MB_SELECT_FRAME_BG , GFL_BG_MODE_TEXT );
+    MB_SELECT_SetupBgFunc( &header_sub3  , MB_SELECT_FRAME_SUB_BG , GFL_BG_MODE_TEXT );
     
   }
   
 }
 
-static void MB_CHILD_TermGraphic( MB_CHILD_WORK *work )
+static void MB_SELECT_TermGraphic( MB_SELECT_WORK *work )
 {
-  GFL_BG_FreeBGControl( MB_CHILD_FRAME_MSG );
-  GFL_BG_FreeBGControl( MB_CHILD_FRAME_BG );
-  GFL_BG_FreeBGControl( MB_CHILD_FRAME_SUB_BG );
+  GFL_BG_FreeBGControl( MB_SELECT_FRAME_MSG );
+  GFL_BG_FreeBGControl( MB_SELECT_FRAME_BG );
+  GFL_BG_FreeBGControl( MB_SELECT_FRAME_SUB_BG );
   GFL_BMPWIN_Exit();
   GFL_BG_Exit();
 }
@@ -371,7 +253,7 @@ static void MB_CHILD_TermGraphic( MB_CHILD_WORK *work )
 //--------------------------------------------------------------------------
 //  Bg初期化 機能部
 //--------------------------------------------------------------------------
-static void MB_CHILD_SetupBgFunc( const GFL_BG_BGCNT_HEADER *bgCont , u8 bgPlane , u8 mode )
+static void MB_SELECT_SetupBgFunc( const GFL_BG_BGCNT_HEADER *bgCont , u8 bgPlane , u8 mode )
 {
   GFL_BG_SetBGControl( bgPlane, bgCont, mode );
   GFL_BG_SetVisible( bgPlane, VISIBLE_ON );
@@ -383,7 +265,7 @@ static void MB_CHILD_SetupBgFunc( const GFL_BG_BGCNT_HEADER *bgCont , u8 bgPlane
 //--------------------------------------------------------------
 //  リソース読み込み
 //--------------------------------------------------------------
-static void MB_CHILD_LoadResource( MB_CHILD_WORK *work )
+static void MB_SELECT_LoadResource( MB_SELECT_WORK *work )
 {
   ARCHANDLE *arcHandle = GFL_ARC_OpenDataHandle( ARCID_MB_CHILD , work->heapId );
 
@@ -391,17 +273,17 @@ static void MB_CHILD_LoadResource( MB_CHILD_WORK *work )
   GFL_ARCHDL_UTIL_TransVramPalette( arcHandle , NARC_mb_child_gra_bg_sub_NCLR , 
                     PALTYPE_SUB_BG , 0 , 0 , work->heapId );
   GFL_ARCHDL_UTIL_TransVramBgCharacter( arcHandle , NARC_mb_child_gra_bg_sub_NCGR ,
-                    MB_CHILD_FRAME_SUB_BG , 0 , 0, FALSE , work->heapId );
+                    MB_SELECT_FRAME_SUB_BG , 0 , 0, FALSE , work->heapId );
   GFL_ARCHDL_UTIL_TransVramScreen( arcHandle , NARC_mb_child_gra_bg_sub_NSCR , 
-                    MB_CHILD_FRAME_SUB_BG ,  0 , 0, FALSE , work->heapId );
+                    MB_SELECT_FRAME_SUB_BG ,  0 , 0, FALSE , work->heapId );
   
   //上画面
   GFL_ARCHDL_UTIL_TransVramPalette( arcHandle , NARC_mb_child_gra_bg_main_NCLR , 
                     PALTYPE_MAIN_BG , 0 , 0 , work->heapId );
   GFL_ARCHDL_UTIL_TransVramBgCharacter( arcHandle , NARC_mb_child_gra_bg_main_NCGR ,
-                    MB_CHILD_FRAME_BG , 0 , 0, FALSE , work->heapId );
+                    MB_SELECT_FRAME_BG , 0 , 0, FALSE , work->heapId );
   GFL_ARCHDL_UTIL_TransVramScreen( arcHandle , NARC_mb_child_gra_bg_main_NSCR , 
-                    MB_CHILD_FRAME_BG ,  0 , 0, FALSE , work->heapId );
+                    MB_SELECT_FRAME_BG ,  0 , 0, FALSE , work->heapId );
   
   GFL_ARC_CloseDataHandle( arcHandle );
 }
@@ -409,31 +291,59 @@ static void MB_CHILD_LoadResource( MB_CHILD_WORK *work )
 
 
 #pragma mark [>proc func
-static GFL_PROC_RESULT MB_CHILD_ProcInit( GFL_PROC * proc, int * seq , void *pwk, void *mywk );
-static GFL_PROC_RESULT MB_CHILD_ProcMain( GFL_PROC * proc, int * seq , void *pwk, void *mywk );
-static GFL_PROC_RESULT MB_CHILD_ProcTerm( GFL_PROC * proc, int * seq , void *pwk, void *mywk );
+static GFL_PROC_RESULT MB_SELECT_ProcInit( GFL_PROC * proc, int * seq , void *pwk, void *mywk );
+static GFL_PROC_RESULT MB_SELECT_ProcMain( GFL_PROC * proc, int * seq , void *pwk, void *mywk );
+static GFL_PROC_RESULT MB_SELECT_ProcTerm( GFL_PROC * proc, int * seq , void *pwk, void *mywk );
 
-GFL_PROC_DATA MultiBootChild_ProcData =
+GFL_PROC_DATA MultiBootSelect_ProcData =
 {
-  MB_CHILD_ProcInit,
-  MB_CHILD_ProcMain,
-  MB_CHILD_ProcTerm
+  MB_SELECT_ProcInit,
+  MB_SELECT_ProcMain,
+  MB_SELECT_ProcTerm
 };
 
 //--------------------------------------------------------------
 //  初期化
 //--------------------------------------------------------------
-static GFL_PROC_RESULT MB_CHILD_ProcInit( GFL_PROC * proc, int * seq , void *pwk, void *mywk )
+static GFL_PROC_RESULT MB_SELECT_ProcInit( GFL_PROC * proc, int * seq , void *pwk, void *mywk )
 {
-  MB_CHILD_WORK *work;
+  MB_SELECT_WORK *work;
+  MB_SELECT_INIT_WORK *initWork;
   
-  GFL_HEAP_CreateHeap( GFL_HEAPID_APP, HEAPID_MULTIBOOT, 0xC0000 );
-  GFL_HEAP_CreateHeap( GFL_HEAPID_APP, HEAPID_MULTIBOOT_DATA, 0xC0000 );
-  work = GFL_PROC_AllocWork( proc, sizeof(MB_CHILD_WORK), HEAPID_MULTIBOOT );
+  if( pwk == NULL )
+  {
+//マルチブート用きり分け
+#ifndef MULTI_BOOT_MAKE  //通常時処理
+    const HEAPID parentHeap = GFL_HEAPID_APP;
+#else                    //DL子機時処理
+    const HEAPID parentHeap = HEAPID_MULTIBOOT;
+#endif //MULTI_BOOT_MAKE
+    u8 i;
+    GFL_HEAP_CreateHeap( parentHeap , HEAPID_MB_BOX, 0x80000 );
+    
+    work = GFL_PROC_AllocWork( proc, sizeof(MB_SELECT_WORK), parentHeap );
+    initWork = GFL_HEAP_AllocClearMemory( HEAPID_MB_BOX , sizeof(MB_SELECT_INIT_WORK) );
 
-  work->heapId = HEAPID_MULTIBOOT;
+    initWork->parentHeap = parentHeap;
+    for( i=0;i<MB_CAP_POKE_NUM;i++ )
+    {
+      initWork->ppp[i] = GFL_HEAP_AllocClearMemory( parentHeap , POKETOOL_GetPPPWorkSize() );
+    }
+
+    work->initWork = initWork;
+  }
+  else
+  {
+    initWork = pwk;
+    GFL_HEAP_CreateHeap( initWork->parentHeap , HEAPID_MB_BOX, 0x80000 );
+    work = GFL_PROC_AllocWork( proc, sizeof(MB_SELECT_WORK), HEAPID_MULTIBOOT );
+    work->initWork = pwk;
+  }
   
-  MB_CHILD_Init( work );
+
+  work->heapId = HEAPID_MB_BOX;
+  
+  MB_SELECT_Init( work );
   
   return GFL_PROC_RES_FINISH;
 }
@@ -441,14 +351,24 @@ static GFL_PROC_RESULT MB_CHILD_ProcInit( GFL_PROC * proc, int * seq , void *pwk
 //--------------------------------------------------------------
 //  開放
 //--------------------------------------------------------------
-static GFL_PROC_RESULT MB_CHILD_ProcTerm( GFL_PROC * proc, int * seq , void *pwk, void *mywk )
+static GFL_PROC_RESULT MB_SELECT_ProcTerm( GFL_PROC * proc, int * seq , void *pwk, void *mywk )
 {
-  MB_CHILD_WORK *work = mywk;
+  MB_SELECT_WORK *work = mywk;
   
-  MB_CHILD_Term( work );
+  MB_SELECT_Term( work );
+
+  if( pwk == NULL )
+  {
+    u8 i;
+    for( i=0;i<MB_CAP_POKE_NUM;i++ )
+    {
+      GFL_HEAP_FreeMemory( work->initWork->ppp[i] );
+    }
+    GFL_HEAP_FreeMemory( work->initWork );
+  }
 
   GFL_PROC_FreeWork( proc );
-  GFL_HEAP_DeleteHeap( HEAPID_MULTIBOOT );
+  GFL_HEAP_DeleteHeap( HEAPID_MB_BOX );
 
   return GFL_PROC_RES_FINISH;
 }
@@ -456,10 +376,10 @@ static GFL_PROC_RESULT MB_CHILD_ProcTerm( GFL_PROC * proc, int * seq , void *pwk
 //--------------------------------------------------------------
 //  ループ
 //--------------------------------------------------------------
-static GFL_PROC_RESULT MB_CHILD_ProcMain( GFL_PROC * proc, int * seq , void *pwk, void *mywk )
+static GFL_PROC_RESULT MB_SELECT_ProcMain( GFL_PROC * proc, int * seq , void *pwk, void *mywk )
 {
-  MB_CHILD_WORK *work = mywk;
-  const BOOL ret = MB_CHILD_Main( work );
+  MB_SELECT_WORK *work = mywk;
+  const BOOL ret = MB_SELECT_Main( work );
   
   if( ret == TRUE )
   {
