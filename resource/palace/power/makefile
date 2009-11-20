@@ -12,7 +12,7 @@ USERS	= matsuda
 #------------------------------------------------------------------------------
 #※ここに作成するnarc名を書く
 #------------------------------------------------------------------------------
-targetname = mission
+targetname = power
 
 #------------------------------------------------------------------------------
 #※コピー先へのパスを書く（通常はPROJECT_ARCDIRでよい）
@@ -41,15 +41,15 @@ include	$(NITROSYSTEM_ROOT)/build/buildtools/modulerules
 
 ELF2BIN		= $(PROJECT_ROOT)/tools/celf2bin.exe
 XLS2TAB		= ruby $(PROJECT_ROOT)/tools/exceltool/xls2xml/tab_out_sheet.rb
-DATAFILE	= パレス_ミッションデータ.xls
+DATAFILE	= パレス_パワーデータ.xls
 DATATXT = $(DATAFILE:.xls=.csv)
 
 ZONETABLE_DIR		= ../../fldmapdata/zonetable/
 ZONEID_H		= zone_id.h
 
 MESSAGE_INC_DIR		= ../../message/dst/
-MSG_MISSION_H		= msg_mission.h
-MSG_MISSION_MONO_H		= msg_mission_monolith.h
+MSG_POWER_H		= msg_power.h
+MSG_POWER_EXPLAIN_H		= msg_power_explain.h
 
 FLDMMDL_DIR		= ../../fldmmdl/
 FLDMMDL_CODE_H		= fldmmdl_objcode.h
@@ -76,8 +76,8 @@ endif
 #------------------------------------------------------------------------------
 #	make do-build ルール
 #------------------------------------------------------------------------------
-#do-build:	$(ZONETABLE_DIR)$(ZONEID_H) $(MESSAGE_INC_DIR)$(MSG_MISSION_H) $(MESSAGE_INC_DIR)$(MSG_MISSION_MONO_H) $(FLDMMDL_DIR)$(FLDMMDL_CODE_H) $(ITEM_DIR)$(ITEM_H) $(FIELDCOMM_DIR)$(MISSION_TYPES_H) subdir $(TARGETDIR)/$(targetname).narc
-#do-build:	subdir $(TARGETDIR)/$(targetname).narc $(ZONEID_H) $(MSG_MISSION_H) $(MSG_MISSION_MONO_H) $(FLDMMDL_CODE_H) $(ITEM_H) $(MISSION_TYPES_H)
+#do-build:	$(ZONETABLE_DIR)$(ZONEID_H) $(MESSAGE_INC_DIR)$(MSG_POWER_H) $(MESSAGE_INC_DIR)$(MSG_POWER_EXPLAIN_H) $(FLDMMDL_DIR)$(FLDMMDL_CODE_H) $(ITEM_DIR)$(ITEM_H) $(FIELDCOMM_DIR)$(MISSION_TYPES_H) subdir $(TARGETDIR)/$(targetname).narc
+#do-build:	subdir $(TARGETDIR)/$(targetname).narc $(ZONEID_H) $(MSG_POWER_H) $(MSG_POWER_EXPLAIN_H) $(FLDMMDL_CODE_H) $(ITEM_H) $(MISSION_TYPES_H)
 do-build:	subdir $(TARGETDIR)/$(targetname).narc
 
 subdir:
@@ -91,7 +91,7 @@ $(TARGETDIR)/$(targetname).narc: $(targetname).narc
 
 ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、元ファイルからコンバートするルールを有効にする
 # コピー先のnarcが古い場合実行する
-$(targetname).narc: $(TARGETDIR)/$(targetname).narc $(ZONEID_H) $(MSG_MISSION_H) $(MSG_MISSION_MONO_H) $(FLDMMDL_CODE_H) $(ITEM_H) $(MISSION_TYPES_H) makefile mission_data.bin mission_conv.rb
+$(targetname).narc: $(TARGETDIR)/$(targetname).narc $(ZONEID_H) $(MSG_POWER_H) $(MSG_POWER_EXPLAIN_H) $(FLDMMDL_CODE_H) $(ITEM_H) $(MISSION_TYPES_H) makefile power_data.bin power_conv.rb
 	-ls *.bin > $(LIST_FILE)
 	perl $(PROJECT_ROOT)tools/arc_list_make.pl $(LIST_FILE)
 	nnsarc -r -l -n -i $(targetname) -S $(LIST_FILE)
@@ -103,11 +103,11 @@ $(ZONEID_H): $(ZONETABLE_DIR)$(ZONEID_H)
 #$(ZONETABLE_DIR)$(ZONEID_H): $(ZONEID_H)
 	$(COPY)	$(ZONETABLE_DIR)$(ZONEID_H) $(ZONEID_H)
 
-$(MSG_MISSION_H): $(MESSAGE_INC_DIR)$(MSG_MISSION_H)
-	$(COPY)	$(MESSAGE_INC_DIR)$(MSG_MISSION_H) $(MSG_MISSION_H)
+$(MSG_POWER_H): $(MESSAGE_INC_DIR)$(MSG_POWER_H)
+	$(COPY)	$(MESSAGE_INC_DIR)$(MSG_POWER_H) $(MSG_POWER_H)
 
-$(MSG_MISSION_MONO_H): $(MESSAGE_INC_DIR)$(MSG_MISSION_MONO_H)
-	$(COPY)	$(MESSAGE_INC_DIR)$(MSG_MISSION_MONO_H) $(MSG_MISSION_MONO_H)
+$(MSG_POWER_EXPLAIN_H): $(MESSAGE_INC_DIR)$(MSG_POWER_EXPLAIN_H)
+	$(COPY)	$(MESSAGE_INC_DIR)$(MSG_POWER_EXPLAIN_H) $(MSG_POWER_EXPLAIN_H)
 
 $(FLDMMDL_CODE_H): $(FLDMMDL_DIR)$(FLDMMDL_CODE_H)
 	$(COPY)	$(FLDMMDL_DIR)$(FLDMMDL_CODE_H) $(FLDMMDL_CODE_H)
@@ -118,21 +118,21 @@ $(ITEM_H): $(ITEM_DIR)$(ITEM_H)
 $(MISSION_TYPES_H): $(FIELDCOMM_DIR)$(MISSION_TYPES_H)
 	$(COPY)	$(FIELDCOMM_DIR)$(MISSION_TYPES_H) $(MISSION_TYPES_H)
 
-$(DATATXT):	$(DATAFILE) $(ZONEID_H) $(MSG_MISSION_H) $(MSG_MISSION_MONO_H) $(FLDMMDL_CODE_H) $(ITEM_H) $(MISSION_TYPES_H)
-	$(XLS2TAB) -c -n 2 $(DATAFILE) > $(DATATXT)
+$(DATATXT):	$(DATAFILE) $(ZONEID_H) $(MSG_POWER_H) $(MSG_POWER_EXPLAIN_H) $(FLDMMDL_CODE_H) $(ITEM_H) $(MISSION_TYPES_H)
+	$(XLS2TAB) -c -n 4 $(DATAFILE) > $(DATATXT)
 
 #%.bin: %.c
-#mission_data.bin: mission_data.cdat
-mission_data.bin: $(DATATXT)
-	@ruby mission_conv.rb $(DATATXT) 
-	@echo "mission data convert"
+#power_data.bin: power_data.cdat
+power_data.bin: $(DATATXT)
+	@ruby power_conv.rb $(DATATXT) 
+	@echo "power data convert"
 	@echo "//" > temp.c
-	@cat sdk_header.h $(ZONEID_H) $(MSG_MISSION_H) $(MSG_MISSION_MONO_H) $(FLDMMDL_CODE_H) $(ITEM_H) $(MISSION_TYPES_H) mission_data.cdat |unix2dos > temp.c
+	@cat sdk_header.h $(ZONEID_H) $(MSG_POWER_H) $(MSG_POWER_EXPLAIN_H) $(FLDMMDL_CODE_H) $(ITEM_H) $(MISSION_TYPES_H) power_data.cdat |unix2dos > temp.c
 	@$(CC) $(INCLUDES) $(INCPATH)  -c temp.c -MD -o temp.o
-	@$(MWLD) -dis -o mission_data.elf temp.o
-	@$(ELF2BIN) mission_data.elf
+	@$(MWLD) -dis -o power_data.elf temp.o
+	@$(ELF2BIN) power_data.elf
 	@-rm temp.o temp.c temp.d
-	@-rm mission_data.cdat
+	@-rm power_data.cdat
 
 endif
 
@@ -146,15 +146,15 @@ ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、中間ファイル削除
 	rm -f $(targetname).narc
 	rm -f $(targetname).naix
 	rm -f $(ZONEID_H)
-	rm -f $(MSG_MISSION_H)
-	rm -f $(MSG_MISSION_MONO_H)
+	rm -f $(MSG_POWER_H)
+	rm -f $(MSG_POWER_EXPLAIN_H)
 	rm -f $(FLDMMDL_CODE_H)
 	rm -f $(ITEM_H)
 	rm -f $(MISSION_TYPES_H)
 	rm -f $(MISSION_TYPES_H)
 	rm -f *.csv
-	rm -f mission_data.elf
-	rm -f mission_data.bin
+	rm -f power_data.elf
+	rm -f power_data.bin
 endif
 	rm -f $(TARGETDIR)/$(targetname).narc
 	rm -f $(TARGETDIR)/$(targetname).naix
