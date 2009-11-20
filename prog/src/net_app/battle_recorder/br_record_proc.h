@@ -1,41 +1,31 @@
 //[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
 /**
  *
- *	@file		br_core.h
- *	@brief	バトルレコーダー本体
+ *	@file		br_record_proc.h
+ *	@brief	レコードプロセス
  *	@author	Toru=Nagihashi
- *	@date		2009.11.09
+ *	@date		2009.11.13
  *
  */
 //]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 #pragma once
-
-#include "net_app/battle_recorder.h"
-
+#include "br_proc_sys.h"
+#include "br_res.h"
 //=============================================================================
 /**
- *					定数
+ *					定数宣言
 */
 //=============================================================================
 //-------------------------------------
-///	プロセスID
+///	レコードモード
 //=====================================
-typedef enum 
+typedef enum
 {
-	BR_PROCID_START,				//起動画面
-	BR_PROCID_MENU,					//メニュー画面
-	BR_PROCID_RECORD,				//録画記録画面
-	BR_PROCID_BTLSUBWAY,		//バトルサブウェイ成績画面
-	BR_PROCID_RNDMATCH,			//ランダムマッチ成績画面
-	BR_PROCID_BV_RANK,			//バトルビデオ30件画面（最新、通信対戦、サブウェイ）
-	BR_PROCID_BV_SEARCH,		//詳しく探す画面
-	BR_PROCID_CODEIN,				//バトルビデオナンバー入力画面
-	BR_PROCID_BV_SEND,			//バトルビデオ送信画面
-	BR_PROCID_MUSICAL_LOOK,	//ミュージカルショット	写真を見る画面
-	BR_PROCID_MUSICAL_SEND,	//ミュージカルショット	写真を送る画面
-
-	BR_PROCID_MAX
-} BR_PROCID;
+	BR_RECODE_PROC_MY,
+	BR_RECODE_PROC_OTHER_00,
+	BR_RECODE_PROC_OTHER_01,
+	BR_RECODE_PROC_OTHER_02,
+} BR_RECODE_PROC_MODE;
 
 //=============================================================================
 /**
@@ -43,17 +33,23 @@ typedef enum
 */
 //=============================================================================
 //-------------------------------------
-///	バトルレコーダーコア用引数
+///	レコードプロセス引数
 //=====================================
 typedef struct 
 {
-	BATTLERECORDER_PARAM	*p_param;
-} BR_CORE_PARAM;
+	BR_RECODE_PROC_MODE	mode;					//[out]起動モード
+	BR_RES_WORK					*p_res;				//[in]リソース管理
+	BR_PROC_SYS					*p_procsys;		//[in]プロセス管理
+	GFL_CLUNIT					*p_unit;			//[in]ユニット
+} BR_RECORD_PROC_PARAM;
 
 
 //=============================================================================
 /**
- *					プロセスデータ
+ *					外部公開関数
 */
 //=============================================================================
-extern const GFL_PROC_DATA BR_CORE_ProcData;
+//-------------------------------------
+///	レコードプロセスデータ
+//=====================================
+extern const GFL_PROC_DATA	BR_RECORD_ProcData;
