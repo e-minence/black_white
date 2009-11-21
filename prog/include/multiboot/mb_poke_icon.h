@@ -1,17 +1,15 @@
 //======================================================================
 /**
- * @file	mb_select_sys.h
- * @brief	マルチブート・ポケモン選択
+ * @file	mb_poke_icon.h
+ * @brief	マルチブート・ポケアイコン表示(子機は刺さっているROMからデータを抜く
  * @author	ariizumi
- * @data	09/11/19
+ * @data	09/11/20
  *
- * モジュール名：MB_SELECT
+ * モジュール名：MB_ICON
  */
 //======================================================================
 #pragma once
-#include "multiboot/mb_local_def.h"
 #include "multiboot/mb_data_def.h"
-#include "poke_tool/poke_tool.h"
 
 //======================================================================
 //	define
@@ -27,20 +25,16 @@
 //	typedef struct
 //======================================================================
 #pragma mark [> struct
-typedef struct
-{
-  HEAPID parentHeap;
-  DLPLAY_CARD_TYPE cardType;
-  
-  //pppサイズ分のワークを確保しておいてください。
-  void *ppp[MB_CAP_POKE_NUM];
-}MB_SELECT_INIT_WORK;
 
 
 //======================================================================
 //	proto
 //======================================================================
 #pragma mark [> proto
-extern GFL_PROC_DATA MultiBootSelect_ProcData;
-
+extern ARCHANDLE* MB_ICON_GetArcHandle( HEAPID heapId , const DLPLAY_CARD_TYPE cardType );
+extern u32 MB_ICON_GetPltResId( const DLPLAY_CARD_TYPE cardType );
+extern u32 MB_ICON_GetCharResId( POKEMON_PASO_PARAM *ppp , const DLPLAY_CARD_TYPE cardType );
+extern u32 MB_ICON_GetCellResId( const DLPLAY_CARD_TYPE cardType );
+extern u32 MB_ICON_GetAnmResId( const DLPLAY_CARD_TYPE cardType );
+extern const u8 MB_ICON_GetPalNumber( POKEMON_PASO_PARAM *ppp , const DLPLAY_CARD_TYPE cardType );
 
