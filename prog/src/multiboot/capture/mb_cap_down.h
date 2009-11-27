@@ -1,15 +1,14 @@
 //======================================================================
 /**
- * @file	  mb_cap_obj.c
- * @brief	  •ßŠlƒQ[ƒ€EáŠQ•¨
+ * @file	  mb_cap_down.h
+ * @brief	  •ßŠlƒQ[ƒ€E‰º‰æ–Ê
  * @author	ariizumi
- * @data	  09/11/24
+ * @data	  09/11/26
  *
- * ƒ‚ƒWƒ…[ƒ‹–¼FMB_CAP_OBJ
+ * ƒ‚ƒWƒ…[ƒ‹–¼FMB_CAP_DOWN
  */
 //======================================================================
 #pragma once
-
 #include "./mb_cap_local_def.h"
 
 //======================================================================
@@ -21,27 +20,12 @@
 //	enum
 //======================================================================
 #pragma mark [> enum
-typedef enum
-{
-  MCOT_GRASS,
-  MCOT_GRASS_SIDE,
-  MCOT_WOOD,
-  MCOT_WATER,
-  
-  MCOT_MAX,
-}MB_CAP_OBJ_TYPE;
 
 //======================================================================
 //	typedef struct
 //======================================================================
 #pragma mark [> struct
-typedef struct _MB_CAP_OBJ MB_CAP_OBJ;
-
-typedef struct
-{
-  MB_CAP_OBJ_TYPE type;
-  VecFx32     pos;
-}MB_CAP_OBJ_INIT_WORK;
+typedef struct _MB_CAP_DOWN MB_CAP_DOWN;
 
 //======================================================================
 //	proto
@@ -51,6 +35,7 @@ typedef struct
 //--------------------------------------------------------------
 //	
 //--------------------------------------------------------------
-extern MB_CAP_OBJ *MB_CAP_OBJ_CreateObject( MB_CAPTURE_WORK *capWork , MB_CAP_OBJ_INIT_WORK *initWork );
-extern void MB_CAP_OBJ_DeleteObject( MB_CAPTURE_WORK *capWork , MB_CAP_OBJ *objWork );
+extern MB_CAP_DOWN* MB_CAP_DOWN_InitSystem( MB_CAPTURE_WORK *work );
+extern void MB_CAP_POKE_DeleteSystem( MB_CAPTURE_WORK *work , MB_CAP_DOWN *downWork );
+extern void MB_CAP_POKE_UpdateSystem( MB_CAPTURE_WORK *capWork , MB_CAP_DOWN *downWork );
 
