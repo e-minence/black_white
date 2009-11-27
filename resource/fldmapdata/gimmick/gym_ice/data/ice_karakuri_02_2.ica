@@ -3,7 +3,7 @@
 <ica version="1.6.0">
 
 <head>
-	<create user="ibe_mana" host="W00191" date="2009-11-27T17:03:19" source="ice_karakuri_02.mb"/>
+	<create user="ibe_mana" host="W00191" date="2009-11-27T17:02:18" source="ice_karakuri_02_2.mb"/>
 	<title>Character Animation Data for NINTENDO NITRO-System</title>
 	<generator name="Maya 6.5 NNS_Export" version="1.6.0.20060417"/>
 </head>
@@ -29,8 +29,8 @@
 </node_scale_data>
 
 <node_rotate_data size="11">
-	0.000000 0.000000 20.000000 40.000000 60.000000 80.000000 100.000000 120.000000 140.000000 160.000000
-	-180.000000
+	0.000000 -180.000000 160.000000 140.000000 120.000000 100.000000 80.000000 60.000000 40.000000 20.000000
+	0.000000
 </node_rotate_data>
 
 <node_translate_data size="1">
