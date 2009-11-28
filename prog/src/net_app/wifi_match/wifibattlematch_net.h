@@ -1,34 +1,20 @@
 //[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
 /**
  *
- *	@file		wifibattlematch.h
- *	@brief	WIFIのバトルマッチ画面
+ *	@file		wifibattlematch_net.h
+ *	@brief  WIFIバトル用ネットモジュール
  *	@author	Toru=Nagihashi
- *	@date		2009.11.02
+ *	@date		2009.11.25
  *
  */
 //]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 #pragma once
 
-#include "savedata/mystatus.h"
 //=============================================================================
 /**
  *					定数宣言
 */
 //=============================================================================
-//-------------------------------------
-///	種類
-//=====================================
-typedef enum
-{
-	WIFIBATTLEMATCH_MODE_RANDOM_FREE,
-	WIFIBATTLEMATCH_MODE_RANDOM_RATE,
-	WIFIBATTLEMATCH_MODE_WIFI_LIMIT,
-	WIFIBATTLEMATCH_MODE_WIFI_NOLIMIT,
-	WIFIBATTLEMATCH_MODE_LIVE,
-
-} WIFIBATTLEMATCH_MODE;
-
 
 //=============================================================================
 /**
@@ -36,19 +22,21 @@ typedef enum
 */
 //=============================================================================
 //-------------------------------------
-///	PROCパラメータ
+///	ネットモジュール
 //=====================================
-typedef struct 
-{
-	WIFIBATTLEMATCH_MODE	mode;
-	const MYSTATUS				*p_my;
-  SAVE_CONTROL_WORK     *p_save;
-} WIFIBATTLEMATCH_PARAM;
+typedef struct _WIFIBATTLEMATCH_NET_WORK WIFIBATTLEMATCH_NET_WORK;
 
 
 //=============================================================================
 /**
- *					外部参照
+ *					プロトタイプ宣言
 */
 //=============================================================================
-extern const GFL_PROC_DATA	WifiBattleMaptch_ProcData;
+extern WIFIBATTLEMATCH_NET_WORK * WIFIBATTLEMATCH_NET_Init( HEAPID heapID );
+extern void WIFIBATTLEMATCH_NET_Exit( WIFIBATTLEMATCH_NET_WORK *p_wk );
+extern void WIFIBATTLEMATCH_NET_Main( WIFIBATTLEMATCH_NET_WORK *p_wk );
+
+extern BOOL WIFIBATTLEMATCH_NET_IsError( const WIFIBATTLEMATCH_NET_WORK *cp_wk );
+
+extern void WIFIBATTLEMATCH_NET_StartMatchMake( WIFIBATTLEMATCH_NET_WORK *p_wk );
+extern BOOL WIFIBATTLEMATCH_NET_WaitMatchMake( WIFIBATTLEMATCH_NET_WORK *p_wk );
