@@ -1,14 +1,15 @@
 //======================================================================
 /**
- * @file	  mb_cap_down.h
- * @brief	  捕獲ゲーム・下画面
+ * @file	  mb_cap_obj.c
+ * @brief	  捕獲ゲーム・障害物
  * @author	ariizumi
- * @data	  09/11/26
+ * @data	  09/11/24
  *
- * モジュール名：MB_CAP_DOWN
+ * モジュール名：MB_CAP_BALL
  */
 //======================================================================
 #pragma once
+
 #include "./mb_cap_local_def.h"
 
 //======================================================================
@@ -20,20 +21,18 @@
 //	enum
 //======================================================================
 #pragma mark [> enum
-//ステート
-typedef enum
-{
-  MCDS_NONE,        //処理無し
-  MCDS_DRAG,        //引っ張る
-  MCDS_SHOT_WAIT,   //飛んでる
-  MCDS_SUPPLY_BALL, //ボール補充
-}MB_CAP_DOWN_STATE;
 
 //======================================================================
 //	typedef struct
 //======================================================================
 #pragma mark [> struct
-typedef struct _MB_CAP_DOWN MB_CAP_DOWN;
+typedef struct _MB_CAP_BALL MB_CAP_BALL;
+
+typedef struct
+{
+  BOOL isBonus;
+  VecFx32 targetPos;
+}MB_CAP_BALL_INIT_WORK;
 
 //======================================================================
 //	proto
@@ -43,17 +42,9 @@ typedef struct _MB_CAP_DOWN MB_CAP_DOWN;
 //--------------------------------------------------------------
 //	
 //--------------------------------------------------------------
-extern MB_CAP_DOWN* MB_CAP_DOWN_InitSystem( MB_CAPTURE_WORK *work );
-extern void MB_CAP_DOWN_DeleteSystem( MB_CAPTURE_WORK *work , MB_CAP_DOWN *downWork );
-extern void MB_CAP_DOWN_UpdateSystem( MB_CAPTURE_WORK *capWork , MB_CAP_DOWN *downWork );
+extern MB_CAP_BALL *MB_CAP_BALL_CreateObject( MB_CAPTURE_WORK *capWork , MB_CAP_BALL_INIT_WORK *initWork );
+extern void MB_CAP_BALL_DeleteObject( MB_CAPTURE_WORK *capWork , MB_CAP_BALL *ballWork );
+extern void MB_CAP_BALL_UpdateObject( MB_CAPTURE_WORK *capWork , MB_CAP_BALL *ballWork );
 
-extern const MB_CAP_DOWN_STATE MB_CAP_DOWN_GetState( const MB_CAP_DOWN *downWork );
-
-extern const fx32 MB_CAP_DOWN_GetPullLen( const MB_CAP_DOWN *downWork );
-extern const u16  MB_CAP_DOWN_GetRotAngle( const MB_CAP_DOWN *downWork );
-extern const fx32 MB_CAP_DOWN_GetShotLen( const MB_CAP_DOWN *downWork );
-extern const u16  MB_CAP_DOWN_GetShotAngle( const MB_CAP_DOWN *downWork );
-
-//ボールの補充
-extern void MB_CAP_DOWN_ReloadBall( MB_CAP_DOWN *downWork );
+extern const BOOL MB_CAP_BALL_IsFinish( const MB_CAP_BALL *ballWork );
 
