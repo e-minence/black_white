@@ -1,11 +1,11 @@
 //======================================================================
 /**
- * @file	  mb_cap_obj.c
- * @brief	  捕獲ゲーム・障害物
+ * @file	  mb_cap_effect.c
+ * @brief	  捕獲ゲーム・エフェクト
  * @author	ariizumi
- * @data	  09/11/24
+ * @data	  09/11/30
  *
- * モジュール名：MB_CAP_OBJ
+ * モジュール名：MB_CAP_EFFECT
  */
 //======================================================================
 #pragma once
@@ -21,26 +21,19 @@
 //	enum
 //======================================================================
 #pragma mark [> enum
-typedef enum
-{
-  MCOT_GRASS,
-  MCOT_GRASS_SIDE,
-  MCOT_WOOD,
-  MCOT_WATER,
-  
-  MCOT_MAX,
-}MB_CAP_OBJ_TYPE;
 
 //======================================================================
 //	typedef struct
 //======================================================================
 #pragma mark [> struct
 
+typedef struct _MB_CAP_EFFECT MB_CAP_EFFECT;
+
 typedef struct
 {
-  MB_CAP_OBJ_TYPE type;
+  MB_CAP_EFFECT_TYPE type;
   VecFx32     pos;
-}MB_CAP_OBJ_INIT_WORK;
+}MB_CAP_EFFECT_INIT_WORK;
 
 //======================================================================
 //	proto
@@ -50,7 +43,8 @@ typedef struct
 //--------------------------------------------------------------
 //	
 //--------------------------------------------------------------
-extern MB_CAP_OBJ *MB_CAP_OBJ_CreateObject( MB_CAPTURE_WORK *capWork , MB_CAP_OBJ_INIT_WORK *initWork );
-extern void MB_CAP_OBJ_DeleteObject( MB_CAPTURE_WORK *capWork , MB_CAP_OBJ *objWork );
-extern void MB_CAP_OBJ_GetHitWork( MB_CAP_OBJ *objWork , MB_CAP_HIT_WORK *hitWork );
+extern MB_CAP_EFFECT *MB_CAP_EFFECT_CreateObject( MB_CAPTURE_WORK *capWork , MB_CAP_EFFECT_INIT_WORK *initWork );
+extern void MB_CAP_EFFECT_DeleteObject( MB_CAPTURE_WORK *capWork , MB_CAP_EFFECT *effWork );
+extern void MB_CAP_EFFECT_UpdateObject( MB_CAPTURE_WORK *capWork , MB_CAP_EFFECT *effWork );
+extern const BOOL MB_CAP_EFFECT_IsFinish( const MB_CAP_EFFECT *effWork );
 
