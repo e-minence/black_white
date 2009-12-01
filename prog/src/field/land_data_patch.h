@@ -2,12 +2,12 @@
 /**
  *	GAME FREAK inc.
  *
- *	@file		field_g3dmap_exwork.h
- *	@brief	field_g3d_mapperのGFL_G3D_MAP拡張ワーク管理処理
+ *	@file		land_data_patch.h
+ *	@brief  マップの基本的なアトリビュート、配置データを書き換え、追加設定
  *	@author	tomoya takahashi
- *	@date		2009.05.01
+ *	@date		2009.11.30
  *
- *	モジュール名：FLD_G3D_MAP_EXWORK
+ *	モジュール名：FIELD_LAND_DATA_PATCH
  */
 //]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 #pragma once
@@ -16,10 +16,11 @@
 extern "C"{
 #endif
 
-#include <gflib.h>
-#include "field_ground_anime.h"
+#include "arc/fieldmap/land_data_patch_def.h"
+
+#include "map/dp3format.h"
+
 #include "field_buildmodel.h"
-#include "field_wfbc.h"
 
 //-----------------------------------------------------------------------------
 /**
@@ -33,33 +34,25 @@ extern "C"{
 */
 //-----------------------------------------------------------------------------
 //-------------------------------------
-///	GFL_G3D_MAP拡張ワーク
+///	  LAND_DATAパッチ情報
 //=====================================
-typedef struct _FLD_G3D_MAP_EXWORK FLD_G3D_MAP_EXWORK;
+typedef struct _FIELD_DATA_PATCH FIELD_DATA_PATCH;
 
-	
 //-----------------------------------------------------------------------------
 /**
  *					プロトタイプ宣言
 */
 //-----------------------------------------------------------------------------
 
-// 拡張ワーク操作
-extern BOOL FLD_G3D_MAP_EXWORK_IsGranm( const FLD_G3D_MAP_EXWORK* cp_wk );
-extern FIELD_GRANM_WORK* FLD_G3D_MAP_EXWORK_GetGranmWork( const FLD_G3D_MAP_EXWORK* cp_wk );
+// 生成・破棄
+extern FIELD_DATA_PATCH* FIELD_DATA_PATCH_Create( u32 data_id, HEAPID heapID );
+extern void FIELD_DATA_PATCH_Delete( FIELD_DATA_PATCH* p_sys );
 
-// 配置モデル制御
-extern FIELD_BMODEL_MAN* FLD_G3D_MAP_EXWORK_GetBModelMan( const FLD_G3D_MAP_EXWORK* cp_wk );
+// アトリビュート上書き
+extern void FIELD_DATA_PATCH_OverWriteAttr( const FIELD_DATA_PATCH* cp_sys, NormalVtxFormat* p_buff, u32 grid_x, u32 grid_z );
 
-// WFBC街情報
-extern FIELD_WFBC* FLD_G3D_MAP_EXWORK_GetWFBCWork( const FLD_G3D_MAP_EXWORK* cp_wk );
-
-// マップインデックス取得
-extern const u32 FLD_G3D_MAP_EXWORK_GetMapIndex( const FLD_G3D_MAP_EXWORK* cp_wk );
-
-// HEAPID
-extern HEAPID FLD_G3D_MAP_EXWORK_GetHeapID( const FLD_G3D_MAP_EXWORK* cp_wk );
-
+// 配置モデル設定
+extern int FIELD_LAND_DATA_PATCH_AddBuildModel( const FIELD_DATA_PATCH* cp_sys, FIELD_BMODEL_MAN * p_bmodel, GFL_G3D_MAP * g3Dmap, int count_start, u32 grid_x, u32 grid_z );
 
 #ifdef _cplusplus
 }	// extern "C"{
