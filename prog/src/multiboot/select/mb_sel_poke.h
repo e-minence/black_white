@@ -1,18 +1,16 @@
 //======================================================================
 /**
- * @file	mb_select_sys.h
- * @brief	マルチブート・ポケモン選択
+ * @file	mb_sel_poke.h
+ * @brief	マルチブート：ボックス・ポケモン
  * @author	ariizumi
- * @data	09/11/19
+ * @data	09/12/03
  *
- * モジュール名：MB_SELECT
+ * モジュール名：MB_SEL_POKE
  */
 //======================================================================
 #pragma once
 
-#include "multiboot/mb_local_def.h"
-#include "multiboot/mb_data_def.h"
-#include "poke_tool/poke_tool.h"
+#include "./mb_sel_local_def.h"
 
 //======================================================================
 //	define
@@ -24,28 +22,39 @@
 //======================================================================
 #pragma mark [> enum
 
+//アイコンの種類(ボックスかトレイか
+typedef enum
+{
+  MSPT_BOX,
+  MSPT_TRAY,
+  
+}MB_SEL_POKE_TYPE;
+
 //======================================================================
 //	typedef struct
 //======================================================================
 #pragma mark [> struct
 typedef struct
 {
-  HEAPID parentHeap;
-  DLPLAY_CARD_TYPE cardType;
+  HEAPID heapId;
+  ARCHANDLE *arcHandle;
   
-  //ボックスデータ
-  void *boxData[MB_POKE_BOX_TRAY][MB_POKE_BOX_POKE];
+  MB_SEL_POKE_TYPE iconType;
+  u8               idx;
   
-  //戻り値用
-  //pppサイズ分のワークを確保しておいてください。
-  void *ppp[MB_CAP_POKE_NUM];
-}MB_SELECT_INIT_WORK;
+  GFL_CLUNIT  *cellUnit;
+  u32   palResIdx;
+  u32   anmResIdx;
+  
+}MB_SEL_POKE_INIT_WORK;
 
 
 //======================================================================
 //	proto
 //======================================================================
 #pragma mark [> proto
-extern GFL_PROC_DATA MultiBootSelect_ProcData;
+extern MB_SEL_POKE* MB_SEL_POKE_CreateWork( MB_SELECT_WORK *selWork , MB_SEL_POKE_INIT_WORK *initWork );
+extern void MB_SEL_POKE_DeleteWork( MB_SELECT_WORK *selWork , MB_SEL_POKE *pokeWork );
+extern void MB_SEL_POKE_UpdateWork( MB_SELECT_WORK *selWork , MB_SEL_POKE *pokeWork );
 
-
+extern void MB_SEL_POKE_SetPPP( MB_SELECT_WORK *selWork , MB_SEL_POKE *pokeWork , POKEMON_PASO_PARAM *ppp );

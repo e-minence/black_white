@@ -1,11 +1,11 @@
 //======================================================================
 /**
- * @file	mb_select_sys.h
- * @brief	マルチブート・ポケモン選択
+ * @file	mb_sel_local_def.h
+ * @brief	マルチブート：ボックス 定義群
  * @author	ariizumi
- * @data	09/11/19
+ * @data	09/12/03
  *
- * モジュール名：MB_SELECT
+ * モジュール名：MB_SEL_
  */
 //======================================================================
 #pragma once
@@ -23,29 +23,31 @@
 //	enum
 //======================================================================
 #pragma mark [> enum
+typedef enum
+{
+  MSCR_PLT_POKEICON,
+  MSCR_ANM_POKEICON,
+  
+  MSCR_MAX,
+}MB_SEL_CELL_RES;
 
 //======================================================================
 //	typedef struct
 //======================================================================
 #pragma mark [> struct
-typedef struct
-{
-  HEAPID parentHeap;
-  DLPLAY_CARD_TYPE cardType;
-  
-  //ボックスデータ
-  void *boxData[MB_POKE_BOX_TRAY][MB_POKE_BOX_POKE];
-  
-  //戻り値用
-  //pppサイズ分のワークを確保しておいてください。
-  void *ppp[MB_CAP_POKE_NUM];
-}MB_SELECT_INIT_WORK;
+typedef struct _MB_SELECT_WORK MB_SELECT_WORK;
+typedef struct _MB_SEL_POKE MB_SEL_POKE;
 
 
 //======================================================================
 //	proto
 //======================================================================
 #pragma mark [> proto
-extern GFL_PROC_DATA MultiBootSelect_ProcData;
 
+extern ARCHANDLE* MB_SELECT_GetIconArcHandle( MB_SELECT_WORK *work );
+extern const DLPLAY_CARD_TYPE MB_SELECT_GetCardType( const MB_SELECT_WORK *work );
+extern const HEAPID MB_SELECT_GetHeapId( const MB_SELECT_WORK *work );
 
+//--------------------------------------------------------------
+//	
+//--------------------------------------------------------------
