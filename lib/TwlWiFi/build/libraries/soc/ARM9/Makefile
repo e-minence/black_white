@@ -1,9 +1,9 @@
 #! make -f
 #----------------------------------------------------------------------------
-# Project:  TwlWiFi - demos.TWL
+# Project:  TwlWiFi - SOC - libraries
 # File:     Makefile
 #
-# Copyright 2007-2009 Nintendo.  All rights reserved.
+# Copyright 2003-2008 Nintendo.  All rights reserved.
 #
 # These coded instructions, statements, and computer programs contain
 # proprietary information of Nintendo of America Inc. and/or Nintendo
@@ -11,31 +11,19 @@
 # not be disclosed to third parties or copied or duplicated in any form,
 # in whole or in part, without the prior written consent of Nintendo.
 #
-# $Date:: 2009-06-08#$
-# $Rev: 1183 $
+# $Date:: 2008-09-18#$
+# $Rev: 1024 $
 # $Author: okubata_ryoma $
 #----------------------------------------------------------------------------
-TARGET_PLATFORM = TWL
-TWL_ARCHGEN     = ALL
-TARGET_BIN	    = main.srl
 
-SRCS		    = main.c test_cainfo.c
+SUBDIRS		=
 
-LLIBRARIES	    = libnhttp$(TWIFI_LIBSUFFIX_EX).a
 #----------------------------------------------------------------------------
+override TARGET_PLATFORM = NITRO
+NITRO_PROC		= ARM9
+NITRO_CODEGEN		= ALL
+TARGET_LIB		= libsoc$(NITRO_LIBSUFFIX).a
 
-include	$(TWLWIFI_ROOT)/build/buildtools/commondefs
-
-TWLWIFI_LIBNSSL =
-
-do-build:	$(TARGETS)
-
-include	$(TWLWIFI_ROOT)/build/buildtools/modulerules
-
-%.der: %.crt
-	openssl x509 -in $< -outform der -out $(basename $@).der
-
-src/%_cainfo.c: etc/%.der
-	$(TWIFI_ROOT)/tools/bin/certconv -n ca -o $@ $<
+include ../common/Makefile.common
 
 #===== End of Makefile =====
