@@ -1,7 +1,7 @@
 //======================================================================
 /**
- * @file	fldeff_iwakudaki.c
- * @brief	フィールド 岩砕き
+ * @file	fldeff_iaigiri.c
+ * @brief	フィールド 居合い切り
  * @author	kagaya
  * @date	05.07.13
  */
@@ -12,26 +12,25 @@
 #include "fieldmap.h"
 #include "field_effect.h"
 #include "fldmmdl.h"
+#include "field/field_const.h"
 
-#include "fldeff_iwakudaki.h"
+#include "fldeff_iaigiri.h"
 
 //======================================================================
 //	define
 //======================================================================
 typedef enum{
   ANIME_ICA,
-  ANIME_ITP,
-  ANIME_ITA,
   ANIME_IMA,
+  ANIME_ITA,
   ANIME_NUM
 } ANIME_INDEX;
 
 static u32 dat_id[ANIME_NUM] =
 {
-  NARC_fldeff_iwakudaki_nsbca,
-  NARC_fldeff_iwakudaki_nsbtp,
-  NARC_fldeff_iwakudaki_nsbta,
-  NARC_fldeff_iwakudaki_nsbma,
+  NARC_fldeff_iaigiri_nsbca,
+  NARC_fldeff_iaigiri_nsbma,
+  NARC_fldeff_iaigiri_nsbta,
 };
 
 
@@ -39,14 +38,14 @@ static u32 dat_id[ANIME_NUM] =
 //	struct
 //======================================================================
 //--------------------------------------------------------------
-///	FLDEFF_IWAKUDAKI型
+///	FLDEFF_IAIGIRI型
 //--------------------------------------------------------------
-typedef struct _TAG_FLDEFF_IWAKUDAKI FLDEFF_IWAKUDAKI;
+typedef struct _TAG_FLDEFF_IAIGIRI FLDEFF_IAIGIRI;
 
 //--------------------------------------------------------------
-///	FLDEFF_IWAKUDAKI構造体
+///	FLDEFF_IAIGIRI構造体
 //--------------------------------------------------------------
-struct _TAG_FLDEFF_IWAKUDAKI
+struct _TAG_FLDEFF_IAIGIRI
 {
 	FLDEFF_CTRL *fectrl;
   
@@ -55,177 +54,185 @@ struct _TAG_FLDEFF_IWAKUDAKI
 };
 
 //--------------------------------------------------------------
-/// TASKWORK_IWAKUDAKI
+/// TASKWORK_IAIGIRI
 //--------------------------------------------------------------
 typedef struct
 {
-  FLDEFF_IWAKUDAKI *eff_iwakudaki;
+  FLDEFF_IAIGIRI *eff_iaigiri;
   GFL_G3D_OBJ *obj;
   GFL_G3D_ANM *obj_anm[ANIME_NUM];
   GFL_G3D_RND *obj_rnd;
-}TASKWORK_IWAKUDAKI;
+}TASKWORK_IAIGIRI;
 
 //--------------------------------------------------------------
-/// TASKHEADER_IWAKUDAKI
+/// TASKHEADER_IAIGIRI
 //--------------------------------------------------------------
 typedef struct
 {
-  FLDEFF_IWAKUDAKI *eff_iwakudaki;
+  FLDEFF_IAIGIRI *eff_iaigiri;
   VecFx32 pos;
-}TASKHEADER_IWAKUDAKI;
+}TASKHEADER_IAIGIRI;
 
 //======================================================================
 //	プロトタイプ
 //======================================================================
-static void iwakudaki_InitResource( FLDEFF_IWAKUDAKI *kemu );
-static void iwakudaki_DeleteResource( FLDEFF_IWAKUDAKI *kemu );
+static void iaigiri_InitResource( FLDEFF_IAIGIRI *iai );
+static void iaigiri_DeleteResource( FLDEFF_IAIGIRI *iai );
 
-static const FLDEFF_TASK_HEADER DATA_iwakudakiTaskHeader;
+static const FLDEFF_TASK_HEADER DATA_iaigiriTaskHeader;
 
 //======================================================================
-//	岩砕き　システム
+//	居合い切り　システム
 //======================================================================
 //--------------------------------------------------------------
 /**
- * 岩砕き 初期化
+ * 居合い切り 初期化
  * @param	fectrl		FLDEFF_CTRL *
  * @param heapID HEAPID
  * @retval	void*	エフェクト使用ワーク
  */
 //--------------------------------------------------------------
-void * FLDEFF_IWAKUDAKI_Init( FLDEFF_CTRL *fectrl, HEAPID heapID )
+void * FLDEFF_IAIGIRI_Init( FLDEFF_CTRL *fectrl, HEAPID heapID )
 {
-	FLDEFF_IWAKUDAKI *kemu;
+	FLDEFF_IAIGIRI *iai;
 	
-	kemu = GFL_HEAP_AllocClearMemory( heapID, sizeof(FLDEFF_IWAKUDAKI) );
-	kemu->fectrl = fectrl;
+	iai = GFL_HEAP_AllocClearMemory( heapID, sizeof(FLDEFF_IAIGIRI) );
+	iai->fectrl = fectrl;
   
-	iwakudaki_InitResource( kemu );
-	return( kemu );
+	iaigiri_InitResource( iai );
+	return( iai );
 }
 
 //--------------------------------------------------------------
 /**
- * 岩砕き 削除
+ * 居合い切り 削除
  * @param fectrl FLDEFF_CTRL
  * @param	work	エフェクト使用ワーク
  * @retval	nothing
  */
 //--------------------------------------------------------------
-void FLDEFF_IWAKUDAKI_Delete( FLDEFF_CTRL *fectrl, void *work )
+void FLDEFF_IAIGIRI_Delete( FLDEFF_CTRL *fectrl, void *work )
 {
-	FLDEFF_IWAKUDAKI *kemu = work;
-  iwakudaki_DeleteResource( kemu );
-  GFL_HEAP_FreeMemory( kemu );
+	FLDEFF_IAIGIRI *iai = work;
+  iaigiri_DeleteResource( iai );
+  GFL_HEAP_FreeMemory( iai );
 }
 
 //======================================================================
-//	岩砕き　リソース
+//	居合い切り　リソース
 //======================================================================
 //--------------------------------------------------------------
 /**
- * 岩砕き　リソース初期化
+ * 居合い切り　リソース初期化
  * @param fectrl FLDEFF_CTRL*
  * @retval nothing
  */
 //--------------------------------------------------------------
-static void iwakudaki_InitResource( FLDEFF_IWAKUDAKI *kemu )
+static void iaigiri_InitResource( FLDEFF_IAIGIRI *iai )
 {
   int i;
   ARCHANDLE *handle;
   
-  handle = FLDEFF_CTRL_GetArcHandleEffect( kemu->fectrl );
+  handle = FLDEFF_CTRL_GetArcHandleEffect( iai->fectrl );
   
-  kemu->g3d_res_mdl	=
-    GFL_G3D_CreateResourceHandle( handle, NARC_fldeff_iwakudaki_nsbmd );
-  GFL_G3D_TransVramTexture( kemu->g3d_res_mdl );
+  iai->g3d_res_mdl	=
+    GFL_G3D_CreateResourceHandle( handle, NARC_fldeff_iaigiri_nsbmd );
+  GFL_G3D_TransVramTexture( iai->g3d_res_mdl );
 
   for( i=0; i<ANIME_NUM; i++ )
   {
-    kemu->g3d_res_anm[i] =
+    iai->g3d_res_anm[i] =
       GFL_G3D_CreateResourceHandle( handle, dat_id[i] );
   }
 }
 
 //--------------------------------------------------------------
 /**
- * 岩砕き　リソース削除
+ * 居合い切り　リソース削除
  * @param fectrl FLDEFF_CTRL*
  * @retval nothing
  */
 //--------------------------------------------------------------
-static void iwakudaki_DeleteResource( FLDEFF_IWAKUDAKI *kemu )
+static void iaigiri_DeleteResource( FLDEFF_IAIGIRI *iai )
 {
   int i;
   for( i=0; i<ANIME_NUM; i++ )
   {
-    GFL_G3D_DeleteResource( kemu->g3d_res_anm[i] );
+    GFL_G3D_DeleteResource( iai->g3d_res_anm[i] );
   }
- 	GFL_G3D_DeleteResource( kemu->g3d_res_mdl );
+ 	GFL_G3D_DeleteResource( iai->g3d_res_mdl );
 }
 
 //======================================================================
-//	岩砕き　タスク
+//	居合い切り　タスク
 //======================================================================
 //--------------------------------------------------------------
 /**
- * 動作モデル用土煙　追加
+ * 動作モデル用居合い切り　追加
  * @param fmmdl MMDL
  * @param FLDEFF_CTRL*
  * @retval nothing
  */
 //--------------------------------------------------------------
-void FLDEFF_IWAKUDAKI_SetMMdl( MMDL *fmmdl, FLDEFF_CTRL *fectrl )
+void FLDEFF_IAIGIRI_SetMMdl( MMDL *fmmdl, FLDEFF_CTRL *fectrl )
 {
+  u16 dir;
   VecFx32 pos;
-  FLDEFF_IWAKUDAKI *kemu;
-  TASKHEADER_IWAKUDAKI head;
+  FLDEFF_IAIGIRI *iai;
+  TASKHEADER_IAIGIRI head;
   
+  // 1グリッド前方に表示
   MMDL_GetVectorPos( fmmdl, &pos );
-  pos.y += FX32_ONE*1;
-  pos.z += FX32_ONE*12;
+  dir = MMDL_GetDirDisp( fmmdl );
+  switch( dir )
+  {
+  case DIR_UP:    pos.z -= FIELD_CONST_GRID_FX32_SIZE;  break;
+  case DIR_DOWN:  pos.z += FIELD_CONST_GRID_FX32_SIZE;  break;
+  case DIR_LEFT:  pos.x -= FIELD_CONST_GRID_FX32_SIZE;  break;
+  case DIR_RIGHT: pos.x += FIELD_CONST_GRID_FX32_SIZE;  break;
+  }
   
-  if( FLDEFF_CTRL_CheckRegistEffect( fectrl, FLDEFF_PROCID_IWAKUDAKI ) == FALSE )
+  if( FLDEFF_CTRL_CheckRegistEffect( fectrl, FLDEFF_PROCID_IAIGIRI ) == FALSE )
   { // エフェクトを登録
-    FLDEFF_PROCID id = FLDEFF_PROCID_IWAKUDAKI;
+    FLDEFF_PROCID id = FLDEFF_PROCID_IAIGIRI;
     FLDEFF_CTRL_RegistEffect( fectrl, &id, 1 );
   }
 
-  kemu = FLDEFF_CTRL_GetEffectWork( fectrl, FLDEFF_PROCID_IWAKUDAKI );
-  head.eff_iwakudaki = kemu;
+  iai = FLDEFF_CTRL_GetEffectWork( fectrl, FLDEFF_PROCID_IAIGIRI );
+  head.eff_iaigiri = iai;
   head.pos = pos; 
   
   FLDEFF_CTRL_AddTask(
-      fectrl, &DATA_iwakudakiTaskHeader, NULL, 0, &head, 0 );
+      fectrl, &DATA_iaigiriTaskHeader, NULL, 0, &head, 0 );
 }
 
 //--------------------------------------------------------------
 /**
- * 岩砕きタスク　初期化
+ * 居合い切りタスク　初期化
  * @param task FLDEFF_TASK
  * @param wk task work
  * @retval nothing
  */
 //--------------------------------------------------------------
-static void iwakudakiTask_Init( FLDEFF_TASK *task, void *wk )
+static void iaigiriTask_Init( FLDEFF_TASK *task, void *wk )
 {
   int i;
-  TASKWORK_IWAKUDAKI *work = wk;
-  const TASKHEADER_IWAKUDAKI *head;
+  TASKWORK_IAIGIRI *work = wk;
+  const TASKHEADER_IAIGIRI *head;
   
   head = FLDEFF_TASK_GetAddPointer( task );
-  work->eff_iwakudaki = head->eff_iwakudaki;
+  work->eff_iaigiri = head->eff_iaigiri;
   FLDEFF_TASK_SetPos( task, &head->pos );
   
   work->obj_rnd =
     GFL_G3D_RENDER_Create(
-        work->eff_iwakudaki->g3d_res_mdl, 0, work->eff_iwakudaki->g3d_res_mdl );
+        work->eff_iaigiri->g3d_res_mdl, 0, work->eff_iaigiri->g3d_res_mdl );
   
   for( i=0; i<ANIME_NUM; i++ )
   {
     work->obj_anm[i] =
       GFL_G3D_ANIME_Create(
-          work->obj_rnd, work->eff_iwakudaki->g3d_res_anm[i], 0 );
+          work->obj_rnd, work->eff_iaigiri->g3d_res_anm[i], 0 );
   }
   
   work->obj = GFL_G3D_OBJECT_Create(
@@ -238,16 +245,16 @@ static void iwakudakiTask_Init( FLDEFF_TASK *task, void *wk )
 
 //--------------------------------------------------------------
 /**
- * 岩砕きタスク　削除
+ * 居合い切りタスク　削除
  * @param task FLDEFF_TASK
  * @param wk task work
  * @retval nothing
  */
 //--------------------------------------------------------------
-static void iwakudakiTask_Delete( FLDEFF_TASK *task, void *wk )
+static void iaigiriTask_Delete( FLDEFF_TASK *task, void *wk )
 {
   int i;
-  TASKWORK_IWAKUDAKI *work = wk;
+  TASKWORK_IAIGIRI *work = wk;
 
   for( i=0; i<ANIME_NUM; i++ )
   {
@@ -259,17 +266,17 @@ static void iwakudakiTask_Delete( FLDEFF_TASK *task, void *wk )
 
 //--------------------------------------------------------------
 /**
- * 岩砕きタスク　更新
+ * 居合い切りタスク　更新
  * @param task FLDEFF_TASK
  * @param wk task work
  * @retval nothing
  */
 //--------------------------------------------------------------
-static void iwakudakiTask_Update( FLDEFF_TASK *task, void *wk )
+static void iaigiriTask_Update( FLDEFF_TASK *task, void *wk )
 {
   int i;
   BOOL end = TRUE;
-  TASKWORK_IWAKUDAKI *work = wk;
+  TASKWORK_IAIGIRI *work = wk;
   
   for( i=0; i<ANIME_NUM; i++ )
   {
@@ -284,16 +291,16 @@ static void iwakudakiTask_Update( FLDEFF_TASK *task, void *wk )
 
 //--------------------------------------------------------------
 /**
- * 岩砕きタスク　描画
+ * 居合い切りタスク　描画
  * @param task FLDEFF_TASK
  * @param wk task work
  * @retval nothing
  */
 //--------------------------------------------------------------
-static void iwakudakiTask_Draw( FLDEFF_TASK *task, void *wk )
+static void iaigiriTask_Draw( FLDEFF_TASK *task, void *wk )
 {
   VecFx32 pos;
-  TASKWORK_IWAKUDAKI *work = wk;
+  TASKWORK_IAIGIRI *work = wk;
   GFL_G3D_OBJSTATUS status = {{0},{FX32_ONE,FX32_ONE,FX32_ONE},{0}};
 
   MTX_Identity33( &status.rotate );
@@ -302,13 +309,14 @@ static void iwakudakiTask_Draw( FLDEFF_TASK *task, void *wk )
 }
 
 //--------------------------------------------------------------
-//  岩砕きタスク　ヘッダー
+//  居合い切りタスク　ヘッダー
 //--------------------------------------------------------------
-static const FLDEFF_TASK_HEADER DATA_iwakudakiTaskHeader =
+static const FLDEFF_TASK_HEADER DATA_iaigiriTaskHeader =
 {
-  sizeof(TASKWORK_IWAKUDAKI),
-  iwakudakiTask_Init,
-  iwakudakiTask_Delete,
-  iwakudakiTask_Update,
-  iwakudakiTask_Draw,
+  sizeof(TASKWORK_IAIGIRI),
+  iaigiriTask_Init,
+  iaigiriTask_Delete,
+  iaigiriTask_Update,
+  iaigiriTask_Draw,
 };
+
