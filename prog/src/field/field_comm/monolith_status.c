@@ -1,9 +1,9 @@
 //==============================================================================
 /**
- * @file    monolith_mission_explain.c
- * @brief   モノリス：ミッション説明
+ * @file    monolith_status.c
+ * @brief   モノリス：状態を見る
  * @author  matsuda
- * @date    2009.11.25(水)
+ * @date    2009.12.04(金)
  */
 //==============================================================================
 #include <gflib.h>
@@ -22,11 +22,43 @@
 //==============================================================================
 //  定数定義
 //==============================================================================
+///BMPWIN
 enum{
-  BMPWIN_TYPE,        ///<ミッションタイプ名
-  BMPWIN_EXPLAIN,     ///<ミッション説明
+  BMPWIN_LEVEL,           ///<モノリスレベル
+  BMPWIN_NICKNAME,        ///<モノリスの通称
+  BMPWIN_POWER_BALANCE,   ///<パワーバランス
+  BMPWIN_USE_POWER,       ///<使えるパワーの数
+  BMPWIN_TIME,            ///<滞在時間
   
   BMPWIN_MAX,
+};
+
+///BMPWINのサイズ定義など
+enum{
+  BMPWIN_POS_LEVEL_X = 2,
+  BMPWIN_POS_LEVEL_Y = 4,
+  BMPWIN_POS_LEVEL_SIZE_X = 32 - BMPWIN_POS_LEVEL_X,
+  BMPWIN_POS_LEVEL_SIZE_Y = 2,
+  
+  BMPWIN_POS_NICKNAME_X = 2,
+  BMPWIN_POS_NICKNAME_Y = BMPWIN_POS_LEVEL_Y + 2,
+  BMPWIN_POS_NICKNAME_SIZE_X = 32 - BMPWIN_POS_NICKNAME_X,
+  BMPWIN_POS_NICKNAME_SIZE_Y = 2,
+  
+  BMPWIN_POS_POWER_BALANCE_X = 4,
+  BMPWIN_POS_POWER_BALANCE_Y = BMPWIN_POS_NICKNAME_Y + 4,
+  BMPWIN_POS_POWER_BALANCE_SIZE_X = 32 - BMPWIN_POS_POWER_BALANCE_X,
+  BMPWIN_POS_POWER_BALANCE_SIZE_Y = 5,
+  
+  BMPWIN_POS_USE_POWER_X = BMPWIN_POS_POWER_BALANCE_X,
+  BMPWIN_POS_USE_POWER_Y = 15,
+  BMPWIN_POS_USE_POWER_SIZE_X = 32 - BMPWIN_POS_USE_POWER_X,
+  BMPWIN_POS_USE_POWER_SIZE_Y = 2,
+  
+  BMPWIN_POS_TIME_X = BMPWIN_POS_POWER_BALANCE_X,
+  BMPWIN_POS_TIME_Y = BMPWIN_POS_USE_POWER_Y + 2,
+  BMPWIN_POS_TIME_SIZE_X = 32 - BMPWIN_POS_TIME_X,
+  BMPWIN_POS_TIME_SIZE_Y = 2,
 };
 
 //==============================================================================
@@ -38,34 +70,34 @@ typedef struct{
   PRINT_UTIL print_util[BMPWIN_MAX];
   u8 view_town;                         ///<ミッション説明を表示中の街番号
   u8 padding[3];
-}MONOLITH_MSEXPLAIN_WORK;
+}MONOLITH_STATUS_WORK;
 
 
 //==============================================================================
 //  プロトタイプ宣言
 //==============================================================================
-static GFL_PROC_RESULT MonolithMissionExplainProc_Init(
+static GFL_PROC_RESULT MonolithStatusProc_Init(
   GFL_PROC * proc, int * seq, void * pwk, void * mywk);
-static GFL_PROC_RESULT MonolithMissionExplainProc_Main(
+static GFL_PROC_RESULT MonolithStatusProc_Main(
   GFL_PROC * proc, int * seq, void * pwk, void * mywk);
-static GFL_PROC_RESULT MonolithMissionExplainProc_End(
+static GFL_PROC_RESULT MonolithStatusProc_End(
   GFL_PROC * proc, int * seq, void * pwk, void * mywk);
 static void _Setup_BGFrameSetting(void);
 static void _Setup_BGFrameExit(void);
 static void _Setup_BGGraphicLoad(MONOLITH_SETUP *setup);
-static void _Setup_BmpWin_Create(MONOLITH_SETUP *setup, MONOLITH_MSEXPLAIN_WORK *mmw);
-static void _Setup_BmpWin_Exit(MONOLITH_MSEXPLAIN_WORK *mmw);
-static void _Write_MissionExplain(MONOLITH_APP_PARENT *appwk, MONOLITH_SETUP *setup, MONOLITH_MSEXPLAIN_WORK *mmw, int select_town);
+static void _Setup_BmpWin_Create(MONOLITH_SETUP *setup, MONOLITH_STATUS_WORK *msw);
+static void _Setup_BmpWin_Exit(MONOLITH_STATUS_WORK *msw);
+static void _Write_Status(MONOLITH_APP_PARENT *appwk, MONOLITH_SETUP *setup, MONOLITH_STATUS_WORK *msw, int select_town);
 
 
 //==============================================================================
 //  データ
 //==============================================================================
 ///モノリスパワーROCデータ
-const GFL_PROC_DATA MonolithAppProc_Up_MissionExplain = {
-  MonolithMissionExplainProc_Init,
-  MonolithMissionExplainProc_Main,
-  MonolithMissionExplainProc_End,
+const GFL_PROC_DATA MonolithAppProc_Down_Status = {
+  MonolithStatusProc_Init,
+  MonolithStatusProc_Main,
+  MonolithStatusProc_End,
 };
 
 ///街番号からミッションタイプを取得するテーブル
@@ -97,21 +129,21 @@ static const u32 TownNo_to_Type[] = {
  * @retval  処理状況
  */
 //--------------------------------------------------------------
-static GFL_PROC_RESULT MonolithMissionExplainProc_Init(GFL_PROC * proc, int * seq, void * pwk, void * mywk)
+static GFL_PROC_RESULT MonolithStatusProc_Init(GFL_PROC * proc, int * seq, void * pwk, void * mywk)
 {
   MONOLITH_APP_PARENT *appwk = pwk;
-	MONOLITH_MSEXPLAIN_WORK *mmw = mywk;
+	MONOLITH_STATUS_WORK *msw = mywk;
 	ARCHANDLE *hdl;
   
-  mmw = GFL_PROC_AllocWork(proc, sizeof(MONOLITH_MSEXPLAIN_WORK), HEAPID_MONOLITH);
-  GFL_STD_MemClear(mmw, sizeof(MONOLITH_MSEXPLAIN_WORK));
+  msw = GFL_PROC_AllocWork(proc, sizeof(MONOLITH_STATUS_WORK), HEAPID_MONOLITH);
+  GFL_STD_MemClear(msw, sizeof(MONOLITH_STATUS_WORK));
   
   //BG
   _Setup_BGFrameSetting();
   _Setup_BGGraphicLoad(appwk->setup);
-  _Setup_BmpWin_Create(appwk->setup, mmw);
+  _Setup_BmpWin_Create(appwk->setup, msw);
   
-  mmw->view_town = 0xff;  //初回の描画を通す為に存在しない街番号を設定
+  msw->view_town = 0xff;  //初回の描画を通す為に存在しない街番号を設定
   
   return GFL_PROC_RES_FINISH;
 }
@@ -126,10 +158,11 @@ static GFL_PROC_RESULT MonolithMissionExplainProc_Init(GFL_PROC * proc, int * se
  * @retval  処理状況
  */
 //--------------------------------------------------------------
-static GFL_PROC_RESULT MonolithMissionExplainProc_Main( GFL_PROC * proc, int * seq, void * pwk, void * mywk)
+static GFL_PROC_RESULT MonolithStatusProc_Main( GFL_PROC * proc, int * seq, void * pwk, void * mywk)
 {
   MONOLITH_APP_PARENT *appwk = pwk;
-	MONOLITH_MSEXPLAIN_WORK *mmw = mywk;
+	MONOLITH_STATUS_WORK *msw = mywk;
+  int tp_ret;
   int i;
   int print_finish_count = 0;
 
@@ -138,14 +171,14 @@ static GFL_PROC_RESULT MonolithMissionExplainProc_Main( GFL_PROC * proc, int * s
   }
   
   for(i = 0; i < BMPWIN_MAX; i++){
-    if(PRINT_UTIL_Trans(&mmw->print_util[i], appwk->setup->printQue) == TRUE){
+    if(PRINT_UTIL_Trans(&msw->print_util[i], appwk->setup->printQue) == TRUE){
       print_finish_count++;
     }
   }
   if(print_finish_count == BMPWIN_MAX){
-    if(mmw->view_town != appwk->common->mission_select_town){
-      _Write_MissionExplain(appwk, appwk->setup, mmw, appwk->common->mission_select_town);
-      mmw->view_town = appwk->common->mission_select_town;
+    if(msw->view_town != appwk->common->mission_select_town){
+      _Write_Status(appwk, appwk->setup, msw, appwk->common->mission_select_town);
+      msw->view_town = appwk->common->mission_select_town;
     }
   }
   
@@ -167,13 +200,13 @@ static GFL_PROC_RESULT MonolithMissionExplainProc_Main( GFL_PROC * proc, int * s
  * @retval  処理状況
  */
 //--------------------------------------------------------------
-static GFL_PROC_RESULT MonolithMissionExplainProc_End( GFL_PROC * proc, int * seq, void * pwk, void * mywk)
+static GFL_PROC_RESULT MonolithStatusProc_End( GFL_PROC * proc, int * seq, void * pwk, void * mywk)
 {
   MONOLITH_APP_PARENT *appwk = pwk;
-	MONOLITH_MSEXPLAIN_WORK *mmw = mywk;
+	MONOLITH_STATUS_WORK *msw = mywk;
   
   //BG
-  _Setup_BmpWin_Exit(mmw);
+  _Setup_BmpWin_Exit(msw);
   _Setup_BGFrameExit();
   
   GFL_PROC_FreeWork(proc);
@@ -192,27 +225,18 @@ static GFL_PROC_RESULT MonolithMissionExplainProc_End( GFL_PROC * proc, int * se
 static void _Setup_BGFrameSetting(void)
 {
 	static const GFL_BG_BGCNT_HEADER bgcnt_frame[] = {
-		{//GFL_BG_FRAME0_M
+		{//GFL_BG_FRAME0_S
 			0, 0, 0x800, 0,
 			GFL_BG_SCRSIZ_256x256, GX_BG_COLORMODE_16,
-			GX_BG_SCRBASE_0x2000, GX_BG_CHARBASE_0x0c000, 0x8000,
+			GX_BG_SCRBASE_0x1000, GX_BG_CHARBASE_0x0c000, 0x8000,
 			GX_BG_EXTPLTT_01, 2, 0, 0, FALSE
-		},
-		{//GFL_BG_FRAME2_M
-			0, 0, MONO_BG_COMMON_SCR_SIZE, 0,
-			GFL_BG_SCRSIZ_256x256, GX_BG_COLORMODE_16,
-			GX_BG_SCRBASE_0x1000, MONO_BG_COMMON_CHARBASE, MONO_BG_COMMON_CHAR_SIZE,
-			GX_BG_EXTPLTT_01, 3, 0, 0, FALSE
 		},
 	};
 
-	GFL_BG_SetBGControl( GFL_BG_FRAME0_M,   &bgcnt_frame[0],   GFL_BG_MODE_TEXT );
-	GFL_BG_SetBGControl( GFL_BG_FRAME2_M,   &bgcnt_frame[1],   GFL_BG_MODE_TEXT );
+	GFL_BG_SetBGControl( GFL_BG_FRAME0_S,   &bgcnt_frame[0],   GFL_BG_MODE_TEXT );
 
-	GFL_BG_FillScreen( GFL_BG_FRAME0_M, 0x0000, 0, 0, 32, 32, GFL_BG_SCRWRT_PALIN );
-	GFL_BG_FillScreen( GFL_BG_FRAME2_M, 0x0000, 0, 0, 32, 32, GFL_BG_SCRWRT_PALIN );
-	GFL_BG_SetVisible(GFL_BG_FRAME0_M, VISIBLE_ON);
-	GFL_BG_SetVisible(GFL_BG_FRAME2_M, VISIBLE_ON);
+	GFL_BG_FillScreen( GFL_BG_FRAME0_S, 0x0000, 0, 0, 32, 32, GFL_BG_SCRWRT_PALIN );
+	GFL_BG_SetVisible(GFL_BG_FRAME0_S, VISIBLE_ON);
 }
 
 //--------------------------------------------------------------
@@ -222,10 +246,8 @@ static void _Setup_BGFrameSetting(void)
 //--------------------------------------------------------------
 static void _Setup_BGFrameExit(void)
 {
-	GFL_BG_SetVisible(GFL_BG_FRAME0_M, VISIBLE_OFF);
-	GFL_BG_SetVisible(GFL_BG_FRAME2_M, VISIBLE_OFF);
-  GFL_BG_FreeBGControl(GFL_BG_FRAME0_M);
-  GFL_BG_FreeBGControl(GFL_BG_FRAME2_M);
+	GFL_BG_SetVisible(GFL_BG_FRAME0_S, VISIBLE_OFF);
+  GFL_BG_FreeBGControl(GFL_BG_FRAME0_S);
 }
 
 //--------------------------------------------------------------
@@ -237,11 +259,7 @@ static void _Setup_BGFrameExit(void)
 //--------------------------------------------------------------
 static void _Setup_BGGraphicLoad(MONOLITH_SETUP *setup)
 {
-	GFL_ARCHDL_UTIL_TransVramScreen(setup->hdl, NARC_monolith_mono_bgu_mission_lz_NSCR, 
-		GFL_BG_FRAME2_M, 0, 0, TRUE, HEAPID_MONOLITH);
-
-	GFL_BG_LoadScreenReq( GFL_BG_FRAME0_M );
-	GFL_BG_LoadScreenReq( GFL_BG_FRAME2_M );
+	GFL_BG_LoadScreenReq( GFL_BG_FRAME0_S );
 }
 
 //--------------------------------------------------------------
@@ -249,43 +267,74 @@ static void _Setup_BGGraphicLoad(MONOLITH_SETUP *setup)
  * BMPWIN作成
  *
  * @param   setup		
- * @param   mmw		
+ * @param   msw		
  */
 //--------------------------------------------------------------
-static void _Setup_BmpWin_Create(MONOLITH_SETUP *setup, MONOLITH_MSEXPLAIN_WORK *mmw)
+static void _Setup_BmpWin_Create(MONOLITH_SETUP *setup, MONOLITH_STATUS_WORK *msw)
 {
   int i;
   
-  //ミッションタイプ名
-  mmw->bmpwin[BMPWIN_TYPE] = GFL_BMPWIN_Create(GFL_BG_FRAME0_M, 2, 0, 28, 3, 
-    MONOLITH_BG_UP_FONT_PALNO, GFL_BMP_CHRAREA_GET_B);
-  GFL_BMPWIN_TransVramCharacter( mmw->bmpwin[BMPWIN_TYPE] );
-  GFL_BMPWIN_MakeScreen( mmw->bmpwin[BMPWIN_TYPE] );
+  //モノリスレベル
+  msw->bmpwin[BMPWIN_LEVEL] = GFL_BMPWIN_Create(GFL_BG_FRAME0_S, 
+    BMPWIN_POS_LEVEL_X, BMPWIN_POS_LEVEL_Y, 
+    BMPWIN_POS_LEVEL_SIZE_X, BMPWIN_POS_LEVEL_SIZE_Y, 
+    MONOLITH_BG_DOWN_FONT_PALNO, GFL_BMP_CHRAREA_GET_B);
+  GFL_BMPWIN_TransVramCharacter( msw->bmpwin[BMPWIN_LEVEL] );
+  GFL_BMPWIN_MakeScreen( msw->bmpwin[BMPWIN_LEVEL] );
 
-  //ミッション説明
-  mmw->bmpwin[BMPWIN_EXPLAIN] = GFL_BMPWIN_Create(GFL_BG_FRAME0_M, 2, 5, 28, 16, 
-    MONOLITH_BG_UP_FONT_PALNO, GFL_BMP_CHRAREA_GET_B);
-  GFL_BMPWIN_TransVramCharacter( mmw->bmpwin[BMPWIN_EXPLAIN] );
-  GFL_BMPWIN_MakeScreen( mmw->bmpwin[BMPWIN_EXPLAIN] );
-  
+  //モノリスの通称
+  msw->bmpwin[BMPWIN_NICKNAME] = GFL_BMPWIN_Create(GFL_BG_FRAME0_S, 
+    BMPWIN_POS_NICKNAME_X, BMPWIN_POS_NICKNAME_Y, 
+    BMPWIN_POS_NICKNAME_SIZE_X, BMPWIN_POS_NICKNAME_SIZE_Y, 
+    MONOLITH_BG_DOWN_FONT_PALNO, GFL_BMP_CHRAREA_GET_B);
+  GFL_BMPWIN_TransVramCharacter( msw->bmpwin[BMPWIN_NICKNAME] );
+  GFL_BMPWIN_MakeScreen( msw->bmpwin[BMPWIN_NICKNAME] );
+
+  //パワーバランス
+  msw->bmpwin[BMPWIN_POWER_BALANCE] = GFL_BMPWIN_Create(GFL_BG_FRAME0_S, 
+    BMPWIN_POS_POWER_BALANCE_X, BMPWIN_POS_POWER_BALANCE_Y, 
+    BMPWIN_POS_POWER_BALANCE_SIZE_X, BMPWIN_POS_POWER_BALANCE_SIZE_Y, 
+    MONOLITH_BG_DOWN_FONT_PALNO, GFL_BMP_CHRAREA_GET_B);
+  GFL_BMPWIN_TransVramCharacter( msw->bmpwin[BMPWIN_POWER_BALANCE] );
+  GFL_BMPWIN_MakeScreen( msw->bmpwin[BMPWIN_POWER_BALANCE] );
+
+  //使えるパワーの数
+  msw->bmpwin[BMPWIN_USE_POWER] = GFL_BMPWIN_Create(GFL_BG_FRAME0_S, 
+    BMPWIN_POS_USE_POWER_X, BMPWIN_POS_USE_POWER_Y, 
+    BMPWIN_POS_USE_POWER_SIZE_X, BMPWIN_POS_USE_POWER_SIZE_Y, 
+    MONOLITH_BG_DOWN_FONT_PALNO, GFL_BMP_CHRAREA_GET_B);
+  GFL_BMPWIN_TransVramCharacter( msw->bmpwin[BMPWIN_USE_POWER] );
+  GFL_BMPWIN_MakeScreen( msw->bmpwin[BMPWIN_USE_POWER] );
+
+  //滞在時間
+  msw->bmpwin[BMPWIN_TIME] = GFL_BMPWIN_Create(GFL_BG_FRAME0_S, 
+    BMPWIN_POS_TIME_X, BMPWIN_POS_TIME_Y, 
+    BMPWIN_POS_TIME_SIZE_X, BMPWIN_POS_TIME_SIZE_Y, 
+    MONOLITH_BG_DOWN_FONT_PALNO, GFL_BMP_CHRAREA_GET_B);
+  GFL_BMPWIN_TransVramCharacter( msw->bmpwin[BMPWIN_TIME] );
+  GFL_BMPWIN_MakeScreen( msw->bmpwin[BMPWIN_TIME] );
+
   for(i = 0; i < BMPWIN_MAX; i++){
-    PRINT_UTIL_Setup(&mmw->print_util[i], mmw->bmpwin[i]);
+    PRINT_UTIL_Setup(&msw->print_util[i], msw->bmpwin[i]);
   }
   
-	GFL_BG_LoadScreenReq( GFL_BG_FRAME0_M );
+	GFL_BG_LoadScreenReq( GFL_BG_FRAME0_S );
 }
 
 //--------------------------------------------------------------
 /**
  * BMPWIN削除
  *
- * @param   mmw		
+ * @param   msw		
  */
 //--------------------------------------------------------------
-static void _Setup_BmpWin_Exit(MONOLITH_MSEXPLAIN_WORK *mmw)
+static void _Setup_BmpWin_Exit(MONOLITH_STATUS_WORK *msw)
 {
-  GFL_BMPWIN_Delete(mmw->bmpwin[BMPWIN_TYPE]);
-  GFL_BMPWIN_Delete(mmw->bmpwin[BMPWIN_EXPLAIN]);
+  int i;
+  
+  for(i = 0; i < BMPWIN_MAX; i++){
+    GFL_BMPWIN_Delete(msw->bmpwin[i]);
+  }
 }
 
 //--------------------------------------------------------------
@@ -294,11 +343,11 @@ static void _Setup_BmpWin_Exit(MONOLITH_MSEXPLAIN_WORK *mmw)
  *
  * @param   appwk		
  * @param   setup		
- * @param   mmw		
+ * @param   msw		
  * @param   select_town		
  */
 //--------------------------------------------------------------
-static void _Write_MissionExplain(MONOLITH_APP_PARENT *appwk, MONOLITH_SETUP *setup, MONOLITH_MSEXPLAIN_WORK *mmw, int select_town)
+static void _Write_Status(MONOLITH_APP_PARENT *appwk, MONOLITH_SETUP *setup, MONOLITH_STATUS_WORK *msw, int select_town)
 {
   STRBUF *str_type, *str_explain, *expand_explain;
   u32 explain_msgid;
@@ -306,8 +355,8 @@ static void _Write_MissionExplain(MONOLITH_APP_PARENT *appwk, MONOLITH_SETUP *se
   
   expand_explain = GFL_STR_CreateBuffer( 256, HEAPID_MONOLITH );
 
-  GFL_BMP_Clear(GFL_BMPWIN_GetBmp(mmw->bmpwin[BMPWIN_TYPE]), 0x0000);
-  GFL_BMP_Clear(GFL_BMPWIN_GetBmp(mmw->bmpwin[BMPWIN_EXPLAIN]), 0x0000);
+  GFL_BMP_Clear(GFL_BMPWIN_GetBmp(msw->bmpwin[BMPWIN_TYPE]), 0x0000);
+  GFL_BMP_Clear(GFL_BMPWIN_GetBmp(msw->bmpwin[BMPWIN_EXPLAIN]), 0x0000);
 
   mdata = &appwk->parent->list.md[TownNo_to_Type[select_town]];
   explain_msgid = mdata->cdata.msg_id_contents_monolith;
@@ -319,9 +368,9 @@ static void _Write_MissionExplain(MONOLITH_APP_PARENT *appwk, MONOLITH_SETUP *se
   MISSIONDATA_Wordset(appwk->parent->intcomm, mdata, setup->wordset, HEAPID_MONOLITH);
   WORDSET_ExpandStr(setup->wordset, expand_explain, str_explain );
 
-  PRINT_UTIL_Print(&mmw->print_util[BMPWIN_TYPE], setup->printQue, 
+  PRINT_UTIL_Print(&msw->print_util[BMPWIN_TYPE], setup->printQue, 
     0, 4, str_type, setup->font_handle);
-  PRINT_UTIL_Print(&mmw->print_util[BMPWIN_EXPLAIN], setup->printQue, 
+  PRINT_UTIL_Print(&msw->print_util[BMPWIN_EXPLAIN], setup->printQue, 
     0, 0, expand_explain, setup->font_handle);
   
   GFL_STR_DeleteBuffer(str_type);
