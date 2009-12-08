@@ -1,6 +1,6 @@
 //============================================================================================
 /**
- * @file     event_wifibattlematch.c
+ * @file     event_wifi_match.c
  * @brief	  イベント：WIFI世界対戦
  * @author   Toru=Nagihashi
  * @date     2009.11.24
@@ -16,13 +16,15 @@
 #include "event_fieldmap_control.h"
 
 //PROC
-#include "net_app/wifibattlematch.h"
+#include "net_app/debug_wifi_match.h"
 #include "net_app/wifi_login.h"
 
 //外部公開
-#include "field/event_wifibattlematch.h"
+#include "field/event_debug_wifimatch.h"
 
 
+
+FS_EXTERN_OVERLAY(wifibattlematch_core);
 
 //============================================================================================
 //
@@ -55,9 +57,8 @@ typedef struct
   FIELDMAP_WORK     * fieldmap;
   SAVE_CONTROL_WORK * ctrl;
   void              * p_sub_wk;
-  WIFIBATTLEMATCH_MODE mode;
-  BtlRule btl_rule;
-} EVENT_WIFIBTLMATCH_WORK;
+  DEBUG_WIFIBATTLEMATCH_MODE mode;
+} EVENT_DEBUGWIFIMATCH_WORK;
 
 
 //============================================================================================
@@ -76,9 +77,9 @@ typedef struct
  *	@return 終了コード
  */
 //-----------------------------------------------------------------------------
-static GMEVENT_RESULT EVENT_WifiBattleMatchMain(GMEVENT * event, int *  seq, void * work)
+static GMEVENT_RESULT EVENT_DebugWifiMatchMain(GMEVENT * event, int *  seq, void * work)
 {
-  EVENT_WIFIBTLMATCH_WORK * dbw = work;
+  EVENT_DEBUGWIFIMATCH_WORK * dbw = work;
   GAMESYS_WORK * gsys = dbw->gsys;
 
 
@@ -102,8 +103,8 @@ static GMEVENT_RESULT EVENT_WifiBattleMatchMain(GMEVENT * event, int *  seq, voi
       WIFILOGIN_PARAM *p_param;
       dbw->p_sub_wk = GFL_HEAP_AllocClearMemory(HEAPID_PROC,sizeof(WIFILOGIN_PARAM));
       p_param = dbw->p_sub_wk;
-      p_param->gsys = gsys;
-      p_param->gamedata = GAMESYSTEM_GetGameData(gsys);
+      p_param->gamedata = GAMESYSTEM_GetGameData( gsys );
+      p_param->bDreamWorld  = FALSE;
       GAMESYSTEM_CallProc(gsys, FS_OVERLAY_ID(wifi_login), &WiFiLogin_ProcData, dbw->p_sub_wk);
     }
     (*seq)++;
@@ -125,13 +126,12 @@ static GMEVENT_RESULT EVENT_WifiBattleMatchMain(GMEVENT * event, int *  seq, voi
     break;
   case _CALL_WIFIBTLMATCH:
     { 
-      WIFIBATTLEMATCH_PARAM *p_param;
-      dbw->p_sub_wk = GFL_HEAP_AllocClearMemory(HEAPID_PROC,sizeof(WIFIBATTLEMATCH_PARAM));
+      DEBUG_WIFIBATTLEMATCH_PARAM *p_param;
+      dbw->p_sub_wk = GFL_HEAP_AllocClearMemory(HEAPID_PROC,sizeof(DEBUG_WIFIBATTLEMATCH_PARAM));
       p_param = dbw->p_sub_wk;
-      p_param->mode = dbw->mode;
-      p_param->p_game_data  = GAMESYSTEM_GetGameData(gsys);
-      p_param->btl_rule     = dbw->btl_rule;
-      GAMESYSTEM_CallProc(gsys, FS_OVERLAY_ID(wifibattlematch_sys), &WifiBattleMaptch_ProcData, dbw->p_sub_wk );
+      p_param->mode   = dbw->mode;
+      p_param->p_save = dbw->ctrl;
+      GAMESYSTEM_CallProc(gsys, FS_OVERLAY_ID(wifibattlematch_core), &DEBUG_WifiBattleMatch_ProcData, dbw->p_sub_wk );
     }
     (*seq)++;
     break;
@@ -149,7 +149,7 @@ static GMEVENT_RESULT EVENT_WifiBattleMatchMain(GMEVENT * event, int *  seq, voi
     (*seq) ++;
     break;
   case _FIELD_FADEIN:
-    GMEVENT_CallEvent(event,EVENT_FieldFadeIn_Black(gsys, dbw->fieldmap, FIELD_FADE_WAIT));
+    GMEVENT_CallEvent(event,EVENT_FieldFadeIn(gsys, dbw->fieldmap, 0, 0, 0));
     (*seq) ++;
     break;
   case _FIELD_END:
@@ -163,25 +163,27 @@ static GMEVENT_RESULT EVENT_WifiBattleMatchMain(GMEVENT * event, int *  seq, voi
 
 //----------------------------------------------------------------------------
 /**
- *	@brief  WiFi世界対戦コール
+ *	@brief  デバッグWiFi世界対戦コール
  *
  *	@param	GAMESYS_WORK * gsys ゲームシステム
  *	@param	* fieldmap          フィールドマップ
+ *	@param  mode                モード
  */
 //-----------------------------------------------------------------------------
-GMEVENT* EVENT_WifiBattleMatch( GAMESYS_WORK * gsys, FIELDMAP_WORK * fieldmap, WIFIBATTLEMATCH_MODE mode, BtlRule btl_rule )
+GMEVENT* EVENT_DEBUG_WifiMatch( GAMESYS_WORK * gsys, FIELDMAP_WORK * fieldmap, DEBUG_WIFIBATTLEMATCH_MODE mode )
 {
-  GMEVENT * event = GMEVENT_Create(gsys, NULL, EVENT_WifiBattleMatchMain, sizeof(EVENT_WIFIBTLMATCH_WORK));
+  GMEVENT * event = GMEVENT_Create(gsys, NULL, EVENT_DebugWifiMatchMain, sizeof(EVENT_DEBUGWIFIMATCH_WORK));
   if(GAME_COMM_NO_NULL!= GameCommSys_BootCheck(GAMESYSTEM_GetGameCommSysPtr(gsys))){
     GameCommSys_ExitReq(GAMESYSTEM_GetGameCommSysPtr(gsys));
   }
 
   { 
-    EVENT_WIFIBTLMATCH_WORK * dbw;
+    EVENT_DEBUGWIFIMATCH_WORK * dbw;
 
     dbw = GMEVENT_GetEventWork(event);
     dbw->gsys = gsys;
     dbw->fieldmap = fieldmap;
+    dbw->mode = mode;
     dbw->ctrl = GAMEDATA_GetSaveControlWork(GAMESYSTEM_GetGameData(gsys));
   }
 

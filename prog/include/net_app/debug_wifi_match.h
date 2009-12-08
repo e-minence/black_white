@@ -1,32 +1,28 @@
 //[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
 /**
  *
- *	@file		wifibattlematch.h
- *	@brief	WIFIのバトルマッチ画面
+ *	@file		debug_wifi_match.h
+ *	@brief  サーバーアクセスデバッグ
  *	@author	Toru=Nagihashi
- *	@date		2009.11.02
+ *	@date		2009.12.03
  *
  */
 //]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 #pragma once
 
-#include "battle/battle.h"
 //=============================================================================
 /**
  *					定数宣言
 */
 //=============================================================================
 //-------------------------------------
-///	種類
+///	デバッグモード
 //=====================================
 typedef enum
 {
-	WIFIBATTLEMATCH_MODE_RANDOM,  //ランダム対戦
-	WIFIBATTLEMATCH_MODE_WIFI,    //WIFI大会
-	WIFIBATTLEMATCH_MODE_LIVE,    //ライブ大会
-
-} WIFIBATTLEMATCH_MODE;
-
+  DEBUG_WIFIBATTLEMATCH_MODE_SAKE,  //データベースサーバーへのデータアクセスモード
+  DEBUG_WIFIBATTLEMATCH_MODE_ATLAS, //アトラスサーバーへのデータアクセスモード（※注意！2台でマッチングしないとできません！！）
+} DEBUG_WIFIBATTLEMATCH_MODE;
 
 //=============================================================================
 /**
@@ -34,21 +30,18 @@ typedef enum
 */
 //=============================================================================
 //-------------------------------------
-///	PROCパラメータ
+///	引数
 //=====================================
 typedef struct 
 {
-  GAMEDATA              *p_game_data; //[in ]ゲームデータ
-  BtlRule               btl_rule;     //[in ]バトルルール
-	WIFIBATTLEMATCH_MODE	mode;         //[in ]起動モード
-  POKEPARTY             *p_party;     //[in ]選択用パーティ（手持ちorバトルボックスのはず）
-} WIFIBATTLEMATCH_PARAM;
+  DEBUG_WIFIBATTLEMATCH_MODE  mode;   //[in ]デバッグモード
+  SAVE_CONTROL_WORK*          p_save; //[in ]セーブ
+} DEBUG_WIFIBATTLEMATCH_PARAM;
 
 
 //=============================================================================
 /**
- *					外部参照
+ *					外部公開
 */
 //=============================================================================
-FS_EXTERN_OVERLAY( wifibattlematch_sys );
-extern const GFL_PROC_DATA	WifiBattleMaptch_ProcData;
+extern const GFL_PROC_DATA	DEBUG_WifiBattleMatch_ProcData;
