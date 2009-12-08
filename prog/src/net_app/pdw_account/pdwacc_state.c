@@ -1,6 +1,6 @@
 //=============================================================================
 /**
- * @file    gsync_state.c
+ * @file    pdwacc_state.c
  * @brief   ゲームシンク
  * @author  ohno_katsumi@gamefreak.co.jp
  * @date    09/04/30
@@ -11,7 +11,7 @@
 #include "gflib.h"
 #include "arc_def.h"
 #include "libdpw/dwci_ghttp.h"
-#include "net_app/gsync.h"
+#include "net_app/pdwacc.h"
 #include <nitroWiFi/nhttp.h>
 #include "net/nitrowifidummy.h"
 
@@ -28,14 +28,14 @@
 #include "savedata/wifilist.h"
 #include "savedata/system_data.h"
 #include "msg/msg_d_ohno.h"
-#include "gsync_local.h"
+#include "pdwacc_local.h"
 #include "net/nhttp_rap.h"
-#include "../../field/event_gsync.h"
+//#include "../../field/event_pdwacc.h"
 #include "savedata/dreamworld_data.h"
-#include "gsync_obj_NANR_LBLDEFS.h"
-#include "gsync_poke.cdat"
-#include "msg/msg_gsync.h"
-#include "gsync.naix"
+//#include "pdwacc_obj_NANR_LBLDEFS.h"
+#include "pdwacc_poke.cdat"
+#include "msg/msg_pdwacc.h"
+//#include "pdwacc.naix"
 
 
 /*
@@ -48,10 +48,10 @@ SEQ_BGM_GAME_SYNC	ゲームシンクBGM
 SEQ_SE_SYS_24			アップ・ダウンロード
 SEQ_SE_SYS_25			アップロード完了音
 SEQ_SE_SYS_26			ポケモン眠る
-*/
+ */
 
 
-typedef void (StateFunc)(G_SYNC_WORK* pState);
+typedef void (StateFunc)(PDWACC_WORK* pState);
 
 
 
@@ -78,8 +78,8 @@ typedef struct tag_EVENT_DATA
 
 
 
-static void _changeState(G_SYNC_WORK* pWork,StateFunc* state);
-static void _changeStateDebug(G_SYNC_WORK* pWork,StateFunc* state, int line);
+static void _changeState(PDWACC_WORK* pWork,StateFunc* state);
+static void _changeStateDebug(PDWACC_WORK* pWork,StateFunc* state, int line);
 
 #define _NET_DEBUG (1)
 
@@ -92,12 +92,12 @@ static void _changeStateDebug(G_SYNC_WORK* pWork,StateFunc* state, int line);
 
 
 
-struct _G_SYNC_WORK {
+struct _PDWACC_WORK {
   HEAPID heapID;
   POKEMON_PARAM* pp;
   NHTTP_RAP_WORK* pNHTTPRap;
-  GSYNC_DISP_WORK* pDispWork;  // 描画系
-  GSYNC_MESSAGE_WORK* pMessageWork; //メッセージ系
+  PDWACC_DISP_WORK* pDispWork;  // 描画系
+  PDWACC_MESSAGE_WORK* pMessageWork; //メッセージ系
   APP_TASKMENU_WORK* pAppTask;
   BOX_MANAGER * pBox;
   SAVE_CONTROL_WORK* pSaveData;
@@ -113,7 +113,7 @@ struct _G_SYNC_WORK {
 };
 
 
-static void _ghttpKeyWait(G_SYNC_WORK* pWork);
+static void _ghttpKeyWait(PDWACC_WORK* pWork);
 
 
 
@@ -126,7 +126,7 @@ static void _ghttpKeyWait(G_SYNC_WORK* pWork);
  */
 //------------------------------------------------------------------------------
 
-static void _changeState(G_SYNC_WORK* pWork,StateFunc state)
+static void _changeState(PDWACC_WORK* pWork,StateFunc state)
 {
   pWork->state = state;
 }
@@ -138,10 +138,10 @@ static void _changeState(G_SYNC_WORK* pWork,StateFunc state)
  */
 //------------------------------------------------------------------------------
 #ifdef _NET_DEBUG
-static void _changeStateDebug(G_SYNC_WORK* pWork,StateFunc state, int line)
+static void _changeStateDebug(PDWACC_WORK* pWork,StateFunc state, int line)
 {
 #ifdef DEBUG_ONLY_FOR_ohno
-  OS_TPrintf("gsync: %d\n",line);
+  OS_TPrintf("pdwacc: %d\n",line);
 #endif
   _changeState(pWork, state);
 }
@@ -150,9 +150,9 @@ static void _changeStateDebug(G_SYNC_WORK* pWork,StateFunc state, int line)
 
 
 
-static void _wakeupActio8(G_SYNC_WORK* pWork)
+static void _wakeupActio8(PDWACC_WORK* pWork)
 {
-  if(!GSYNC_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
+  if(!PDWACC_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
     return;
   }
   if(GFL_UI_KEY_GetTrg()){
@@ -168,18 +168,18 @@ static void _wakeupActio8(G_SYNC_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-static void _wakeupAction7(G_SYNC_WORK* pWork)
+static void _wakeupAction7(PDWACC_WORK* pWork)
 {
 
-  GSYNC_MESSAGE_InfoMessageDisp(pWork->pMessageWork,GSYNC_005);
-  GSYNC_DISP_ObjChange(pWork->pDispWork,NANR_gsync_obj_rug_ani3,NANR_gsync_obj_rug_ani4);
+  PDWACC_MESSAGE_InfoMessageDisp(pWork->pMessageWork,PDWACC_005);
+  //  PDWACC_DISP_ObjChange(pWork->pDispWork,NANR_pdwacc_obj_rug_ani3,NANR_pdwacc_obj_rug_ani4);
 
-  GSYNC_DISP_ObjChange(pWork->pDispWork,NANR_gsync_obj_bed,NANR_gsync_obj_bed_ani);
-  GSYNC_DISP_BlendSmokeStart(pWork->pDispWork,FALSE);
-  
-  
-  GSYNC_DISP_PokemonIconCreate(pWork->pDispWork, PP_GetPPPPointer(pWork->pp),CLSYS_DRAW_MAIN);
-  GSYNC_DISP_PokemonIconJump(pWork->pDispWork);
+  //  PDWACC_DISP_ObjChange(pWork->pDispWork,NANR_pdwacc_obj_bed,NANR_pdwacc_obj_bed_ani);
+  PDWACC_DISP_BlendSmokeStart(pWork->pDispWork,FALSE);
+
+
+  PDWACC_DISP_PokemonIconCreate(pWork->pDispWork, PP_GetPPPPointer(pWork->pp),CLSYS_DRAW_MAIN);
+  PDWACC_DISP_PokemonIconJump(pWork->pDispWork);
 
   PMSND_PlaySE(SEQ_SE_SYS_25);
 
@@ -193,18 +193,18 @@ static void _wakeupAction7(G_SYNC_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-static void _wakeupAction6(G_SYNC_WORK* pWork)
+static void _wakeupAction6(PDWACC_WORK* pWork)
 {
   if(GFL_NET_IsInit()){
     if(NHTTP_ERROR_NONE== NHTTP_RAP_Process(pWork->pNHTTPRap)){
       NET_PRINT("終了\n");
       {
         EVENT_DATA* pEvent = (EVENT_DATA*)NHTTP_RAP_GetRecvBuffer(pWork->pNHTTPRap);
-        
+
 
       }
 
-      
+
       _CHANGE_STATE(_wakeupAction7);
     }
   }
@@ -213,7 +213,7 @@ static void _wakeupAction6(G_SYNC_WORK* pWork)
   }
 }
 
-static void _wakeupAction5(G_SYNC_WORK* pWork)
+static void _wakeupAction5(PDWACC_WORK* pWork)
 {
   if(GFL_NET_IsInit()){
     if(NHTTP_RAP_ConectionCreate(NHTTPRAP_URL_DOWNLOAD, pWork->pNHTTPRap)){
@@ -229,22 +229,22 @@ static void _wakeupAction5(G_SYNC_WORK* pWork)
   }
 }
 
-static void _wakeupActio4_2(G_SYNC_WORK* pWork)
+static void _wakeupActio4_2(PDWACC_WORK* pWork)
 {
- if(!GSYNC_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
+  if(!PDWACC_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
     return;
   }
   _CHANGE_STATE(_wakeupAction5);
 }
 
 
-static void _wakeupAction4(G_SYNC_WORK* pWork)
+static void _wakeupAction4(PDWACC_WORK* pWork)
 {
-  GSYNC_MESSAGE_InfoMessageDisp(pWork->pMessageWork,GSYNC_004);
-  GSYNC_DISP_ObjEnd(pWork->pDispWork, NANR_gsync_obj_zzz_ani);
-  GSYNC_DISP_DreamSmokeBgStart(pWork->pDispWork);
-  GSYNC_DISP_BlendSmokeStart(pWork->pDispWork,TRUE);
-  GSYNC_DISP_ObjChange(pWork->pDispWork,NANR_gsync_obj_rug_ani3,NANR_gsync_obj_rug_ani2);
+  PDWACC_MESSAGE_InfoMessageDisp(pWork->pMessageWork,PDWACC_004);
+//  PDWACC_DISP_ObjEnd(pWork->pDispWork, NANR_pdwacc_obj_zzz_ani);
+  PDWACC_DISP_DreamSmokeBgStart(pWork->pDispWork);
+  PDWACC_DISP_BlendSmokeStart(pWork->pDispWork,TRUE);
+  // PDWACC_DISP_ObjChange(pWork->pDispWork,NANR_pdwacc_obj_rug_ani3,NANR_pdwacc_obj_rug_ani2);
   PMSND_PlaySE(SEQ_SE_SYS_24);
 
   _CHANGE_STATE(_wakeupActio4_2);
@@ -259,7 +259,7 @@ static void _wakeupAction4(G_SYNC_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-static void _wakeupAction3(G_SYNC_WORK* pWork)
+static void _wakeupAction3(PDWACC_WORK* pWork)
 {
   if(APP_TASKMENU_IsFinish(pWork->pAppTask)){
     int selectno = APP_TASKMENU_GetCursorPos(pWork->pAppTask);
@@ -271,7 +271,7 @@ static void _wakeupAction3(G_SYNC_WORK* pWork)
       //@todo 切断処理へ
       _CHANGE_STATE(NULL);
     }
-    GSYNC_MESSAGE_InfoMessageEnd(pWork->pMessageWork);
+    PDWACC_MESSAGE_InfoMessageEnd(pWork->pMessageWork);
     APP_TASKMENU_CloseMenu(pWork->pAppTask);
     pWork->pAppTask=NULL;
   }
@@ -284,12 +284,12 @@ static void _wakeupAction3(G_SYNC_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-static void _wakeupAction2(G_SYNC_WORK* pWork)
+static void _wakeupAction2(PDWACC_WORK* pWork)
 {
-  if(!GSYNC_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
+  if(!PDWACC_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
     return;
   }
-  pWork->pAppTask = GSYNC_MESSAGE_YesNoStart(pWork->pMessageWork,GSYNC_YESNOTYPE_INFO);
+  pWork->pAppTask = PDWACC_MESSAGE_YesNoStart(pWork->pMessageWork,PDWACC_YESNOTYPE_INFO);
 
   _CHANGE_STATE(_wakeupAction3);
 }
@@ -303,13 +303,13 @@ static void _wakeupAction2(G_SYNC_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-static void _wakeupAction1(G_SYNC_WORK* pWork)
+static void _wakeupAction1(PDWACC_WORK* pWork)
 {
 
-  GSYNC_DISP_ObjInit(pWork->pDispWork, NANR_gsync_obj_rug_ani3);
-  GSYNC_DISP_ObjInit(pWork->pDispWork, NANR_gsync_obj_zzz_ani);
+  //PDWACC_DISP_ObjInit(pWork->pDispWork, NANR_pdwacc_obj_rug_ani3);
+  //PDWACC_DISP_ObjInit(pWork->pDispWork, NANR_pdwacc_obj_zzz_ani);
 
-  GSYNC_MESSAGE_InfoMessageDisp(pWork->pMessageWork,GSYNC_003);
+  PDWACC_MESSAGE_InfoMessageDisp(pWork->pMessageWork,PDWACC_003);
   PMSND_PlaySE(SEQ_SE_SYS_26);
 
   _CHANGE_STATE(_wakeupAction2);
@@ -323,14 +323,14 @@ static void _wakeupAction1(G_SYNC_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-static void _ghttpInfoWait1(G_SYNC_WORK* pWork)
+static void _ghttpInfoWait1(PDWACC_WORK* pWork)
 {
   if(GFL_NET_IsInit()){
     if(NHTTP_ERROR_NONE== NHTTP_RAP_Process(pWork->pNHTTPRap)){
       NET_PRINT("終了\n");
       {
         EVENT_DATA* pEvent = (EVENT_DATA*)NHTTP_RAP_GetRecvBuffer(pWork->pNHTTPRap);
-        
+
 
       }
       _CHANGE_STATE(_wakeupAction1);
@@ -339,7 +339,7 @@ static void _ghttpInfoWait1(G_SYNC_WORK* pWork)
   else{
     _CHANGE_STATE(_wakeupAction1);
   }
-    
+
 }
 
 //------------------------------------------------------------------------------
@@ -349,7 +349,7 @@ static void _ghttpInfoWait1(G_SYNC_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-static void _ghttpInfoWait0(G_SYNC_WORK* pWork)
+static void _ghttpInfoWait0(PDWACC_WORK* pWork)
 {
 
   if(GFL_NET_IsInit()){
@@ -376,7 +376,7 @@ static void _ghttpInfoWait0(G_SYNC_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-static void _upeffectLoop8(G_SYNC_WORK* pWork)
+static void _upeffectLoop8(PDWACC_WORK* pWork)
 {
   if(GFL_UI_KEY_GetTrg()){
     _CHANGE_STATE(NULL);
@@ -392,9 +392,9 @@ static void _upeffectLoop8(G_SYNC_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-static void _upeffectLoop7(G_SYNC_WORK* pWork)
+static void _upeffectLoop7(PDWACC_WORK* pWork)
 {
-  if(!GSYNC_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
+  if(!PDWACC_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
     return;
   }
   PMSND_PlaySE(SEQ_SE_SYS_26);
@@ -408,23 +408,23 @@ static void _upeffectLoop7(G_SYNC_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _upeffectLoop6(G_SYNC_WORK* pWork)
+static void _upeffectLoop6(PDWACC_WORK* pWork)
 {
   if(pWork->pTopAddr){
     GFL_HEAP_FreeMemory(pWork->pTopAddr);
   }
 
-  
-  GSYNC_MESSAGE_InfoMessageDisp(pWork->pMessageWork,GSYNC_002);
-  GSYNC_DISP_ObjInit(pWork->pDispWork, NANR_gsync_obj_zzz_ani);
-  GSYNC_DISP_BlendSmokeStart(pWork->pDispWork,FALSE);
-    GSYNC_DISP_ObjChange(pWork->pDispWork,NANR_gsync_obj_rug_ani1,NANR_gsync_obj_rug_ani3);
+
+  PDWACC_MESSAGE_InfoMessageDisp(pWork->pMessageWork,PDWACC_002);
+  //PDWACC_DISP_ObjInit(pWork->pDispWork, NANR_pdwacc_obj_zzz_ani);
+  PDWACC_DISP_BlendSmokeStart(pWork->pDispWork,FALSE);
+  //  PDWACC_DISP_ObjChange(pWork->pDispWork,NANR_pdwacc_obj_rug_ani1,NANR_pdwacc_obj_rug_ani3);
   PMSND_PlaySE(SEQ_SE_SYS_25);
 
   _CHANGE_STATE(_upeffectLoop7);
 }
 
-static void _upeffectLoop5(G_SYNC_WORK* pWork)
+static void _upeffectLoop5(PDWACC_WORK* pWork)
 {
   if(GFL_NET_IsInit()){
     if(NHTTP_ERROR_NONE== NHTTP_RAP_Process(pWork->pNHTTPRap)){
@@ -433,7 +433,7 @@ static void _upeffectLoop5(G_SYNC_WORK* pWork)
         EVENT_DATA* pEvent = (EVENT_DATA*)NHTTP_RAP_GetRecvBuffer(pWork->pNHTTPRap);
         int d,j;
         u32 size;
-        
+
         OS_TPrintf("%d \n",	pEvent->rom_code);
         OS_TPrintf("%d \n",	 pEvent->country_code);
         OS_TPrintf("%d \n",	pEvent->id);
@@ -450,7 +450,7 @@ static void _upeffectLoop5(G_SYNC_WORK* pWork)
   else{
     _CHANGE_STATE(_upeffectLoop6);
   }
-    
+
 }
 
 
@@ -462,9 +462,9 @@ static void _upeffectLoop5(G_SYNC_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-static void _upeffectLoop4(G_SYNC_WORK* pWork)
+static void _upeffectLoop4(PDWACC_WORK* pWork)
 {
-  if(!GSYNC_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
+  if(!PDWACC_MESSAGE_InfoMessageEndCheck(pWork->pMessageWork)){
     return;
   }
   if(GFL_NET_IsInit()){
@@ -475,11 +475,11 @@ static void _upeffectLoop4(G_SYNC_WORK* pWork)
         NHTTP_AddPostDataRaw(NHTTP_RAP_GetHandle(pWork->pNHTTPRap), topAddr, 0x80000 );
       }
       else{
-        ARCHANDLE* p_handle = GFL_ARC_OpenDataHandle( ARCID_GSYNC, pWork->heapID );
+/*        ARCHANDLE* p_handle = GFL_ARC_OpenDataHandle( ARCID_PDWACC, pWork->heapID );
         u32 size;
-        pWork->pTopAddr = GFL_ARCHDL_UTIL_LoadEx(p_handle,NARC_gsync_save3_bin,FALSE,pWork->heapID,&size );
+        pWork->pTopAddr = GFL_ARCHDL_UTIL_LoadEx(p_handle,NARC_pdwacc_save3_bin,FALSE,pWork->heapID,&size );
         NHTTP_AddPostDataRaw(NHTTP_RAP_GetHandle(pWork->pNHTTPRap), pWork->pTopAddr, 0x80000 );
-        GFL_ARC_CloseDataHandle(p_handle);
+        GFL_ARC_CloseDataHandle(p_handle);*/
       }
       if(NHTTP_RAP_StartConnect(pWork->pNHTTPRap)){
         _CHANGE_STATE(_upeffectLoop5);
@@ -500,17 +500,17 @@ static void _upeffectLoop4(G_SYNC_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _upeffectLoop3(G_SYNC_WORK* pWork)
+static void _upeffectLoop3(PDWACC_WORK* pWork)
 {
 
   pWork->countTimer--;
   if(pWork->countTimer==0){
-    GSYNC_DISP_DreamSmokeBgStart(pWork->pDispWork);
+    PDWACC_DISP_DreamSmokeBgStart(pWork->pDispWork);
 
-    GSYNC_MESSAGE_InfoMessageDisp(pWork->pMessageWork,GSYNC_001);
+    PDWACC_MESSAGE_InfoMessageDisp(pWork->pMessageWork,PDWACC_001);
 
-    GSYNC_DISP_BlendSmokeStart(pWork->pDispWork,TRUE);
-    GSYNC_DISP_ObjChange(pWork->pDispWork,NANR_gsync_obj_rug_ani1,NANR_gsync_obj_rug_ani2);
+    PDWACC_DISP_BlendSmokeStart(pWork->pDispWork,TRUE);
+    //  PDWACC_DISP_ObjChange(pWork->pDispWork,NANR_pdwacc_obj_rug_ani1,NANR_pdwacc_obj_rug_ani2);
 
     PMSND_PlaySE(SEQ_SE_SYS_24);
 
@@ -526,11 +526,11 @@ static void _upeffectLoop3(G_SYNC_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _upeffectLoop2(G_SYNC_WORK* pWork)
+static void _upeffectLoop2(PDWACC_WORK* pWork)
 {
   pWork->countTimer--;
   if(pWork->countTimer==0){
-    GSYNC_DISP_ObjInit(pWork->pDispWork, NANR_gsync_obj_rug_ani1);
+    //PDWACC_DISP_ObjInit(pWork->pDispWork, NANR_pdwacc_obj_rug_ani1);
     pWork->countTimer = _DREAMSMOKE_TIME;
     _CHANGE_STATE(_upeffectLoop3);
   }
@@ -544,15 +544,15 @@ static void _upeffectLoop2(G_SYNC_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _upeffectLoop1(G_SYNC_WORK* pWork)
+static void _upeffectLoop1(PDWACC_WORK* pWork)
 {
   pWork->countTimer--;
   if(pWork->countTimer==0){
-    GSYNC_DISP_ObjChange(pWork->pDispWork,NANR_gsync_obj_bed,NANR_gsync_obj_bed_ani);
+    // PDWACC_DISP_ObjChange(pWork->pDispWork,NANR_pdwacc_obj_bed,NANR_pdwacc_obj_bed_ani);
 
-    GSYNC_DISP_ObjInit(pWork->pDispWork,NANR_gsync_obj_kemuri_r);
-    GSYNC_DISP_ObjInit(pWork->pDispWork,NANR_gsync_obj_kemuri_l);
-    
+    //PDWACC_DISP_ObjInit(pWork->pDispWork,NANR_pdwacc_obj_kemuri_r);
+    //PDWACC_DISP_ObjInit(pWork->pDispWork,NANR_pdwacc_obj_kemuri_l);
+
     pWork->countTimer = _HAND_UP_TIME;
     _CHANGE_STATE(_upeffectLoop2);
   }
@@ -568,12 +568,12 @@ static void _upeffectLoop1(G_SYNC_WORK* pWork)
  * @retval  none
  */
 //------------------------------------------------------------------------------
-static void _upeffectLoop(G_SYNC_WORK* pWork)
+static void _upeffectLoop(PDWACC_WORK* pWork)
 {
   pWork->countTimer--;
   if(pWork->countTimer==0){
-    GSYNC_DISP_HandInit(pWork->pDispWork);
-    GSYNC_DISP_PokemonIconMove(pWork->pDispWork);
+    PDWACC_DISP_HandInit(pWork->pDispWork);
+    PDWACC_DISP_PokemonIconMove(pWork->pDispWork);
     pWork->countTimer = _BEDIN_TIME;
     _CHANGE_STATE(_upeffectLoop1);
   }
@@ -588,9 +588,9 @@ static void _upeffectLoop(G_SYNC_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-static void _upeffectStart(G_SYNC_WORK* pWork)
+static void _upeffectStart(PDWACC_WORK* pWork)
 {
-  GSYNC_DISP_PokemonIconCreate(pWork->pDispWork, PP_GetPPPPointer(pWork->pp),CLSYS_DRAW_SUB);
+  PDWACC_DISP_PokemonIconCreate(pWork->pDispWork, PP_GetPPPPointer(pWork->pp),CLSYS_DRAW_SUB);
   pWork->countTimer=10;
 
   _CHANGE_STATE(_upeffectLoop);
@@ -603,7 +603,7 @@ static void _upeffectStart(G_SYNC_WORK* pWork)
  */
 //------------------------------------------------------------------------------
 
-static void _BoxPokeMove(G_SYNC_WORK* pWork)
+static void _BoxPokeMove(PDWACC_WORK* pWork)
 {
   POKEMON_PASO_PARAM* ppp;
   DREAMWORLD_SAVEDATA* pDream = DREAMWORLD_SV_GetDreamWorldSaveData(pWork->pSaveData);
@@ -630,9 +630,6 @@ static void _BoxPokeMove(G_SYNC_WORK* pWork)
 FS_EXTERN_OVERLAY(dpw_common);
 
 
-#if PM_DEBUG
-static  G_SYNC_WORK* _pWork;
-#endif
 
 //------------------------------------------------------------------------------
 /**
@@ -641,65 +638,23 @@ static  G_SYNC_WORK* _pWork;
  */
 //------------------------------------------------------------------------------
 
-static GFL_PROC_RESULT GSYNCProc_Init( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
+static GFL_PROC_RESULT PDWACCProc_Init( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
 {
-  EVENT_GSYNC_WORK* pParent = pwk;
-  G_SYNC_WORK* pWork;
+  PDWACC_PROCWORK* pParent = pwk;
+  PDWACC_WORK* pWork;
 
   GFL_OVERLAY_Load( FS_OVERLAY_ID(dpw_common));
-  GFL_HEAP_CreateHeap( GFL_HEAPID_APP, HEAPID_GAMESYNC, 0x78000 );
-  pWork = GFL_PROC_AllocWork( proc, sizeof( G_SYNC_WORK ), HEAPID_GAMESYNC );
-  GFL_STD_MemClear(pWork, sizeof(G_SYNC_WORK));
+  pWork = GFL_PROC_AllocWork( proc, sizeof( PDWACC_WORK ), pParent->heapID );
+  GFL_STD_MemClear(pWork, sizeof(PDWACC_WORK));
 
-  pWork->heapID = HEAPID_GAMESYNC;
+  pWork->heapID = pParent->heapID;
+  pWork->pSaveData = GAMEDATA_GetSaveControlWork(pParent->gameData);
+  pWork->pNHTTPRap = NHTTP_RAP_Init(pParent->heapID, SYSTEMDATA_GetDpwInfo(SaveData_GetSystemData(pWork->pSaveData)));
 
-  if(pParent){
-    pWork->pSaveData = GAMEDATA_GetSaveControlWork(pParent->gameData);
-    pWork->pNHTTPRap = NHTTP_RAP_Init(HEAPID_GAMESYNC, SYSTEMDATA_GetDpwInfo(SaveData_GetSystemData(pWork->pSaveData)));
-    pWork->pBox = GAMEDATA_GetBoxManager(GAMESYSTEM_GetGameData(pParent->gsys));
-    pWork->trayno = pParent->boxNo;
-    pWork->indexno = pParent->boxIndex;
-    switch(pParent->selectType){
-    case  GSYNC_CALLTYPE_INFO:
-      _CHANGE_STATE(_ghttpInfoWait0);
-      break;
-    case GSYNC_CALLTYPE_BOXSET:
-      _CHANGE_STATE(_BoxPokeMove);
-      break;
-    }
-  }
-  else{
-#if PM_DEBUG
-    pWork->pNHTTPRap = NHTTP_RAP_Init(HEAPID_GAMESYNC, 1234);
-    _pWork=pWork;
-    pWork->trayno=0;
-    pWork->indexno=0;
-    pWork->pSaveData = SaveControl_GetPointer();
-    pWork->pBox = BOX_DAT_InitManager(pWork->heapID,SaveControl_GetPointer());
+  _CHANGE_STATE(_ghttpInfoWait0);
 
-    {
-      POKEMON_PARAM *pp;
-      BOX_MANAGER* pBox = pWork->pBox;
-      pp = PP_Create(MONSNO_MARIRU, 100, 123456, pWork->heapID);
-      {
-        u16 oyaName[5] = {L'デ',L'バ',L'ッ',L'グ',0xFFFF};
-        POKEMON_PERSONAL_DATA* ppd = POKE_PERSONAL_OpenHandle(MONSNO_MARIRU, 0, GFL_HEAPID_APP);
-        u32 ret = POKE_PERSONAL_GetParam(ppd, POKEPER_ID_sex);
-        PP_SetupEx(pp, MONSNO_MARIRU, 3, 123456,PTL_SETUP_POW_AUTO, ret);
-        PP_Put( pp , ID_PARA_oyaname_raw , (u32)oyaName );
-
-        BOXDAT_PutPokemonBox(pBox, 0, (POKEMON_PASO_PARAM*)PP_GetPPPPointerConst(pp));
-
-        POKE_PERSONAL_CloseHandle(ppd);
-      }
-      GFL_HEAP_FreeMemory(pp);
-    }
-    _CHANGE_STATE(_BoxPokeMove);
-#endif
-  }
-
-  pWork->pDispWork = GSYNC_DISP_Init(pWork->heapID);
-  pWork->pMessageWork = GSYNC_MESSAGE_Init(pWork->heapID, NARC_message_gsync_dat);
+  pWork->pDispWork = PDWACC_DISP_Init(pWork->heapID);
+  pWork->pMessageWork = PDWACC_MESSAGE_Init(pWork->heapID, NARC_message_pdwacc_dat);
 
 
   WIPE_SYS_Start( WIPE_PATTERN_WMS , WIPE_TYPE_FADEIN , WIPE_TYPE_FADEIN ,
@@ -707,29 +662,14 @@ static GFL_PROC_RESULT GSYNCProc_Init( GFL_PROC * proc, int * seq, void * pwk, v
 
   PMSND_PlayBGM(SEQ_BGM_GAME_SYNC);
 
-  
+
   return GFL_PROC_RES_FINISH;
 }
 
-#if PM_DEBUG
 
-static GFL_PROC_RESULT GSYNCProc_InitDbg( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
+static GFL_PROC_RESULT PDWACCProc_Main( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
 {
-  GSYNCProc_Init( proc, seq, pwk,  mywk);
-  {
-    G_SYNC_WORK* pWork = _pWork;
-    _BoxPokeMove(pWork);
-    _CHANGE_STATE(_ghttpInfoWait0);
-  }
-  return GFL_PROC_RES_FINISH;
-}
-
-#endif
-
-
-static GFL_PROC_RESULT GSYNCProc_Main( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
-{
-  G_SYNC_WORK* pWork = mywk;
+  PDWACC_WORK* pWork = mywk;
   StateFunc* state = pWork->state;
   GFL_PROC_RESULT ret = GFL_PROC_RES_FINISH;
 
@@ -742,18 +682,18 @@ static GFL_PROC_RESULT GSYNCProc_Main( GFL_PROC * proc, int * seq, void * pwk, v
     APP_TASKMENU_UpdateMenu(pWork->pAppTask);
   }
 
-  GSYNC_DISP_Main(pWork->pDispWork);
-  GSYNC_MESSAGE_Main(pWork->pMessageWork);
+  PDWACC_DISP_Main(pWork->pDispWork);
+  PDWACC_MESSAGE_Main(pWork->pMessageWork);
 
   return ret;
 }
 
-static GFL_PROC_RESULT GSYNCProc_End( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
+static GFL_PROC_RESULT PDWACCProc_End( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
 {
-  G_SYNC_WORK* pWork = mywk;
+  PDWACC_WORK* pWork = mywk;
 
-  GSYNC_MESSAGE_End(pWork->pMessageWork);
-  GSYNC_DISP_End(pWork->pDispWork);
+  PDWACC_MESSAGE_End(pWork->pMessageWork);
+  PDWACC_DISP_End(pWork->pDispWork);
   if(pWork->pp){
     GFL_HEAP_FreeMemory(pWork->pp);
   }
@@ -764,32 +704,17 @@ static GFL_PROC_RESULT GSYNCProc_End( GFL_PROC * proc, int * seq, void * pwk, vo
 
   NHTTP_RAP_End(pWork->pNHTTPRap);
 
-#if PM_DEBUG
-  if(pwk==NULL){
-    _pWork = NULL;
-    BOX_DAT_ExitManager(pWork->pBox);
-  }
-#endif
-  
+
   GFL_PROC_FreeWork(proc);
- 
-  GFL_HEAP_DeleteHeap(HEAPID_GAMESYNC);
+
   GFL_OVERLAY_Unload( FS_OVERLAY_ID(dpw_common));
   return GFL_PROC_RES_FINISH;
 }
 
 // プロセス定義データ
-const GFL_PROC_DATA G_SYNC_ProcData = {
-  GSYNCProc_Init,
-  GSYNCProc_Main,
-  GSYNCProc_End,
+const GFL_PROC_DATA PDW_ACC_ProcData = {
+  PDWACCProc_Init,
+  PDWACCProc_Main,
+  PDWACCProc_End,
 };
 
-#if PM_DEBUG
-// プロセス定義データ
-const GFL_PROC_DATA G_SYNC_ProcData_Dbg = {
-  GSYNCProc_InitDbg,
-  GSYNCProc_Main,
-  GSYNCProc_End,
-};
-#endif

@@ -1,7 +1,7 @@
 //============================================================================================
 /**
- * @file    gsync_disp.c
- * @bfief   GSYNC画像表示関連
+ * @file    pdwacc_disp.c
+ * @bfief   PDWACC画像表示関連
  * @author  k.ohno
  * @date    2009.11.14
  */
@@ -12,7 +12,7 @@
 #include "calctool.h"
 
 #include "arc_def.h"
-#include "net_app/gsync.h"
+#include "net_app/pdwacc.h"
 
 #include "infowin/infowin.h"
 #include "system/main.h"
@@ -39,32 +39,32 @@
 #include "../../field/event_ircbattle.h"
 #include "app/app_taskmenu.h"  //APP_TASKMENU_INITWORK
 
-#include "gsync_local.h"
+#include "pdwacc_local.h"
 #include "msg/msg_gtsnego.h"
-#include "gsync.naix"
+//#include "pdwacc.naix"
 #include "box_gra.naix"
 
-#include "gsync_poke.cdat"
-#include "gsync_obj_NANR_LBLDEFS.h"
+#include "pdwacc_poke.cdat"
+//#include "pdwacc_obj_NANR_LBLDEFS.h"
 
 
 #define _OBJPLT_POKEICON_OFFSET (0)  //ポケモンパレット
-#define _OBJPLT_GSYNC_OFFSET (3)     //ゲームシンク素材
+#define _OBJPLT_PDWACC_OFFSET (3)     //ゲームシンク素材
 #define _OBJPLT_HAND_OFFSET (6)    //手
 
 FS_EXTERN_OVERLAY(ui_common);
 
 typedef enum
 {
-  PLT_GSYNC,
+  PLT_PDWACC,
   PLT_HANDOBJ,
   PLT_POKEICON,
   PLT_RESOURCE_MAX,
-  CHAR_GSYNC = PLT_RESOURCE_MAX,
+  CHAR_PDWACC = PLT_RESOURCE_MAX,
   CHAR_HANDOBJ,
   CHAR_SELECT_POKE,
   CHAR_RESOURCE_MAX,
-  ANM_GSYNC = CHAR_RESOURCE_MAX,
+  ANM_PDWACC = CHAR_RESOURCE_MAX,
   ANM_HANDOBJ,
   ANM_POKEICON,
   ANM_RESOURCE_MAX,
@@ -106,7 +106,7 @@ typedef enum  //お互いのセルの表示順序
 
 //#define _CELL_DISP_NUM (12)
 
-struct _GSYNC_DISP_WORK {
+struct _PDWACC_DISP_WORK {
 	u32 subchar;
   u32 mainchar;
   TOUCHBAR_WORK* pTouchWork;
@@ -152,22 +152,22 @@ typedef struct {
   int x;
   int y;
   int pri;
-} _GSYNCOBJPOS_STRUCT;
+} _PDWACCOBJPOS_STRUCT;
 
 
 
 
-static _GSYNCOBJPOS_STRUCT gsyncObjPosTable[]={
-  {124,160,_BED_CELL_PRI},   //NANR_gsync_obj_bed    0 // 
-  {124,160,_BED_CELL_PRI},   //NANR_gsync_obj_bed_ani    1 // 
-  {132,155,_SMOKE_CELL_PRI},   //NANR_gsync_obj_kemuri_r    2 //
-  {122,155,_SMOKE_CELL_PRI},   //NANR_gsync_obj_kemuri_l    3 //
-  {124,125,_FUTON_CELL_PRI},   //NANR_gsync_obj_rug_ani1    4 //
-  {124,125,_FUTON_CELL_PRI},   //NANR_gsync_obj_rug_ani2    5 //
-  {124,125,_FUTON_CELL_PRI},   //NANR_gsync_obj_rug_ani3    5 //
-  {124,125,_FUTON_CELL_PRI},   //NANR_gsync_obj_rug_ani4    5 //
-  {100,125,_ZZZ_CELL_PRI},   //NANR_gsync_obj_zzz_ani    6 // 
-  {128,160,_SMOKE_CELL_PRI},   //NANR_gsync_obj_yume_1    7 // 
+static _PDWACCOBJPOS_STRUCT pdwaccObjPosTable[]={
+  {124,160,_BED_CELL_PRI},   //NANR_pdwacc_obj_bed    0 // 
+  {124,160,_BED_CELL_PRI},   //NANR_pdwacc_obj_bed_ani    1 // 
+  {132,155,_SMOKE_CELL_PRI},   //NANR_pdwacc_obj_kemuri_r    2 //
+  {122,155,_SMOKE_CELL_PRI},   //NANR_pdwacc_obj_kemuri_l    3 //
+  {124,125,_FUTON_CELL_PRI},   //NANR_pdwacc_obj_rug_ani1    4 //
+  {124,125,_FUTON_CELL_PRI},   //NANR_pdwacc_obj_rug_ani2    5 //
+  {124,125,_FUTON_CELL_PRI},   //NANR_pdwacc_obj_rug_ani3    5 //
+  {124,125,_FUTON_CELL_PRI},   //NANR_pdwacc_obj_rug_ani4    5 //
+  {100,125,_ZZZ_CELL_PRI},   //NANR_pdwacc_obj_zzz_ani    6 // 
+  {128,160,_SMOKE_CELL_PRI},   //NANR_pdwacc_obj_yume_1    7 // 
 };
 
 
@@ -180,22 +180,22 @@ static GFL_BG_SYS_HEADER BGsys_data = {
   GX_DISPMODE_GRAPHICS, GX_BGMODE_0, GX_BGMODE_0, GX_BG0_AS_2D,
 };
 
-static void dispInit(GSYNC_DISP_WORK* pWork);
-static void settingSubBgControl(GSYNC_DISP_WORK* pWork);
-static void _TOUCHBAR_Init(GSYNC_DISP_WORK* pWork);
+static void dispInit(PDWACC_DISP_WORK* pWork);
+static void settingSubBgControl(PDWACC_DISP_WORK* pWork);
+static void _TOUCHBAR_Init(PDWACC_DISP_WORK* pWork);
 static void	_VBlank( GFL_TCB *tcb, void *work );
-static void _SetHand(GSYNC_DISP_WORK* pWork,int x,int y);
-static void _SetBed(GSYNC_DISP_WORK* pWork,int no);
+static void _SetHand(PDWACC_DISP_WORK* pWork,int x,int y);
+static void _SetBed(PDWACC_DISP_WORK* pWork,int no);
 
-static void _HandRelease(GSYNC_DISP_WORK* pWork);
-static void _CreatePokeIconResource(GSYNC_DISP_WORK* pWork);
-static void _blendSmoke(GSYNC_DISP_WORK* pWork);
+static void _HandRelease(PDWACC_DISP_WORK* pWork);
+static void _CreatePokeIconResource(PDWACC_DISP_WORK* pWork);
+static void _blendSmoke(PDWACC_DISP_WORK* pWork);
 
 
 
-GSYNC_DISP_WORK* GSYNC_DISP_Init(HEAPID id)
+PDWACC_DISP_WORK* PDWACC_DISP_Init(HEAPID id)
 {
-  GSYNC_DISP_WORK* pWork = GFL_HEAP_AllocClearMemory(id, sizeof(GSYNC_DISP_WORK));
+  PDWACC_DISP_WORK* pWork = GFL_HEAP_AllocClearMemory(id, sizeof(PDWACC_DISP_WORK));
   pWork->heapID = id;
 
   GFL_OVERLAY_Load( FS_OVERLAY_ID(ui_common));
@@ -228,7 +228,7 @@ GSYNC_DISP_WORK* GSYNC_DISP_Init(HEAPID id)
   return pWork;
 }
 
-void GSYNC_DISP_Main(GSYNC_DISP_WORK* pWork)
+void PDWACC_DISP_Main(PDWACC_DISP_WORK* pWork)
 {
   pWork->scroll_index++;
   if(pWork->scroll_index>=192){
@@ -238,7 +238,7 @@ void GSYNC_DISP_Main(GSYNC_DISP_WORK* pWork)
   _blendSmoke(pWork);
 }
 
-void GSYNC_DISP_End(GSYNC_DISP_WORK* pWork)
+void PDWACC_DISP_End(PDWACC_DISP_WORK* pWork)
 {
   int i;
   _HandRelease(pWork);
@@ -279,7 +279,7 @@ void GSYNC_DISP_End(GSYNC_DISP_WORK* pWork)
 }
 
 
-static void settingSubBgControl(GSYNC_DISP_WORK* pWork)
+static void settingSubBgControl(PDWACC_DISP_WORK* pWork)
 {
 
   // 背景面
@@ -378,91 +378,67 @@ static void settingSubBgControl(GSYNC_DISP_WORK* pWork)
 //--------------------------------------------------------------
 static void	_VBlank( GFL_TCB *tcb, void *work )
 {
-  GSYNC_DISP_WORK *pWork=work;
+  PDWACC_DISP_WORK *pWork=work;
 
   GFL_CLACT_SYS_VBlankFunc();	//セルアクターVBlank
 
 }
 
-static void dispInit(GSYNC_DISP_WORK* pWork)
+static void dispInit(PDWACC_DISP_WORK* pWork)
 {
+#if 0
 	{
-    ARCHANDLE* p_handle = GFL_ARC_OpenDataHandle( ARCID_GSYNC, pWork->heapID );
-
-    GFL_ARCHDL_UTIL_TransVramPalette( p_handle, NARC_gsync_gsync_bg_NCLR,
+    ARCHANDLE* p_handle = GFL_ARC_OpenDataHandle( ARCID_PDWACC, pWork->heapID );
+    GFL_ARCHDL_UTIL_TransVramPalette( p_handle, NARC_pdwacc_pdwacc_bg_NCLR,
                                       PALTYPE_SUB_BG, 0, 0,  pWork->heapID);
     // サブ画面BG0キャラ転送
-    pWork->subchar = GFL_ARCHDL_UTIL_TransVramBgCharacterAreaMan( p_handle, NARC_gsync_gsync_bg_NCGR,
+    pWork->subchar = GFL_ARCHDL_UTIL_TransVramBgCharacterAreaMan( p_handle, NARC_pdwacc_pdwacc_bg_NCGR,
                                                                   GFL_BG_FRAME0_S, 0, 0, pWork->heapID);
 
     // サブ画面BG0スクリーン転送
-    GFL_ARCHDL_UTIL_TransVramScreenCharOfs(   p_handle, NARC_gsync_downner_bg_NSCR,
+    GFL_ARCHDL_UTIL_TransVramScreenCharOfs(   p_handle, NARC_pdwacc_downner_bg_NSCR,
                                               GFL_BG_FRAME0_S, 0,
                                               GFL_ARCUTIL_TRANSINFO_GetPos(pWork->subchar), 0, 0,
                                               pWork->heapID);
 
 
-    GFL_ARCHDL_UTIL_TransVramPalette( p_handle, NARC_gsync_gsync_bg_NCLR,
+    GFL_ARCHDL_UTIL_TransVramPalette( p_handle, NARC_pdwacc_pdwacc_bg_NCLR,
                                       PALTYPE_MAIN_BG, 0, 0,  pWork->heapID);
     // サブ画面BG0キャラ転送
-    pWork->mainchar = GFL_ARCHDL_UTIL_TransVramBgCharacterAreaMan( p_handle, NARC_gsync_gsync_bg_NCGR,
+    pWork->mainchar = GFL_ARCHDL_UTIL_TransVramBgCharacterAreaMan( p_handle, NARC_pdwacc_pdwacc_bg_NCGR,
                                                                   GFL_BG_FRAME0_M, 0, 0, pWork->heapID);
 
     // サブ画面BG0スクリーン転送
-    GFL_ARCHDL_UTIL_TransVramScreenCharOfs(   p_handle, NARC_gsync_upper_bg_NSCR,
+    GFL_ARCHDL_UTIL_TransVramScreenCharOfs(   p_handle, NARC_pdwacc_upper_bg_NSCR,
                                               GFL_BG_FRAME0_M, 0,
                                               GFL_ARCUTIL_TRANSINFO_GetPos(pWork->mainchar), 0, 0,
                                               pWork->heapID);
 
-    pWork->cellRes[CHAR_GSYNC] =
-      GFL_CLGRP_CGR_Register( p_handle , NARC_gsync_gsync_obj_NCGR ,
-                              FALSE , CLSYS_DRAW_MAX , pWork->heapID );
-    pWork->cellRes[PLT_GSYNC] =
-      GFL_CLGRP_PLTT_RegisterEx(
-        p_handle ,NARC_gsync_gsync_obj_NCLR , CLSYS_DRAW_MAX, _OBJPLT_GSYNC_OFFSET*0x20, 0, 3, pWork->heapID  );
-    pWork->cellRes[ANM_GSYNC] =
-      GFL_CLGRP_CELLANIM_Register(
-        p_handle , NARC_gsync_gsync_obj_NCER, NARC_gsync_gsync_obj_NANR , pWork->heapID  );
-
-
-    pWork->cellRes[CHAR_HANDOBJ] =
-      GFL_CLGRP_CGR_Register( p_handle , NARC_gsync_hand_obj_NCGR ,
-                              FALSE , CLSYS_DRAW_MAX , pWork->heapID );
-    pWork->cellRes[PLT_HANDOBJ] =
-      GFL_CLGRP_PLTT_RegisterEx(
-        p_handle ,NARC_gsync_hand_obj2_NCLR , CLSYS_DRAW_MAX ,  _OBJPLT_HAND_OFFSET*0x20, 0, 0, pWork->heapID  );
-    pWork->cellRes[ANM_HANDOBJ] =
-      GFL_CLGRP_CELLANIM_Register(
-        p_handle , NARC_gsync_hand_obj_NCER, NARC_gsync_hand_obj_NANR , pWork->heapID  );
-
-
-    _SetBed(pWork, NANR_gsync_obj_bed);
-    _CreatePokeIconResource(pWork);
-
     GFL_ARC_CloseDataHandle(p_handle);
 	}
+#endif
   
 }
 
 
-void GSYNC_DISP_HandInit(GSYNC_DISP_WORK* pWork)
+void PDWACC_DISP_HandInit(PDWACC_DISP_WORK* pWork)
 {
   _SetHand(pWork,_POKEMON_CELLX, _POKEMON_CELLY);
 }
 
 
-void GSYNC_DISP_ObjInit(GSYNC_DISP_WORK* pWork,int no)
+void PDWACC_DISP_ObjInit(PDWACC_DISP_WORK* pWork,int no)
 {
   _SetBed(pWork, no);
 }
 
 
-void GSYNC_DISP_ObjChange(GSYNC_DISP_WORK* pWork,int no,int no2)
+void PDWACC_DISP_ObjChange(PDWACC_DISP_WORK* pWork,int no,int no2)
 {
   GFL_CLACT_WK_SetAnmSeq( pWork->curIcon[no] , no2 );
 }
 
-void GSYNC_DISP_ObjEnd(GSYNC_DISP_WORK* pWork,int no)
+void PDWACC_DISP_ObjEnd(PDWACC_DISP_WORK* pWork,int no)
 {
   GFL_CLACT_WK_Remove( pWork->curIcon[no] );
   pWork->curIcon[no]=NULL;
@@ -478,7 +454,7 @@ void GSYNC_DISP_ObjEnd(GSYNC_DISP_WORK* pWork,int no)
  */
 //-----------------------------------------------------------------------------
 
-static void _TOUCHBAR_Init(GSYNC_DISP_WORK* pWork)
+static void _TOUCHBAR_Init(PDWACC_DISP_WORK* pWork)
 {
   //アイコンの設定
   //数分作る
@@ -513,7 +489,7 @@ static void _TOUCHBAR_Init(GSYNC_DISP_WORK* pWork)
 //-----------------------------------------------------------------------------
 
 
-TOUCHBAR_WORK* GSYNC_DISP_GetTouchWork(GSYNC_DISP_WORK* pWork)
+TOUCHBAR_WORK* PDWACC_DISP_GetTouchWork(PDWACC_DISP_WORK* pWork)
 {
   return pWork->pTouchWork;
 }
@@ -528,7 +504,7 @@ TOUCHBAR_WORK* GSYNC_DISP_GetTouchWork(GSYNC_DISP_WORK* pWork)
 //-----------------------------------------------------------------------------
 
 
-static void _SetHand(GSYNC_DISP_WORK* pWork,int x,int y)
+static void _SetHand(PDWACC_DISP_WORK* pWork,int x,int y)
 {
   int i=0;
 
@@ -562,21 +538,21 @@ static void _SetHand(GSYNC_DISP_WORK* pWork,int x,int y)
 //-----------------------------------------------------------------------------
 
 
-static void _SetBed(GSYNC_DISP_WORK* pWork,int no)
+static void _SetBed(PDWACC_DISP_WORK* pWork,int no)
 {
   GF_ASSERT(pWork->curIcon[no]==NULL);
   {
     GFL_CLWK_DATA cellInitData;
 
-    cellInitData.pos_x = gsyncObjPosTable[no].x;
-    cellInitData.pos_y = gsyncObjPosTable[no].y;
+    cellInitData.pos_x = pdwaccObjPosTable[no].x;
+    cellInitData.pos_y = pdwaccObjPosTable[no].y;
     cellInitData.anmseq = no;
-    cellInitData.softpri = gsyncObjPosTable[no].pri;
+    cellInitData.softpri = pdwaccObjPosTable[no].pri;
     cellInitData.bgpri = 1;
     pWork->curIcon[no] = GFL_CLACT_WK_Create( pWork->cellUnit ,
-                                                        pWork->cellRes[CHAR_GSYNC],
-                                                        pWork->cellRes[PLT_GSYNC],
-                                                        pWork->cellRes[ANM_GSYNC],
+                                                        pWork->cellRes[CHAR_PDWACC],
+                                                        pWork->cellRes[PLT_PDWACC],
+                                                        pWork->cellRes[ANM_PDWACC],
                                                         &cellInitData ,CLSYS_DRAW_MAIN , pWork->heapID );
     GFL_CLACT_WK_SetAutoAnmFlag( pWork->curIcon[no] , TRUE );
     GFL_CLACT_WK_SetDrawEnable( pWork->curIcon[no], TRUE );
@@ -594,7 +570,7 @@ static void _SetBed(GSYNC_DISP_WORK* pWork,int no)
  */
 //-----------------------------------------------------------------------------
 
-static void _HandRelease(GSYNC_DISP_WORK* pWork)
+static void _HandRelease(PDWACC_DISP_WORK* pWork)
 {
   int i=0;
    
@@ -616,23 +592,8 @@ static void _HandRelease(GSYNC_DISP_WORK* pWork)
 //------------------------------------------------------------------------------
 
 
-static void _CreatePokeIconResource(GSYNC_DISP_WORK* pWork)
+static void _CreatePokeIconResource(PDWACC_DISP_WORK* pWork)
 {
-  {
-    ARCHANDLE *arcHandlePoke = GFL_ARC_OpenDataHandle( ARCID_POKEICON , pWork->heapID );
-    pWork->cellRes[PLT_POKEICON] =
-      GFL_CLGRP_PLTT_RegisterComp( arcHandlePoke ,
-                                   POKEICON_GetPalArcIndex() , CLSYS_DRAW_MAX ,
-                                   _OBJPLT_POKEICON_OFFSET , pWork->heapID  );
-    GFL_ARC_CloseDataHandle(arcHandlePoke);
-  }
-  {
-    ARCHANDLE *arcHandlePoke = GFL_ARC_OpenDataHandle( ARCID_GSYNC , pWork->heapID );
-    pWork->cellRes[ANM_POKEICON] =
-      GFL_CLGRP_CELLANIM_Register( arcHandlePoke ,
-                                   NARC_gsync_poke_icon_128k_NCER, NARC_gsync_poke_icon_128k_NANR, pWork->heapID  );
-    GFL_ARC_CloseDataHandle(arcHandlePoke);
-  }
 }
 
 
@@ -646,9 +607,9 @@ static void _CreatePokeIconResource(GSYNC_DISP_WORK* pWork)
 //-----------------------------------------------------------------------------
 
 
-void GSYNC_DISP_PokemonIconCreate(GSYNC_DISP_WORK* pWork, POKEMON_PASO_PARAM* ppp, int draw)
+void PDWACC_DISP_PokemonIconCreate(PDWACC_DISP_WORK* pWork, POKEMON_PASO_PARAM* ppp, int draw)
 {
-
+#if 0
 
   {
     GFL_CLWK_DATA cellInitData;
@@ -674,15 +635,16 @@ void GSYNC_DISP_PokemonIconCreate(GSYNC_DISP_WORK* pWork, POKEMON_PASO_PARAM* pp
 
     GFL_ARC_CloseDataHandle(arcHandlePoke);
   }
+#endif
 }
 
 
-void GSYNC_DISP_PokemonIconMove(GSYNC_DISP_WORK* pWork)
+void PDWACC_DISP_PokemonIconMove(PDWACC_DISP_WORK* pWork)
 {
   GFL_CLACT_WK_SetAutoAnmFlag( pWork->curIcon[CELL_CUR_POKE_PLAYER] , TRUE );
 }
 
-void GSYNC_DISP_PokemonIconJump(GSYNC_DISP_WORK* pWork)
+void PDWACC_DISP_PokemonIconJump(PDWACC_DISP_WORK* pWork)
 {
   GFL_CLACT_WK_SetAnmSeq( pWork->curIcon[CELL_CUR_POKE_PLAYER] , 1 );
   GFL_CLACT_WK_SetAutoAnmFlag( pWork->curIcon[CELL_CUR_POKE_PLAYER] , TRUE );
@@ -693,7 +655,7 @@ void GSYNC_DISP_PokemonIconJump(GSYNC_DISP_WORK* pWork)
 
 static void dreamSmoke_HBlank( GFL_TCB* p_tcb, void* p_work )
 {
-	GSYNC_DISP_WORK* pWork = p_work;
+	PDWACC_DISP_WORK* pWork = p_work;
 	int v_c;
 
   v_c = GX_GetVCount();
@@ -709,15 +671,15 @@ static void dreamSmoke_HBlank( GFL_TCB* p_tcb, void* p_work )
 
 
 
-void GSYNC_DISP_DreamSmokeBgStart(GSYNC_DISP_WORK* pWork)
+void PDWACC_DISP_DreamSmokeBgStart(PDWACC_DISP_WORK* pWork)
 {
-
-  ARCHANDLE* p_handle = GFL_ARC_OpenDataHandle( ARCID_GSYNC, pWork->heapID );
+#if 0
+  ARCHANDLE* p_handle = GFL_ARC_OpenDataHandle( ARCID_PDWACC, pWork->heapID );
 
   G2_SetBlendAlpha( GX_BLEND_PLANEMASK_BG3, GX_BLEND_PLANEMASK_BG0|GX_BLEND_PLANEMASK_BD , 0, 16);
   
   GFL_ARCHDL_UTIL_TransVramScreenCharOfs(
-    p_handle, NARC_gsync_downner_bg2_NSCR,
+    p_handle, NARC_pdwacc_downner_bg2_NSCR,
     GFL_BG_FRAME3_M, 0,
     GFL_ARCUTIL_TRANSINFO_GetPos(pWork->mainchar), 0, 0,
     pWork->heapID);
@@ -727,13 +689,13 @@ void GSYNC_DISP_DreamSmokeBgStart(GSYNC_DISP_WORK* pWork)
 
   pWork->p_hblank = GFUser_HIntr_CreateTCB( dreamSmoke_HBlank, pWork, 0 );
   LASTER_ScrollMakeSinTbl( pWork->scroll, 192, GFL_CALC_GET_ROTA_NUM(8), 1.5*FX32_ONE );
-
+#endif
 
 }
 
 
 
-void GSYNC_DISP_BlendSmokeStart(GSYNC_DISP_WORK* pWork,BOOL bFadein)
+void PDWACC_DISP_BlendSmokeStart(PDWACC_DISP_WORK* pWork,BOOL bFadein)
 {
   if(bFadein){
     pWork->blendCount = 0;
@@ -753,7 +715,7 @@ void GSYNC_DISP_BlendSmokeStart(GSYNC_DISP_WORK* pWork,BOOL bFadein)
  */
 //-----------------------------------------------------------------------------
 
-static void _blendSmoke(GSYNC_DISP_WORK* pWork)
+static void _blendSmoke(PDWACC_DISP_WORK* pWork)
 {
   int i=0;
 
