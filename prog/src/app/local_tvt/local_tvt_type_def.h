@@ -1,51 +1,42 @@
 //======================================================================
 /**
- * @file	local_tvt_sys.h
- * @brief	非通信テレビトランシーバー メイン
+ * @file	local_tvt_type_def.h
+ * @brief	非通信テレビトランシーバー タイプ定義
  * @author	ariizumi
- * @data	09/11/02
+ * @data	09/12/12
  *
  * モジュール名：LOCAL_TVT
  */
 //======================================================================
 #pragma once
 
-#include "gamesystem/game_data.h"
-
 //======================================================================
 //	define
 //======================================================================
 #pragma mark [> define
-
-#define LOCAL_TVT_MEMBER_MAX (4)
-FS_EXTERN_OVERLAY(local_tvt);
-
 //======================================================================
 //	enum
 //======================================================================
 #pragma mark [> enum
+
 typedef enum
 {
-  LTM_2_MEMBER = 2,
-  LTM_4_MEMBER = 4,
+  LTCT_PLAYER_M,
+  LTCT_PLAYER_F,
+  LTCT_SUPPORT,
+  LTCT_RIVAL,
+  LTCT_DOCTOR_D,
   
-  LTM_MAX,
-}LOCAL_TVT_MODE;
+  LTCT_MAX,
+}LOCAL_TVT_CHARA_TYPE;
 
 //======================================================================
 //	typedef struct
 //======================================================================
 #pragma mark [> struct
-typedef struct
-{
-  u16 scriptId;
-  GAMEDATA *gameData;
-}LOCAL_TVT_INIT_WORK;
-
 
 //======================================================================
 //	proto
 //======================================================================
 #pragma mark [> proto
 
-extern GFL_PROC_DATA LocalTvt_ProcData;
