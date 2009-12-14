@@ -1,9 +1,9 @@
 //============================================================================================
 /**
- * @file    event_gsync.c
- * @brief   イベント：ゲームシンク
- * @author  k.ohno
- * @date    2009.11.15
+ * @file    event_cg_wireless.c
+ * @brief	  イベント：パレスとTVトランシーバー
+ * @author	k.ohno
+ * @date	  2009.12.13
  */
 //============================================================================================
 
@@ -20,7 +20,7 @@
 #include "field/field_sound.h"
 
 #include "./event_fieldmap_control.h"
-#include "./event_gsync.h"
+#include "./event_cg_wireless.h"
 
 //------------------------------------------------------------------
 //------------------------------------------------------------------
@@ -57,13 +57,12 @@ extern const GFL_PROC_DATA WiFiLogin_ProcData;
 
 #define _LOCALMATCHNO (100)
 
-enum _EVENT_IRCBATTLE {
+enum _EVENT_CG_WIRELESS {
   _FIELD_FADE_START,
   _FIELD_FADE_CLOSE,
   _CALL_GAMESYNC_MENU,
   _WAIT_GAMESYNC_MENU,
   _FIELD_FADEOUT,
-  _CALL_IRCBATTLE_MATCH,
   _WAIT_IRCBATTLE_MATCH,
   _BATTLE_MATCH_START,
   _TIMING_SYNC_CALL_BATTLE,
@@ -88,9 +87,9 @@ enum _EVENT_IRCBATTLE {
 //    サブイベント
 //
 //============================================================================================
-static GMEVENT_RESULT EVENT_GSyncMain(GMEVENT * event, int *  seq, void * work)
+static GMEVENT_RESULT EVENT_CG_WirelessMain(GMEVENT * event, int *  seq, void * work)
 {
-  EVENT_GSYNC_WORK * dbw = work;
+  EVENT_CG_WIRELESS_WORK * dbw = work;
   GAMESYS_WORK * gsys = dbw->gsys;
 
   switch (*seq) {
@@ -124,11 +123,11 @@ static GMEVENT_RESULT EVENT_GSyncMain(GMEVENT * event, int *  seq, void * work)
     if (GAMESYSTEM_IsProcExists(gsys) != GFL_PROC_MAIN_NULL){
       break;
     }
-    if(dbw->selectType == GAMESYNC_RETURNMODE_SYNC )
+    if(dbw->selectType == WIRELESS_CALLTYPE_PALACE )
     {
       *seq = _CALL_GAMESYNC;
     }
-    else if(dbw->selectType == GAMESYNC_RETURNMODE_UTIL )
+    else if(dbw->selectType == WIRELESS_CALLTYPE_TV )
     {
       *seq = _FIELD_FADEOUT;
     }
@@ -140,23 +139,6 @@ static GMEVENT_RESULT EVENT_GSyncMain(GMEVENT * event, int *  seq, void * work)
   case _FIELD_FADEOUT:
     dbw->isEndProc = FALSE;
     (*seq)++;
-    break;
-  case _CALL_IRCBATTLE_MATCH:
-   	PMSND_Exit();
-    
-    GAMESYSTEM_CallProc(gsys, FS_OVERLAY_ID(wifi_util), &WifiUtilGSyncProcData, dbw);
-    (*seq)++;
-    break;
-  case _WAIT_IRCBATTLE_MATCH:
-    if (GAMESYSTEM_IsProcExists(gsys) == GFL_PROC_MAIN_NULL){
-      *seq = _FADEIN_WIFIUTIL;
-    }
-    break;
-  case _FADEIN_WIFIUTIL:
-   	PMSND_Init();
-    GFL_FADE_SetMasterBrightReq(GFL_FADE_MASTER_BRIGHT_WHITEOUT, 16, 0, 1);
-    
-    (*seq) = _CALL_GAMESYNC_MENU;
     break;
   case _FIELD_OPEN:
     GMEVENT_CallEvent(event, EVENT_FieldOpen(gsys));
@@ -230,7 +212,7 @@ static GMEVENT_RESULT EVENT_GSyncMain(GMEVENT * event, int *  seq, void * work)
   case _GAMESYNC_CALLBOX_WAIT:
     dbw->boxNo = dbw->boxParam.retTray;      		// 終了時に開いていたトレイ（寝かせる用）
     dbw->boxIndex = dbw->boxParam.retPoke;   		// 終了時に選択された位置（寝かせる用）
-    dbw->selectType = GSYNC_CALLTYPE_BOXSET;  // ポケモンセット後
+    dbw->selectType = CG_WIRELESS_CALLTYPE_BOXSET;  // ポケモンセット後
     (*seq) = _GAMESYNC_MAINPROC;
     
     break;
@@ -243,17 +225,17 @@ static GMEVENT_RESULT EVENT_GSyncMain(GMEVENT * event, int *  seq, void * work)
 
 //------------------------------------------------------------------
 //------------------------------------------------------------------
-GMEVENT* EVENT_GSync(GAMESYS_WORK * gsys, FIELDMAP_WORK * fieldmap,GMEVENT * prevevent,BOOL bCreate)
+GMEVENT* EVENT_CG_Wireless(GAMESYS_WORK * gsys, FIELDMAP_WORK * fieldmap,GMEVENT * prevevent,BOOL bCreate)
 {
   GMEVENT * event = prevevent;
   BATTLE_SETUP_PARAM * para;
-  EVENT_GSYNC_WORK * dbw;
+  EVENT_CG_WIRELESS_WORK * dbw;
 
   if(bCreate){
-    event = GMEVENT_Create(gsys, NULL, EVENT_GSyncMain, sizeof(EVENT_GSYNC_WORK));
+    event = GMEVENT_Create(gsys, NULL, EVENT_CG_WirelessMain, sizeof(EVENT_CG_WIRELESS_WORK));
   }
   else{
-    GMEVENT_Change( event,EVENT_GSyncMain, sizeof(EVENT_GSYNC_WORK) );
+    GMEVENT_Change( event,EVENT_CG_WirelessMain, sizeof(EVENT_CG_WIRELESS_WORK) );
   }
   dbw = GMEVENT_GetEventWork(event);
   dbw->ctrl = SaveControl_GetPointer();
