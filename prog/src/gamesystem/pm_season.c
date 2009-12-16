@@ -8,24 +8,8 @@
  */
 //============================================================================================
 
-#pragma once
-
-#ifdef	__cplusplus
-extern "C" {
-#endif
-
-//============================================================================================
-//============================================================================================
-
-#define	PMSEASON_SPRING		(0)			/**!< èt */
-#define	PMSEASON_SUMMER		(1)			/**!< âƒ */
-#define	PMSEASON_AUTUMN		(2)			/**!< èH */
-#define	PMSEASON_WINTER		(3)			/**!< ì~ */
-
-#define	PMSEASON_TOTAL		(4)			/**!< ìñÇΩÇËëOÇæÇ™élãGÇÕÇSÇ¬ */
-
-
-#ifndef __ASM_NO_DEF_
+#include <gflib.h>
+#include "gamesystem/pm_season.h"
 
 //--------------------------------------------------------------------------------------------
 /**
@@ -36,7 +20,15 @@ extern "C" {
  * @return åªç›éûçèÇÃãGêﬂ( PMSEASON_SPRING Ç»Ç« )
  */
 //--------------------------------------------------------------------------------------------
-u8 PMSEASON_CalcSeasonID_byDate( const RTCDate* start_date );
+u8 PMSEASON_CalcSeasonID_byDate( const RTCDate* start_date )
+{
+  RTCDate now_date;
+  u8 season; 
+
+  GFL_RTC_GetDate( &now_date );
+  season = (now_date.month + 12 - start_date->month) % PMSEASON_TOTAL;
+  return season;
+}
 
 //--------------------------------------------------------------------------------------------
 /**
@@ -47,12 +39,14 @@ u8 PMSEASON_CalcSeasonID_byDate( const RTCDate* start_date );
  * @return åªç›éûçèÇÃãGêﬂ( PMSEASON_SPRING Ç»Ç« )
  */
 //--------------------------------------------------------------------------------------------
-u8 PMSEASON_CalcSeasonID_bySec( s64 start_sec );
+u8 PMSEASON_CalcSeasonID_bySec( s64 start_sec )
+{
+  RTCDate start_date;
+  RTCTime start_time;
 
-#endif  // __ASM_NO_DEF_
+  // äJénéûçè[sec]Ç ì˙éû, éûä‘Ç…ïœä∑
+  RTC_ConvertSecondToDateTime( &start_date, &start_time, start_sec );
 
-
-#ifdef	__cplusplus
-} /* extern "C" */
-#endif
-
+  // ãGêﬂÇåvéZ
+  return PMSEASON_CalcSeasonID_byDate( &start_date );
+} 
