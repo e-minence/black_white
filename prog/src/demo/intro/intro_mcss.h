@@ -1,20 +1,19 @@
 //============================================================================
 /**
  *
- *	@file		intro_cmd.h
- *	@brief  イントロデモ用コマンド
+ *	@file		intro_mcss.h
+ *	@brief
  *	@author		hosaka genya
- *	@data		2009.12.09
+ *	@data		2009.12.18
  *
  */
 //============================================================================
 #pragma once
 
 #include <gflib.h>
+#include "system/mcss.h"
 
-#include "demo/intro.h"
-
-typedef struct _INTRO_CMD_WORK INTRO_CMD_WORK;
+typedef struct _INTRO_MCSS_WORK INTRO_MCSS_WORK;
 
 //=============================================================================
 /**
@@ -34,9 +33,21 @@ typedef struct _INTRO_CMD_WORK INTRO_CMD_WORK;
  */
 //=============================================================================
 
-extern INTRO_CMD_WORK* Intro_CMD_Init( INTRO_MCSS_WORK* mcss, const INTRO_PARAM* init_param, HEAPID heap_id );
 
-extern void Intro_CMD_Exit( INTRO_CMD_WORK* wk );
 
-extern BOOL Intro_CMD_Main( INTRO_CMD_WORK* );
+extern INTRO_MCSS_WORK* INTRO_MCSS_Create( HEAPID heap_id );
+
+extern void INTRO_MCSS_Exit( INTRO_MCSS_WORK* wk );
+
+extern void INTRO_MCSS_Main( INTRO_MCSS_WORK* wk );
+
+extern void INTRO_MCSS_Add( INTRO_MCSS_WORK* wk, fx32 px, fx32 py, fx32 pz, const MCSS_ADD_WORK* add, u8 id );
+
+extern void INTRO_MCSS_SetVisible( INTRO_MCSS_WORK* wk, BOOL is_visible, u8 id );
+
+//@TODO ロード
+//@TODO 表示切替
+
+
+
 
