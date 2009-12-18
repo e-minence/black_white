@@ -4,7 +4,7 @@
 <gmml version="4.5">
 
 <head>
-	<create user="iwao_kazumasa" host="W00203" date="2009-12-17T12:11:12"/>
+	<create user="iwao_kazumasa" host="W00203" date="2009-12-17T12:01:42"/>
 	<generator name="MessageEditor" version="4.9.2.5"/>
 </head>
 
@@ -305,7 +305,7 @@
 		</language>
 	</columns>
 
-	<dialog left="1728" top="530" right="2433" bottom="1158" maximized="no" rayout="Vertical2">
+	<dialog left="1635" top="612" right="2340" bottom="1240" maximized="no" rayout="Vertical2">
 		<comment-input left="733" top="589" right="1080" bottom="739" visible="no"/>
 		<tag-palette left="807" top="161" right="1280" bottom="559" visible="no"/>
 		<band id="0" index="0" style="0000" width="530"/>
@@ -335,22 +335,22 @@
 
 	<row id="TITLE">
 		<comment>最初のメッセージはタイトル固定でお願いします</comment>
-		<language name="JPN" width="256">クールきょく</language>
-		<language name="JPN_KANJI" width="256">クール曲</language>
+		<language name="JPN" width="256">キュートきょく</language>
+		<language name="JPN_KANJI" width="256">キュート曲</language>
 	</row>
 
 	<row id="MSG_01">
-		<language name="JPN" width="256">おおきかったり　ちいさかったり
-ふわふわしてたり　そらとんだり</language>
-		<language name="JPN_KANJI" width="256">おおきかったり　ちいさかったり
-ふわふわしてたり　そらとんだり</language>
+		<language name="JPN" width="256">おうちを　とびだし　おさんぽしよう
+ゆきどけ　みずは　まだ　つめたいけれど</language>
+		<language name="JPN_KANJI" width="256">おうちを　とびだし　おさんぽしよう
+ゆきどけ　みずは　まだ　つめたいけれど</language>
 	</row>
 
 	<row id="MSG_02">
-		<language name="JPN" width="256">みんな　ちがっているけれど
-みんな　いっしょさ　ともだちさ！</language>
-		<language name="JPN_KANJI" width="256">みんな　ちがっているけれど
-みんな　いっしょさ　ともだちさ！</language>
+		<language name="JPN" width="256">みちゆく　くさばなに　であえたなら
+いっしょに　おどろう　はるは　すぐそこ！</language>
+		<language name="JPN_KANJI" width="256">みちゆく　くさばなに　であえたなら
+いっしょに　おどろう　はるは　すぐそこ！</language>
 	</row>
 
 	<flowchart-group-list>
