@@ -1,14 +1,12 @@
 #------------------------------------------------------------------------------
-#  通信アイコンnarcを作るmakefile  
-#  コピーしてtargetnameを書き換えれば汎用的に使えます
-#  2008.08.19
+#  3Dリソースのコンバート > １つ下の階層にコピー
+#  2009.12.03
 #------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
-#※コンバートを行う人のユーザーIDをここに書く
+#ユーザー定義をインクルード
 #------------------------------------------------------------------------------
-#USERS	= 
-include make_users
+include ..\make_users
 
 #------------------------------------------------------------------------------
 #※ここに作成するnarc名を書く
@@ -23,72 +21,82 @@ TARGETDIR = $(PROJECT_ARCDIR)
 #------------------------------------------------------------------------------
 #※サブディレクトリでもMakeしたい場合、ここにディレクトリ名を書く
 #------------------------------------------------------------------------------
-SUBDIRS	= mcss g3d
+SUBDIRS	= 
 
 #共通ルールファイルのインクルード
 include	$(PROJECT_RSCDIR)\macro_define
 
-# サブフォルダ内のファイルを全てNARCの依存ターゲットとして収集
-obj_g3d:=$(wildcard ./g3d/*.nsb*)
-obj_mcss:=$(wildcard ./mcss/*.N*)
+#ICAコンバータ
+ICACONV = ..\..\..\tools\ica\ica_converter.rb
 
 # 自動でリソースを集める
-lsources:=$(wildcard *.ncl)
-gsources:=$(wildcard *.ncg)
-ssources:=$(wildcard *.nsc)
-esources:=$(wildcard *.nce)
+src_imd:=$(wildcard *.imd)
+src_ica:=$(wildcard *.ica)
+src_ita:=$(wildcard *.ita)
+src_ima:=$(wildcard *.ima)
+src_itp:=$(wildcard *.itp)
+src_iva:=$(wildcard *.iva)
 
 # リソースが吐き出すファイルを自動でつくる
-lobjects = $(subst .ncl,.NCLR,$(lsources))
-gobjects = $(subst .ncg,.NCGR,$(gsources))
-sobjects = $(subst .nsc,.NSCR,$(ssources))
-eobjects = $(subst .nce,.NCER,$(esources))
-aobjects = $(subst .nce,.NANR,$(esources))
+obj_imd = $(subst .imd,.nsbmd,$(src_imd))
+obj_ica = $(subst .ica,.nsbca,$(src_ica))
+obj_ita = $(subst .ita,.nsbta,$(src_ita))
+obj_ima = $(subst .ima,.nsbma,$(src_ima))
+obj_itp = $(subst .itp,.nsbtp,$(src_itp))
+obj_iva = $(subst .iva,.nsbva,$(src_iva))
 
 
 ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、コンバートのルールを有効にする
+
 # サフィックスルールを定義することで 依存関係を自動で判断してくれる
-.SUFFIXES: .NCLR .ncl .NCGR .ncg .NSCR .nsc .NCER .nce
+.SUFFIXES: .nsbmd .imd .nsbca .ica .nsbta .ita .nsbma .ima .nsbtp .itp .nsbva .iva
 
-.ncl.NCLR:
-	g2dcvtr $<
+.imd.nsbmd:
+	g3dcvtr $<
+#	CP $*.nsbmd ../
 
-.ncg.NCGR:
-	g2dcvtr $< -bg
+.ica.nsbca:
+	g3dcvtr $< 
+#	CP $*.nsbca ../
 
-.nsc.NSCR:
-	g2dcvtr $<
+.ita.nsbta:
+	g3dcvtr $<
+#	CP $*.nsbta ../
 
-.nce.NCER:
-	g2dcvtr $< -lbl
+.ima.nsbma:
+	g3dcvtr $<
+#	CP $*.nsbma ../
+
+.itp.nsbtp:
+	g3dcvtr $<
+#	CP $*.nsbtp ../
+
+.iva.nsbva:
+	g3dcvtr $<
+#	CP $*.nsbva ../
 
 endif
 
 .PHONY:	do-build clean subdir
 
+
 #------------------------------------------------------------------------------
 #	make do-build ルール
 #------------------------------------------------------------------------------
-do-build:	subdir $(TARGETDIR)/$(targetname).narc
-	echo $(obj_g2d)
+ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、コンバート処理
+
+do-build:	subdir $(obj_imd) $(obj_ica) $(obj_ita) $(obj_ima) $(obj_itp) $(obj_iva)
+
+else
+
+do-build:	subdir
+
+endif
 
 subdir:
 	@$(MAKE_SUBDIR)
 
-# narc のコピーだけ実行する
-$(TARGETDIR)/$(targetname).narc: $(targetname).narc
-	$(COPY) $(targetname).narc $(TARGETDIR)
-	$(COPY) $(targetname).naix $(TARGETDIR)
 
-ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、元ファイルからコンバートするルールを有効にする
-# コピー先のnarcが古い場合実行する
-$(targetname).narc: $(obj_g3d) $(obj_mcss) $(lobjects) $(gobjects) $(sobjects) $(eobjects) $(aobjects)
-
-	-ls *.N*R g3d/*.nsb* mcss/*.N* > arclist.txt
-	perl $(PROJECT_ROOT)tools/arc_list_make.pl arclist.txt
-	nnsarc -r -l -n -i $(targetname) -S arclist.txt
-	$(NAIXCUT) $(targetname).naix
-endif
 
 #------------------------------------------------------------------------------
 #	make clean ルール
@@ -97,13 +105,9 @@ endif
 clean:
 	@$(MAKE_SUBDIR)
 ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、中間ファイル削除
-	rm -f *.N*
-	rm -f *.narc
-	rm -f *.naix
-	rm -f $(targetname).narc
-	rm -f $(targetname).naix
+	rm -f *.nsb*
+	rm -f *.bin
 endif
-	rm -f $(TARGETDIR)/$(targetname).narc
-	rm -f $(TARGETDIR)/$(targetname).naix
+
 
 
