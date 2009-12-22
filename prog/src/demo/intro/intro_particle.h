@@ -1,22 +1,14 @@
 //============================================================================
 /**
  *
- *	@file		intro_cmd.h
- *	@brief  イントロデモ用コマンド
+ *	@file		intro_particle.h
+ *	@brief
  *	@author		hosaka genya
- *	@data		2009.12.09
+ *	@data		2009.12.21
  *
  */
 //============================================================================
 #pragma once
-
-#include <gflib.h>
-
-#include "demo/intro.h"
-
-#include "intro_particle.h"
-
-typedef struct _INTRO_CMD_WORK INTRO_CMD_WORK;
 
 //=============================================================================
 /**
@@ -29,15 +21,19 @@ typedef struct _INTRO_CMD_WORK INTRO_CMD_WORK;
  *								構造体定義
  */
 //=============================================================================
-
+typedef struct _INTRO_PARTICLE_WORK INTRO_PARTICLE_WORK;
 //=============================================================================
 /**
  *								EXTERN宣言
  */
 //=============================================================================
-extern INTRO_CMD_WORK* Intro_CMD_Init( INTRO_G3D_WORK* g3d, INTRO_PARTICLE_WORK* ptc ,INTRO_MCSS_WORK* mcss, INTRO_PARAM* init_param, HEAPID heap_id );
 
-extern void Intro_CMD_Exit( INTRO_CMD_WORK* wk );
+extern INTRO_PARTICLE_WORK* INTRO_PARTICLE_Create( INTRO_GRAPHIC_WORK* graphic, HEAPID heap_id );
+extern void INTRO_PARTICLE_Exit( INTRO_PARTICLE_WORK* wk );
+extern void INTRO_PARTICLE_Main( INTRO_PARTICLE_WORK* wk );
+extern void INTRO_PARTICLE_CreateEmitterMonsterBall( INTRO_PARTICLE_WORK* wk, fx32 px, fx32 py, fx32 pz );
 
-extern BOOL Intro_CMD_Main( INTRO_CMD_WORK* );
+
+
+
 
