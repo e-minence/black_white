@@ -1,25 +1,34 @@
 //[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
 /**
  *
- *	@file		misc.h
- *	@brief	未分類セーブデータアクセス
+ *	@file		my_pms_data.h
+ *	@brief  自己紹介文や対戦前挨拶などの、PMS情報セーブデータ
  *	@author	Toru=Nagihashi
- *	@date		2009.10.14
+ *	@date		2010.01.08
  *
  */
 //]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 #pragma once
 
 #include "savedata/save_control.h"
-
-#include "app/name_input.h"
 #include "system/pms_data.h"
-
 //=============================================================================
 /**
  *					定数宣言
 */
 //=============================================================================
+//-------------------------------------
+///	PMSの種類
+//=====================================
+typedef enum
+{
+  MYPMS_PMS_TYPE_INTRODUCTION,  //自己紹介
+  MYPMS_PMS_TYPE_BATTLE_READY,  //バトル勝負前挨拶
+  MYPMS_PMS_TYPE_BATTLE_WON,    //バトル勝ち時セリフ
+  MYPMS_PMS_TYPE_BATTLE_LOST,   //バトル負け時セリフ
+  MYPMS_PMS_TYPE_BATTLE_TOP,    //バトル１番になったとき
+  MYPMS_PMS_TYPE_MAX            //.c内で使用
+} MYPMS_PMS_TYPE;
 
 //=============================================================================
 /**
@@ -27,40 +36,29 @@
 */
 //=============================================================================
 //-------------------------------------
-///	未分類セーブデータ不完全型
+///	PMS情報セーブデータ
 //=====================================
-typedef struct _MISC MISC;
+typedef struct _MYPMS_DATA MYPMS_DATA;
 
 //=============================================================================
 /**
- *					外部参照
+ *					外部公開
 */
 //=============================================================================
 //----------------------------------------------------------
 //セーブデータシステムに依存する関数
 //----------------------------------------------------------
-extern int MISC_GetWorkSize( void );
-extern void MISC_Init( MISC *p_msc );
+extern int MYPMS_GetWorkSize( void );
+extern void MYPMS_Init( MYPMS_DATA *p_wk );
 
 //----------------------------------------------------------
 //セーブデータ取得のための関数
 //----------------------------------------------------------
-extern const MISC * SaveData_GetMiscConst( const SAVE_CONTROL_WORK * cp_sv);
-extern MISC * SaveData_GetMisc( SAVE_CONTROL_WORK * p_sv);
+extern const MYPMS_DATA * SaveData_GetMyPmsDataConst( const SAVE_CONTROL_WORK * cp_sv);
+extern MYPMS_DATA * SaveData_GetMyPmsData( SAVE_CONTROL_WORK * p_sv);
 
 //----------------------------------------------------------
 //それぞれの取得関数
 //----------------------------------------------------------
-//名前入力
-extern void MISC_SetNameInMode( MISC *p_misc, NAMEIN_MODE mode, u8 input_type );
-extern u8 MISC_GetNameInMode( const MISC *cp_misc, NAMEIN_MODE mode );
-//GDS
-extern void MISC_SetFavoriteMonsno(MISC * misc, int monsno, int form_no, int egg_flag);
-extern void MISC_GetFavoriteMonsno(const MISC * misc, int *monsno, int *form_no, int *egg_flag);
-//palpark
-extern const u32  MISC_GetPalparkHighscore(const MISC *misc);
-extern void  MISC_SetPalparkHighscore(MISC *misc , u32 score);
-extern const u8  MISC_GetPalparkFinishState(const MISC *misc);
-extern void  MISC_SetPalparkFinishState(MISC *misc , u8 state);
-
-
+extern void MYPMS_GetPms( const MYPMS_DATA *cp_wk, MYPMS_PMS_TYPE type, PMS_DATA *p_pms );
+extern void MYPMS_SetPms( MYPMS_DATA *p_wk, MYPMS_PMS_TYPE type, const PMS_DATA *cp_pms );
