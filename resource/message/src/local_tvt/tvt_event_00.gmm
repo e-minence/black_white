@@ -4,7 +4,7 @@
 <gmml version="4.5">
 
 <head>
-	<create user="ariizumi_nobuhiko" host="W00147" date="2010-02-11T20:31:21"/>
+	<create user="matsumiya" host="W00207" date="2009-12-10T14:24:02"/>
 	<generator name="MessageEditor" version="4.9.2.5"/>
 </head>
 
@@ -281,7 +281,7 @@
 		<number position="-1" width="100"/>
 		<comment position="4" width="293"/>
 		<erase position="-1" width="100"/>
-		<attribute japanese="キャラ指定" english="キャラ指定" type="string" default="" position="1" width="161">
+		<attribute japanese="キャラ指定" english="キャラ指定" type="string" default="" position="1" width="100">
 		</attribute>
 		<language japanese="JPN" english="JPN">
 			<message position="2" width="274"/>
@@ -307,16 +307,16 @@
 		</language>
 	</columns>
 
-	<dialog left="1571" top="190" right="2159" bottom="810" maximized="no" rayout="Vertical2">
+	<dialog left="279" top="259" right="984" bottom="879" maximized="no" rayout="Vertical2">
 		<comment-input left="733" top="589" right="1080" bottom="739" visible="no"/>
 		<tag-palette left="736" top="133" right="1209" bottom="531" visible="no"/>
-		<band id="0" index="1" style="0000" width="580"/>
+		<band id="0" index="1" style="0000" width="530"/>
 		<band id="1" index="2" style="0000" width="165"/>
-		<band id="2" index="3" style="0000" width="259"/>
-		<band id="3" index="4" style="0000" width="152"/>
-		<band id="4" index="0" style="0000" width="591"/>
-		<edit entry="0" language="JPN" mode="Edit" spell-check="-1"/>
-		<edit entry="1" language="JPN_KANJI" mode="Edit" spell-check="-1"/>
+		<band id="2" index="3" style="0000" width="540"/>
+		<band id="3" index="4" style="0000" width="155"/>
+		<band id="4" index="0" style="0000" width="697"/>
+		<edit entry="0" language="JPN_KANJI" mode="Edit" spell-check="-1"/>
+		<edit entry="1" language="JPN" mode="Preview" spell-check="-1"/>
 		<edit entry="2" language="JPN" mode="Source" spell-check="-1"/>
 		<edit entry="3" language="JPN" mode="Source" spell-check="-1"/>
 	</dialog>
@@ -336,32 +336,64 @@
 	</lock>
 
 
-	<row id="LOCAL_TVT_CHARA_00">
-		<attribute name="キャラ指定">主人公男</attribute>
-		<language name="JPN" width="256">[1:00:トレーナー名:0]</language>
-		<language name="JPN_KANJI" width="256">[1:00:トレーナー名:0]</language>
+	<row id="msg_transceiver_r01_01">
+		<comment>■　12月ROM用
+■　r01：一番道路イベント用メッセージ
+・トランシーバー画面に切り替え
+　まず左上に博士の顔グラフィック
+・サポート、ライバル、主人公の順で
+　顔グラフィック表示
+・博士の口ぱくアニメーション再生
+・続けて</comment>
+		<attribute name="キャラ指定">博士（娘）</attribute>
+		<language name="JPN" width="256">ハーイ！
+みんな　げんき？▼
+そろそろ　ポケモンと
+なかよくなった　ころでしょ！▼</language>
+		<language name="JPN_KANJI" width="256">ハーイ！
+みんな　げんき？▼
+そろそろ　ポケモンと
+なかよくなった　ころでしょ！▼</language>
 	</row>
 
-	<row id="LOCAL_TVT_CHARA_01">
-		<language name="JPN" width="256">ライバル</language>
-		<language name="JPN_KANJI" width="256">ライバル</language>
+	<row id="msg_transceiver_r01_02">
+		<comment>・サポートの口ぱくアニメーション再生</comment>
+		<attribute name="キャラ指定">サポート</attribute>
+		<language name="JPN">あっ　はかせ！▼</language>
+		<language name="JPN_KANJI">あっ　はかせ！▼</language>
 	</row>
 
-	<row id="LOCAL_TVT_CHARA_02">
-		<language name="JPN" width="256">サポート</language>
-		<language name="JPN_KANJI" width="256">サポート</language>
+	<row id="msg_transceiver_r01_03">
+		<comment>・博士の口ぱくアニメーション再生</comment>
+		<attribute name="キャラ指定">博士（娘）</attribute>
+		<language name="JPN">いま　カラクサタウンの
+ポケモンセンターに　いるの！▼
+あんない　してあげるから
+みんな　はやく　おいでよ！▼</language>
+		<language name="JPN_KANJI">いま　カラクサタウンの
+ポケモンセンターに　いるの！▼
+あんない　してあげるから
+みんな　はやく　おいでよ！▼</language>
 	</row>
 
-	<row id="LOCAL_TVT_CHARA_03">
-		<language name="JPN" width="256">博士(娘)</language>
-		<language name="JPN_KANJI" width="256">博士(娘)</language>
+	<row id="msg_transceiver_r01_04">
+		<comment>・サポートの口ぱくアニメーション再生</comment>
+		<attribute name="キャラ指定">サポート</attribute>
+		<language name="JPN">わかりました！
+ポケモンセンターですね！▼</language>
+		<language name="JPN_KANJI">わかりました！
+ポケモンセンターですね！▼</language>
 	</row>
 
-	<row id="LOCAL_TVT_CHARA_99">
-		<attribute name="キャラ指定">主人公女(一番最後)
-キャラの追加はこの上に！！</attribute>
-		<language name="JPN" width="256">[1:00:トレーナー名:0]</language>
-		<language name="JPN_KANJI" width="256">[1:00:トレーナー名:0]</language>
+	<row id="msg_transceiver_r01_05">
+		<comment>・博士の口ぱくアニメーション再生
+・TVトランシーバー終了処理
+・フィールドに復帰すると</comment>
+		<attribute name="キャラ指定">博士（娘）</attribute>
+		<language name="JPN">オッケイ！
+それじゃーねー！▼</language>
+		<language name="JPN_KANJI">オッケイ！
+それじゃーねー！▼</language>
 	</row>
 
 	<flowchart-group-list>
