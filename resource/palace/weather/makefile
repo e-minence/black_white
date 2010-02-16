@@ -7,70 +7,70 @@
 #------------------------------------------------------------------------------
 #※コンバートを行う人のユーザーIDをここに書く
 #------------------------------------------------------------------------------
-USERS	= matsuda toyama ohmori
+USERS	= tomoya_takahashi ohmori
 
 #------------------------------------------------------------------------------
 #※ここに作成するnarc名を書く
 #------------------------------------------------------------------------------
-targetname = palace
+targetname = palace_weather
 
 #------------------------------------------------------------------------------
 #※コピー先へのパスを書く（通常はPROJECT_ARCDIRでよい）
 #------------------------------------------------------------------------------
-TARGETDIR = $(PROJECT_ARCDIR)
+TARGETDIR = $(PROJECT_PROGDIR)src/field/
 
 #------------------------------------------------------------------------------
 #※サブディレクトリでもMakeしたい場合、ここにディレクトリ名を書く
 #------------------------------------------------------------------------------
-SUBDIRS	= mission power weather
-
+SUBDIRS	=
 
 #共通ルールファイルのインクルード
 include	$(PROJECT_RSCDIR)\macro_define
 
+##########################################
+#コンバートファイル
+##########################################
+XLSFILE = palace_weather.xls
+TABFILE = palace_weather.txt
 
 
-# 自動でリソースを集める
-lsources:=$(wildcard *.ncl)
-gsources:=$(wildcard *.ncg)
-ssources:=$(wildcard *.nsc)
-bmpsources:=$(wildcard *.bmp)
-imdsources:=$(wildcard *.imd)
 
-# リソースが吐き出すファイルを自動でつくる
-lobjects = $(subst .ncl,.NCLR,$(lsources))
-gobjects = $(subst .ncg,.NCGR,$(gsources))
-sobjects = $(subst .nsc,.NSCR,$(ssources))
+#------------------------------------------------------------------------------
+#	#サフィックス
+#	#コンバート対象者のみ、コンバートのルールを有効にする
+#------------------------------------------------------------------------------
+ifeq	($(CONVERTUSER),true)	
 
 
-ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、コンバートのルールを有効にする
-# サフィックスルールを定義することで 依存関係を自動で判断してくれる
-.SUFFIXES: .NCLR .ncl .NCGR .ncg .NSCR .nsc .imd
-
+.SUFFIXES: 
 endif
+
+
 
 .PHONY:	do-build clean subdir
 
 #------------------------------------------------------------------------------
 #	make do-build ルール
 #------------------------------------------------------------------------------
-#do-build:	$(ZONETABLE_DIR)$(ZONEID_H) $(MESSAGE_INC_DIR)$(MSG_MISSION_H) $(MESSAGE_INC_DIR)$(MSG_MISSION_MONO_H) $(FLDMMDL_DIR)$(FLDMMDL_CODE_H) $(ITEM_DIR)$(ITEM_H) $(FIELDCOMM_DIR)$(MISSION_TYPES_H) subdir $(TARGETDIR)/$(targetname).narc
-do-build:	subdir $(TARGETDIR)/$(targetname).narc
+do-build:	subdir $(TARGETDIR)/$(targetname).cdat
 
 subdir:
 	@$(MAKE_SUBDIR)
 
 # narc のコピーだけ実行する
-$(TARGETDIR)/$(targetname).narc: $(targetname).narc
-	$(COPY) $(targetname).narc $(TARGETDIR)
-	$(COPY) $(targetname).naix $(TARGETDIR) 
+$(TARGETDIR)/$(targetname).cdat: $(targetname).cdat
+	$(COPY) $(targetname).cdat $(TARGETDIR)
 
-
-ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、元ファイルからコンバートするルールを有効にする
+#コンバート対象者のみ、元ファイルからコンバートするルールを有効にする
+ifeq	($(CONVERTUSER),true)	
 # コピー先のnarcが古い場合実行する
-$(targetname).narc: $(lsources) $(gsources) $(ssources) $(imdsources) $(bmpsources) cnv.bat makefile
-	cnv.bat
-	$(NAIXCUT) $(targetname).naix
+$(targetname).cdat: $(XLSFILE)	
+	#エクセルデータをタブ区切りにする。
+	$(PROJECT_ROOT)tools/exceltool/ExcelSeetConv.exe -o $(TABFILE) -p 1 -s tab $(XLSFILE)
+
+
+	#コンバート
+	perl conv.pl $(TABFILE) $(targetname).cdat
 
 endif
 
@@ -80,17 +80,13 @@ endif
 #------------------------------------------------------------------------------
 clean:
 	@$(MAKE_SUBDIR)
-ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、中間ファイル削除
-	rm -f *.NCGR
-	rm -f *.NCLR
-	rm -f *.NCER
-	rm -f *.NSCR
-	rm -f *.narc
-	rm -f *.naix
-	rm -f *.nsbmd
-	rm -f $(targetname).narc
-	rm -f $(targetname).naix
+	rm -f $(TARGETDIR)/$(targetname).cdat
+
+#コンバート対象者のみ、中間ファイル削除
+ifeq	($(CONVERTUSER),true)	
+	rm -f *.h
+	rm -f $(targetname).cdat
 endif
-	rm -f $(TARGETDIR)/$(targetname).narc
-	rm -f $(TARGETDIR)/$(targetname).naix
+
+
 
