@@ -1,48 +1,33 @@
 //============================================================================================
 /**
- * @file		zukan.h
- * @brief		図鑑画面
+ * @file		zukantop.h
+ * @brief		図鑑トップ画面
  * @author	Hiroyuki Nakamura
- * @date		09.12.14
+ * @date		10.02.20
  *
- *	モジュール名：ZUKAN
+ *	モジュール名：ZUKANTOP
  */
 //============================================================================================
 #pragma	once
-
-#include "gamesystem/game_data.h"
-#include "savedata/zukan_savedata.h"
 
 
 //============================================================================================
 //	定数定義
 //============================================================================================
+
 typedef struct {
-	// [ in ]
+/*
   GAMEDATA * gamedata;				// ゲームデータ
 	ZUKAN_SAVEDATA * savedata;	// 図鑑セーブデータ
-
-	u16	callMode;					// 呼び出しモード
-
-	// [ out ]
-	u16	retMode;					// 終了モード
-}ZUKAN_PARAM;
-
-// 呼び出しモード
-enum {
-	ZUKAN_MODE_TOP = 0,			// トップ画面
-	ZUKAN_MODE_LIST,				// リスト画面
-	ZUKAN_MODE_INFO,				// 情報
-	ZUKAN_MODE_MAP,					// 分布
-	ZUKAN_MODE_VOICE,				// 鳴き声
-	ZUKAN_MODE_FORM,				// 姿
-	ZUKAN_MODE_SEARCH,			// 検索
-};
+*/
+	u32	retMode;								// 終了モード
+}ZUKANTOP_DATA;
 
 // 終了モード
 enum {
-	ZUKAN_RET_NORMAL = 0,		// 通常終了（戻るボタン）
-	ZUKAN_RET_MENU_CLOSE,		// 終了してフィールドメニューを閉じる（×ボタン）
+	ZKNTOP_RET_EXIT = 0,			// 図鑑終了
+	ZKNTOP_RET_EXIT_X,				// 図鑑を終了してメニューを閉じる
+	ZKNTOP_RET_LIST,					// リスト画面へ
 };
 
 
@@ -50,12 +35,12 @@ enum {
 //	グローバル
 //============================================================================================
 
-// 図鑑PROCデータ
-extern const GFL_PROC_DATA ZUKAN_ProcData;
+// 図鑑トップ画面PROCデータ
+extern const GFL_PROC_DATA ZUKANTOP_ProcData;
 
 
 //============================================================================================
 //	プロトタイプ宣言
 //============================================================================================
 
-FS_EXTERN_OVERLAY(zukan);
+FS_EXTERN_OVERLAY(zukan_top);
