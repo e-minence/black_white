@@ -4,7 +4,7 @@
 <gmml version="4.5">
 
 <head>
-	<create user="taya" host="W00146" date="2010-02-19T13:04:51"/>
+	<create user="kawada_koji" host="W00215" date="2010-02-19T19:50:16"/>
 	<generator name="MessageEditor" version="4.9.2.5"/>
 </head>
 
@@ -67,11 +67,6 @@
 			<tag entry="11" japanese="ボックス名" english="ボックス名" view="EP" width="96" line="1">
 				<parameter number="0" japanese="番号" english="番号" type="int8"/>
 			</tag>
-			<tag entry="12" japanese="ポケモンニックネーム（正体）" english="ポケモンニックネーム（正体）" view="EP" width="60" line="1">
-				<parameter number="0" japanese="番号" english="番号" type="int8"/>
-				<comment language="japanese">バトル用。イリュージョンの影響を受けないニックネーム取得。</comment>
-				<comment language="english">バトル用。イリュージョンの影響を受けないニックネーム取得。</comment>
-			</tag>
 			<tag entry="13" japanese="ステータス名" english="ステータス名" view="EP" width="74" line="1">
 				<parameter number="0" japanese="番号" english="番号" type="int8"/>
 				<comment language="japanese">たいりょく、こうげきりょく、ぼうぎょりょく、とくこう、とくぼう、すばやさ、かいひりつ、めいちゅう</comment>
@@ -81,14 +76,6 @@
 				<parameter number="0" japanese="番号" english="番号" type="int8"/>
 				<comment language="japanese">「たんぱんこぞう」「エリートトレーナー」など</comment>
 				<comment language="english">「たんぱんこぞう」「エリートトレーナー」など</comment>
-			</tag>
-			<tag entry="15" japanese="趣味（調査レーダー）" english="趣味（調査レーダー）" view="EP" length="0" line="1">
-				<parameter number="0" japanese="番号" english="番号" type="int8"/>
-			</tag>
-			<tag entry="16" japanese="Gパワー名称" english="Gパワー名称" view="EP" width="156" line="1">
-				<parameter number="0" japanese="番号" english="番号" type="int8"/>
-				<comment language="japanese">Gパワーの名称です</comment>
-				<comment language="english">Gパワーの名称です</comment>
 			</tag>
 			<tag entry="17" japanese="特殊状態名" english="特殊状態名" view="EP" width="48" line="1">
 				<parameter number="0" japanese="番号" english="番号" type="int8"/>
@@ -247,20 +234,6 @@
 				<comment language="english">当該行の文字列を
 ウィンドウ内で右寄せします。</comment>
 			</tag>
-			<tag entry="04" japanese="X加算" english="X加算" view="EP" length="0" line="1">
-				<parameter number="0" japanese="加算値" english="加算値" type="int8"/>
-				<comment language="japanese">描画X座標を加算します。
-使用は許可制です。</comment>
-				<comment language="english">描画X座標を加算します。
-使用は許可制です。</comment>
-			</tag>
-			<tag entry="05" japanese="X指定" english="X指定" view="EP" length="0" line="1">
-				<parameter number="0" japanese="Ｘ座標" english="Ｘ座標" type="int16"/>
-				<comment language="japanese">描画Ｘ座標を指定値に変更。
-使用は許可制です。</comment>
-				<comment language="english">描画Ｘ座標を指定値に変更。
-使用は許可制です。</comment>
-			</tag>
 		</group>
 
 		<group entry="190" japanese="動的コントロール" english="Word" color="#c0c0c0">
@@ -281,21 +254,11 @@
 			</tag>
 			<tag entry="07" japanese="コールバック引数リセット" english="コールバック引数リセット" view="EP" length="0" line="1"/>
 			<tag entry="08" japanese="描画領域クリア" english="描画領域クリア" view="EP" length="0" line="1"/>
-			<tag entry="09" japanese="速度コントロール" english="速度コントロール" view="EP" length="0" line="1">
-				<parameter number="0" japanese="モード" english="モード" type="int8"/>
-				<comment language="japanese">ユーザConfig設定に応じて
-相対的に速い（遅い）速度になるように、ウェイトフレーム値などを操作します。</comment>
-				<comment language="english">ユーザConfig設定に応じて
-相対的に速い（遅い）速度になるように、ウェイトフレーム値などを操作します。</comment>
-			</tag>
 		</group>
 
 		<group entry="254" japanese="文字列展開" english="Word">
 		</group>
 
-		<set japanese="RESET" english="RESET" value="BE:09:速度コントロール:0"/>
-		<set japanese="FAST" english="FAST" value="BE:09:速度コントロール:1"/>
-		<set japanese="SLOW" english="SLOW" value="BE:09:速度コントロール:2"/>
 		<set japanese="500%" english="500%" value="FF:01:サイズ:500"/>
 		<set japanese="400%" english="400%" value="FF:01:サイズ:400"/>
 		<set japanese="300%" english="300%" value="FF:01:サイズ:300"/>
@@ -342,7 +305,7 @@
 		</language>
 	</columns>
 
-	<dialog left="248" top="176" right="953" bottom="796" maximized="no" rayout="Vertical2">
+	<dialog left="258" top="311" right="963" bottom="931" maximized="no" rayout="Vertical2">
 		<comment-input left="733" top="589" right="1080" bottom="739" visible="no"/>
 		<tag-palette left="736" top="133" right="1209" bottom="531" visible="no"/>
 		<band id="0" index="0" style="0000" width="530"/>
@@ -370,104 +333,35 @@
 	</lock>
 
 
-	<row id="search_abc_00">
-		<language name="JPN" width="216">よう</language>
-		<language name="JPN_KANJI" width="216">よう</language>
+	<row id="pms_word13_07">
+		<language name="JPN" font=" 1:small" width="96">あーあ</language>
+		<language name="JPN_KANJI" font=" 1:small" width="96">あーあ</language>
 	</row>
 
-	<row id="search_abc_01">
-		<language name="JPN" width="216">ようかいえき</language>
-		<language name="JPN_KANJI" width="216">ようかいえき</language>
+	<row id="pms_word13_08">
+		<language name="JPN" font=" 1:small" width="96">あーん</language>
+		<language name="JPN_KANJI" font=" 1:small" width="96">あーん</language>
 	</row>
 
-	<row id="search_abc_02">
-		<language name="JPN" width="216">ようこそ</language>
-		<language name="JPN_KANJI" width="216">ようこそ</language>
+	<row id="pms_word13_09">
+		<language name="JPN" font=" 1:small" width="96">あはは</language>
+		<language name="JPN_KANJI" font=" 1:small" width="96">あはは</language>
 	</row>
 
-	<row id="search_abc_03">
-		<language name="JPN" width="216">ようちえん</language>
-		<language name="JPN_KANJI" width="216">ようちえん</language>
+	<row id="pms_word13_10">
+		<language name="JPN" font=" 1:small" width="96">あら</language>
+		<language name="JPN_KANJI" font=" 1:small" width="96">あら</language>
 	</row>
 
-	<row id="search_abc_04">
-		<language name="JPN" width="216">ようりよくそ</language>
-		<language name="JPN_KANJI" width="216">ようりよくそ</language>
+	<row id="pms_word13_18">
+		<language name="JPN" font=" 1:small" width="96">いやー</language>
+		<language name="JPN_KANJI" font=" 1:small" width="96">いやー</language>
 	</row>
 
-	<row id="search_abc_05">
-		<language name="JPN" width="216">よーきらす</language>
-		<language name="JPN_KANJI" width="216">よーきらす</language>
-	</row>
-
-	<row id="search_abc_06">
-		<language name="JPN" width="216">よかのほーす</language>
-		<language name="JPN_KANJI" width="216">よかのほーす</language>
-	</row>
-
-	<row id="search_abc_07">
-		<language name="JPN" width="216">よかはわー</language>
-		<language name="JPN_KANJI" width="216">よかはわー</language>
-	</row>
-
-	<row id="search_abc_08">
-		<language name="JPN" width="216">よことり</language>
-		<language name="JPN_KANJI" width="216">よことり</language>
-	</row>
-
-	<row id="search_abc_09">
-		<language name="JPN" width="216">よし</language>
-		<language name="JPN_KANJI" width="216">よし</language>
-	</row>
-
-	<row id="search_abc_10">
-		<language name="JPN" width="216">よちむ</language>
-		<language name="JPN_KANJI" width="216">よちむ</language>
-	</row>
-
-	<row id="search_abc_11">
-		<language name="JPN" width="216">よてい</language>
-		<language name="JPN_KANJI" width="216">よてい</language>
-	</row>
-
-	<row id="search_abc_12">
-		<language name="JPN" width="216">よのわーる</language>
-		<language name="JPN_KANJI" width="216">よのわーる</language>
-	</row>
-
-	<row id="search_abc_13">
-		<language name="JPN" width="216">よひみす</language>
-		<language name="JPN_KANJI" width="216">よひみす</language>
-	</row>
-
-	<row id="search_abc_14">
-		<language name="JPN" width="216">よまわる</language>
-		<language name="JPN_KANJI" width="216">よまわる</language>
-	</row>
-
-	<row id="search_abc_15">
-		<language name="JPN" width="216">よゆう</language>
-		<language name="JPN_KANJI" width="216">よゆう</language>
-	</row>
-
-	<row id="search_abc_16">
-		<language name="JPN" width="216">よるのすく</language>
-		<language name="JPN_KANJI" width="216">よるのすく</language>
-	</row>
-
-	<row id="search_abc_17">
-		<language name="JPN" width="216">よろしく</language>
-		<language name="JPN_KANJI" width="216">よろしく</language>
-	</row>
-
-	<row id="search_abc_18">
-		<language name="JPN" width="216">よわい</language>
-		<language name="JPN_KANJI" width="216">よわい</language>
-	</row>
-
-	<row id="search_abc_19">
-		<language name="JPN" width="216">よわき</language>
-		<language name="JPN_KANJI" width="216">よわき</language>
+	<row id="pms_word13_99">
+		<comment>テスト用の行なので消して下さい。</comment>
+		<language name="JPN" font=" 1:small" width="96">わわわわわわわ</language>
+		<language name="JPN_KANJI" font=" 1:small" width="96">わわわわわわわ</language>
 	</row>
 
 	<flowchart-group-list>
