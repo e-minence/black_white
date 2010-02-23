@@ -7,46 +7,38 @@
 #------------------------------------------------------------------------------
 #※コンバートを行う人のユーザーIDをここに書く
 #------------------------------------------------------------------------------
-USERS	= matsuda toyama ohmori
+USERS	= matsuda ohmori
 
 #------------------------------------------------------------------------------
 #※ここに作成するnarc名を書く
 #------------------------------------------------------------------------------
-targetname = palace
+targetname = intrude_secret_item
 
 #------------------------------------------------------------------------------
 #※コピー先へのパスを書く（通常はPROJECT_ARCDIRでよい）
 #------------------------------------------------------------------------------
-TARGETDIR = $(PROJECT_ARCDIR)
+TARGETDIR = $(PROJECT_PROGDIR)src/field/
 
 #------------------------------------------------------------------------------
 #※サブディレクトリでもMakeしたい場合、ここにディレクトリ名を書く
 #------------------------------------------------------------------------------
-SUBDIRS	= mission power weather secret_item
+SUBDIRS	= 
 
 
 #共通ルールファイルのインクルード
 include	$(PROJECT_RSCDIR)\macro_define
 
 
+XLSDIRECT = ruby $(PROJECT_ROOT)tools/exceltool/xls2xml/tab_out_direct.rb
+DATAFILE	= 隠しアイテム配置設定.xls
+DATATXT = $(DATAFILE:.xls=.csv)
 
-# 自動でリソースを集める
-lsources:=$(wildcard *.ncl)
-gsources:=$(wildcard *.ncg)
-ssources:=$(wildcard *.nsc)
-bmpsources:=$(wildcard *.bmp)
-imdsources:=$(wildcard *.imd)
 
-# リソースが吐き出すファイルを自動でつくる
-lobjects = $(subst .ncl,.NCLR,$(lsources))
-gobjects = $(subst .ncg,.NCGR,$(gsources))
-sobjects = $(subst .nsc,.NSCR,$(ssources))
 
 
 ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、コンバートのルールを有効にする
 # サフィックスルールを定義することで 依存関係を自動で判断してくれる
-.SUFFIXES: .NCLR .ncl .NCGR .ncg .NSCR .nsc .imd
-
+.SUFFIXES:
 endif
 
 .PHONY:	do-build clean subdir
@@ -54,23 +46,22 @@ endif
 #------------------------------------------------------------------------------
 #	make do-build ルール
 #------------------------------------------------------------------------------
-#do-build:	$(ZONETABLE_DIR)$(ZONEID_H) $(MESSAGE_INC_DIR)$(MSG_MISSION_H) $(MESSAGE_INC_DIR)$(MSG_MISSION_MONO_H) $(FLDMMDL_DIR)$(FLDMMDL_CODE_H) $(ITEM_DIR)$(ITEM_H) $(FIELDCOMM_DIR)$(MISSION_TYPES_H) subdir $(TARGETDIR)/$(targetname).narc
-do-build:	subdir $(TARGETDIR)/$(targetname).narc
+do-build:	subdir $(TARGETDIR)/$(targetname).cdat
 
 subdir:
 	@$(MAKE_SUBDIR)
 
 # narc のコピーだけ実行する
-$(TARGETDIR)/$(targetname).narc: $(targetname).narc
-	$(COPY) $(targetname).narc $(TARGETDIR)
-	$(COPY) $(targetname).naix $(TARGETDIR) 
+$(TARGETDIR)/$(targetname).cdat: $(targetname).cdat $(targetname).h
+	$(COPY) $(targetname).cdat $(TARGETDIR)
+	$(COPY) $(targetname).h $(TARGETDIR)
 
 
 ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、元ファイルからコンバートするルールを有効にする
 # コピー先のnarcが古い場合実行する
-$(targetname).narc: $(lsources) $(gsources) $(ssources) $(imdsources) $(bmpsources) cnv.bat makefile
-	cnv.bat
-	$(NAIXCUT) $(targetname).naix
+$(targetname).cdat: $(TARGETDIR)/$(targetname).cdat makefile secret_item_conv.rb $(DATAFILE)
+	$(XLSDIRECT) $(DATAFILE) -c > $(DATATXT)
+	@ruby secret_item_conv.rb $(DATATXT)
 
 endif
 
@@ -81,16 +72,10 @@ endif
 clean:
 	@$(MAKE_SUBDIR)
 ifeq	($(CONVERTUSER),true)	#コンバート対象者のみ、中間ファイル削除
-	rm -f *.NCGR
-	rm -f *.NCLR
-	rm -f *.NCER
-	rm -f *.NSCR
-	rm -f *.narc
-	rm -f *.naix
-	rm -f *.nsbmd
-	rm -f $(targetname).narc
-	rm -f $(targetname).naix
+	rm -f $(targetname).cdat
+	rm -f $(targetname).h
+	rm -f *.csv
 endif
-	rm -f $(TARGETDIR)/$(targetname).narc
-	rm -f $(TARGETDIR)/$(targetname).naix
+	rm -f $(TARGETDIR)/$(targetname).cdat
+	rm -f $(TARGETDIR)/$(targetname).h
 
