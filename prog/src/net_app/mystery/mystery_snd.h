@@ -1,22 +1,20 @@
 //[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
 /**
  *
- *	@file		wifibattlematch_snd.h
- *	@brief  サウンド定義ヘッダ
+ *	@file		mystery_snd.h
+ *	@brief  ふしぎなおくりものサウンド定義
  *	@author	Toru=Nagihashi
  *	@date		2010.02.24
  *
  */
 //]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 #pragma once
-#include "sound/wb_sound_data.sadl"
 
 //=============================================================================
 /**
  *					定数宣言
 */
 //=============================================================================
-#define WBM_SND_SE_MATCHING_OK  (SEQ_SE_SYS_74)
-#define WBM_SND_SE_CARD_SLIDE   (SEQ_SE_SYS_75)
-#define WBM_SND_SE_SAVE         (SEQ_SE_SAVE)
-#define WBM_SND_SE_MATCHING     (SEQ_SE_SYS_21)
+#define MYSTERY_SE_SWAP_CARD    (SEQ_SE_SYS_49)	//カードを入れ替える音
+#define MYSTERY_SE_RECV_PRESENT (SEQ_SE_SYS_50)	//贈り物を受け取った完了音
+
