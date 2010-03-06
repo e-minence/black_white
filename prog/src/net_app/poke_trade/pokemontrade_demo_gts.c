@@ -1,7 +1,7 @@
 //=============================================================================
 /**
- * @file	  pokemontrade_demo.c
- * @bfief	  ポケモン交換アニメーション
+ * @file	  pokemontrade_demo_up.c
+ * @bfief	  ポケモン交換アニメーション  上に行く部分
  * @author  ohno_katsumi@gamefreak.co.jp
  * @date	  09/09/27
  */
@@ -117,7 +117,7 @@ static void _balloutEmitFunc(GFL_EMIT_PTR pEmiter)
  * @retval  none
  */
 //------------------------------------------------------------------
-void IRC_POKMEONTRADE_STEP_ChangeDemo_PokeMove(POKEMON_TRADE_WORK* pWork)
+void POKMEONTRADE_DEMO_GTS_ChangeDemo(POKEMON_TRADE_WORK* pWork)
 {
   VecFx32 apos;
   int i;
@@ -128,6 +128,11 @@ void IRC_POKMEONTRADE_STEP_ChangeDemo_PokeMove(POKEMON_TRADE_WORK* pWork)
   pWork->mcssStop[0] = TRUE;
   MCSS_SetAnimeIndex(pWork->pokeMcss[0], 0);
 
+  if(pWork->type==POKEMONTRADE_TYPE_GTSUP){  //デモのときは真ん中から
+    VecFx32 pos={_POKEMON_PLAYER_CENTER_POSX,_POKEMON_PLAYER_CENTER_POSY, _POKEMON_PLAYER_CENTER_POSZ};
+    MCSS_SetPosition( pWork->pokeMcss[0] ,&pos );
+  }
+  
   _CHANGE_STATE(pWork,_changeDemo_ModelT1);
 }
 
@@ -157,7 +162,7 @@ static void _changeDemo_ModelTrade2(POKEMON_TRADE_WORK* pWork)
   MCSS_SetVanishFlag( pWork->pokeMcss[2] );
   MCSS_SetVanishFlag( pWork->pokeMcss[3] );
   POKEMONTRADE_DEMO_PTC_Init(pWork->pPokemonTradeDemo);
-  POKEMONTRADE_DEMO_ICA_Init(pWork->pPokemonTradeDemo, _DEMO_TYPE_ALL);
+  POKEMONTRADE_DEMO_ICA_Init(pWork->pPokemonTradeDemo,_DEMO_TYPE_MIDDLE);
 
 
   _setNextAnim(pWork, 0);

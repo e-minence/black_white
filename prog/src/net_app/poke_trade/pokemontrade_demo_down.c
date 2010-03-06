@@ -1,7 +1,7 @@
 //=============================================================================
 /**
- * @file	  pokemontrade_demo.c
- * @bfief	  ポケモン交換アニメーション
+ * @file	  pokemontrade_demo_up.c
+ * @bfief	  ポケモン交換アニメーション  上に行く部分
  * @author  ohno_katsumi@gamefreak.co.jp
  * @date	  09/09/27
  */
@@ -117,7 +117,7 @@ static void _balloutEmitFunc(GFL_EMIT_PTR pEmiter)
  * @retval  none
  */
 //------------------------------------------------------------------
-void IRC_POKMEONTRADE_STEP_ChangeDemo_PokeMove(POKEMON_TRADE_WORK* pWork)
+void POKMEONTRADE_DEMO_GTSDOWN_ChangeDemo(POKEMON_TRADE_WORK* pWork)
 {
   VecFx32 apos;
   int i;
@@ -128,7 +128,18 @@ void IRC_POKMEONTRADE_STEP_ChangeDemo_PokeMove(POKEMON_TRADE_WORK* pWork)
   pWork->mcssStop[0] = TRUE;
   MCSS_SetAnimeIndex(pWork->pokeMcss[0], 0);
 
-  _CHANGE_STATE(pWork,_changeDemo_ModelT1);
+  if(pWork->type==POKEMONTRADE_TYPE_GTSUP){  //デモのときは真ん中から
+    VecFx32 pos={_POKEMON_PLAYER_CENTER_POSX,_POKEMON_PLAYER_CENTER_POSY, _POKEMON_PLAYER_CENTER_POSZ};
+    MCSS_SetPosition( pWork->pokeMcss[0] ,&pos );
+  }
+
+  GFL_DISP_GX_SetVisibleControlDirect( GX_PLANEMASK_BG0|GX_PLANEMASK_OBJ );
+  GFL_DISP_GXS_SetVisibleControlDirect( 0 );
+
+//  _CHANGE_STATE(pWork,_changeDemo_ModelT1);
+  _CHANGE_STATE(pWork,_changeDemo_ModelTrade2);
+
+
 }
 
 //3dスタート
@@ -148,19 +159,20 @@ static void _changeDemo_ModelTrade2(POKEMON_TRADE_WORK* pWork)
   G2S_BlendNone();
 
   G2_BlendNone();
-  IRC_POKETRADEDEMO_SetModel( pWork, TRADE01_OBJECT);  //通常用モデル
+  IRC_POKETRADEDEMO_SetModel( pWork, TRADEDOWN_OBJECT);  //ダウン用モデル
   
   IRCPOKETRADE_PokeCreateMcss(pWork, 1, 0, IRC_POKEMONTRADE_GetRecvPP(pWork,1),TRUE );  //相手裏
   IRCPOKETRADE_PokeCreateMcss(pWork, 2, 0, IRC_POKEMONTRADE_GetRecvPP(pWork,0),TRUE );  //みかた裏
   IRCPOKETRADE_PokeCreateMcss(pWork, 3, 1, IRC_POKEMONTRADE_GetRecvPP(pWork,1),TRUE );  //相手表
+  MCSS_SetVanishFlag( pWork->pokeMcss[0] );
   MCSS_SetVanishFlag( pWork->pokeMcss[1] );
   MCSS_SetVanishFlag( pWork->pokeMcss[2] );
   MCSS_SetVanishFlag( pWork->pokeMcss[3] );
   POKEMONTRADE_DEMO_PTC_Init(pWork->pPokemonTradeDemo);
-  POKEMONTRADE_DEMO_ICA_Init(pWork->pPokemonTradeDemo, _DEMO_TYPE_ALL);
+  POKEMONTRADE_DEMO_ICA_Init(pWork->pPokemonTradeDemo,_DEMO_TYPE_DOWN);  //ICAダウン用
 
 
-  _setNextAnim(pWork, 0);
+  _setNextAnim(pWork, _POKESPLASH_WHITEIN_START);
   _CHANGE_STATE(pWork,_changeDemo_ModelTrade3);
 
   G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG0,GX_BLEND_PLANEMASK_BD,0,0);
@@ -228,6 +240,7 @@ static void _changeDemo_ModelTrade3(POKEMON_TRADE_WORK* pWork)
   }
 
   if(pWork->anmCount == ANMCNTC(_OAM_POKECREATE_START2)){
+    _pokemonCreateCLACTInit(pWork);
     _pokemonCreateCLACTAdd(pWork);
   }
   if(pWork->anmCount == ANMCNTC(_POKEUP_WHITEOUT_START)){
@@ -299,10 +312,8 @@ static void _changeDemo_ModelTrade3(POKEMON_TRADE_WORK* pWork)
   }
   
   if(ANMCNTC(_POKE_SIDEOUT_START) == pWork->anmCount){
-    GFL_HEAP_FreeMemory(pWork->pMoveMcss[0]);
-    pWork->pMoveMcss[0]=NULL;
-    GFL_HEAP_FreeMemory(pWork->pMoveMcss[1]);
-    pWork->pMoveMcss[1]=NULL;
+    _moveMcssDelete(pWork, 0);
+    _moveMcssDelete(pWork, 1);
 
     {  //初期位置設定
       VecFx32 apos;
@@ -369,10 +380,8 @@ static void _changeDemo_ModelTrade3(POKEMON_TRADE_WORK* pWork)
 
   
   if(ANMCNTC(_POKE_LEAVE_START) == pWork->anmCount){
-    GFL_HEAP_FreeMemory(pWork->pMoveMcss[0]);
-    pWork->pMoveMcss[0]=NULL;
-    GFL_HEAP_FreeMemory(pWork->pMoveMcss[1]);
-    pWork->pMoveMcss[1]=NULL;
+    _moveMcssDelete(pWork, 0);
+    _moveMcssDelete(pWork, 1);
 
 
     {  //初期位置設定
@@ -435,10 +444,8 @@ static void _changeDemo_ModelTrade3(POKEMON_TRADE_WORK* pWork)
   //OS_TPrintf("C %d\n",pWork->anmCount);
 
   if(pWork->anmCount == ANMCNTC(_DEMO_END-1)){
-    GFL_HEAP_FreeMemory(pWork->pMoveMcss[0]);
-    pWork->pMoveMcss[0]=NULL;
-    GFL_HEAP_FreeMemory(pWork->pMoveMcss[1]);
-    pWork->pMoveMcss[1]=NULL;
+    _moveMcssDelete(pWork, 0);
+    _moveMcssDelete(pWork, 1);
     IRC_POKETRADEDEMO_RemoveModel( pWork);
     _CHANGE_STATE(pWork,_changeDemo_ModelTrade20);
   }
