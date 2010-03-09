@@ -1,7 +1,7 @@
 //[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
 /**
  *
- *	@file		th_award_graphic.c
+ *	@file		zenkoku_zukan_award_graphic.c
  *	@brief	グラフィック設定
  *	@author	Koji Kawada
  *	@data		2010.03.04
@@ -36,8 +36,8 @@
  *
  * 	@noto   ui_template_graphic.cをコピペして名前を変更し、今回の画面に合うように少し変更しただけです。
  *
- * 	モジュール名：TH_AWARD_GRAPHIC
- *
+ * 	モジュール名：ZENKOKU_ZUKAN_AWARD_GRAPHIC
+ * 	
  */
 //]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 //ライブラリ
@@ -48,7 +48,7 @@
 #include "system/gfl_use.h"
 
 //外部公開
-#include "th_award_graphic.h"
+#include "zenkoku_zukan_award_graphic.h"
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_
 //
 //	以下、データ	この箇所を変更すれば、OKです
@@ -69,7 +69,7 @@
 //=====================================
 #define GRAPHIC_BG_USE	//OFFにするとBG使用しません
 #define GRAPHIC_OBJ_USE	//OFFにするとOBJ使用しません
-//#define GRAPHIC_G3D_USE	//OFFにすると3D使用しません
+#define GRAPHIC_G3D_USE	//OFFにすると3D使用しません
 //-------------------------------------
 ///	バンク設定
 //=====================================
@@ -85,7 +85,7 @@ static const GFL_DISP_VRAM sc_vramSetTable =
 	GX_VRAM_SUB_OBJEXTPLTT_NONE,// サブ2DエンジンのOBJ拡張パレット
 	GX_VRAM_TEX_0_D,						// テクスチャイメージスロット
 	GX_VRAM_TEXPLTT_0_F,				// テクスチャパレットスロット
-	GX_OBJVRAMMODE_CHAR_1D_32K,// メイン画面OBJマッピングモード		
+	GX_OBJVRAMMODE_CHAR_1D_128K,// メイン画面OBJマッピングモード		
 	GX_OBJVRAMMODE_CHAR_1D_32K,// サブ画面OBJマッピングモード
 };
 
@@ -145,7 +145,7 @@ static const struct
 		{
 			0, 0, 0x0800, 0,	//X,Y,ｽｸﾘｰﾝﾊﾞｯﾌｧ、ｽｸﾘｰﾝｵﾌｾｯﾄ
 			GFL_BG_SCRSIZ_256x256, GX_BG_COLORMODE_16,	//ｽｸﾘｰﾝｻｲｽﾞ、ｶﾗｰﾓｰﾄﾞ
-			GX_BG_SCRBASE_0x2000, GX_BG_CHARBASE_0x08000, GFL_BG_CHRSIZ_256x256,//ｽｸﾘｰﾝﾍﾞｰｽ、ｷｬﾗﾍﾞｰｽ、ｷｬﾗｻｲｽﾞ
+			GX_BG_SCRBASE_0x2000, GX_BG_CHARBASE_0x10000, GFL_BG_CHRSIZ_256x256,//ｽｸﾘｰﾝﾍﾞｰｽ、ｷｬﾗﾍﾞｰｽ、ｷｬﾗｻｲｽﾞ
 			GX_BG_EXTPLTT_01, 2, 0, 0, FALSE//拡張ﾊﾟﾚｯﾄｽﾛｯﾄ、表示優先度、ｴﾘｱｵｰﾊﾞｰ、ﾀﾞﾐｰ、ﾓｻﾞｲｸﾌﾗｸﾞ
 		},
 		GFL_BG_MODE_TEXT,//BGの種類
@@ -156,7 +156,7 @@ static const struct
 		{
 			0, 0, 0x800, 0,	//X,Y,ｽｸﾘｰﾝﾊﾞｯﾌｧ、ｽｸﾘｰﾝｵﾌｾｯﾄ
 			GFL_BG_SCRSIZ_256x256, GX_BG_COLORMODE_16,	//ｽｸﾘｰﾝｻｲｽﾞ、ｶﾗｰﾓｰﾄﾞ
-			GX_BG_SCRBASE_0x3000, GX_BG_CHARBASE_0x14000, GFL_BG_CHRSIZ_256x256,//ｽｸﾘｰﾝﾍﾞｰｽ、ｷｬﾗﾍﾞｰｽ、ｷｬﾗｻｲｽﾞ
+			GX_BG_SCRBASE_0x3000, GX_BG_CHARBASE_0x18000, GFL_BG_CHRSIZ_256x256,//ｽｸﾘｰﾝﾍﾞｰｽ、ｷｬﾗﾍﾞｰｽ、ｷｬﾗｻｲｽﾞ
 			GX_BG_EXTPLTT_01, 3, 0, 0, FALSE//拡張ﾊﾟﾚｯﾄｽﾛｯﾄ、表示優先度、ｴﾘｱｵｰﾊﾞｰ、ﾀﾞﾐｰ、ﾓｻﾞｲｸﾌﾗｸﾞ
 		},
 		GFL_BG_MODE_TEXT,//BGの種類
@@ -391,7 +391,7 @@ typedef struct
 //-------------------------------------
 ///	グラフィックメインワーク
 //=====================================
-struct _TH_AWARD_GRAPHIC_WORK
+struct _ZENKOKU_ZUKAN_AWARD_GRAPHIC_WORK
 {
 	GRAPHIC_BG_WORK		bg;
 	GRAPHIC_OBJ_WORK	obj;
@@ -452,11 +452,11 @@ static void Graphic_3d_SetUp( void );
  *	@param	HEAPID heapID ヒープ
  */
 //-----------------------------------------------------------------------------
-TH_AWARD_GRAPHIC_WORK * TH_AWARD_GRAPHIC_Init( int display_select, HEAPID heapID )
+ZENKOKU_ZUKAN_AWARD_GRAPHIC_WORK * ZENKOKU_ZUKAN_AWARD_GRAPHIC_Init( int display_select, HEAPID heapID )
 {	
-	TH_AWARD_GRAPHIC_WORK * p_wk;
-	p_wk	= GFL_HEAP_AllocMemory(heapID, sizeof(TH_AWARD_GRAPHIC_WORK) );
-	GFL_STD_MemClear( p_wk, sizeof(TH_AWARD_GRAPHIC_WORK) );
+	ZENKOKU_ZUKAN_AWARD_GRAPHIC_WORK * p_wk;
+	p_wk	= GFL_HEAP_AllocMemory(heapID, sizeof(ZENKOKU_ZUKAN_AWARD_GRAPHIC_WORK) );
+	GFL_STD_MemClear( p_wk, sizeof(ZENKOKU_ZUKAN_AWARD_GRAPHIC_WORK) );
 
 	//レジスタ初期化
 	G2_BlendNone();
@@ -504,7 +504,7 @@ TH_AWARD_GRAPHIC_WORK * TH_AWARD_GRAPHIC_Init( int display_select, HEAPID heapID
  *	@param	GRAPHIC_WORK *p_wk ワーク
  */
 //-----------------------------------------------------------------------------
-void TH_AWARD_GRAPHIC_Exit( TH_AWARD_GRAPHIC_WORK *p_wk )
+void ZENKOKU_ZUKAN_AWARD_GRAPHIC_Exit( ZENKOKU_ZUKAN_AWARD_GRAPHIC_WORK *p_wk )
 {	
 	//VBLANKTask消去
 	GFL_TCB_DeleteTask( p_wk->p_vblank_task );
@@ -530,7 +530,7 @@ void TH_AWARD_GRAPHIC_Exit( TH_AWARD_GRAPHIC_WORK *p_wk )
 	GXS_SetVisibleWnd( GX_WNDMASK_NONE );
 
 	//クリア
-	GFL_STD_MemClear( p_wk, sizeof(TH_AWARD_GRAPHIC_WORK) );
+	GFL_STD_MemClear( p_wk, sizeof(ZENKOKU_ZUKAN_AWARD_GRAPHIC_WORK) );
 	GFL_HEAP_FreeMemory( p_wk );
 }
 //----------------------------------------------------------------------------
@@ -540,7 +540,7 @@ void TH_AWARD_GRAPHIC_Exit( TH_AWARD_GRAPHIC_WORK *p_wk )
  *	@param	GRAPHIC_WORK *p_wk ワーク
  */
 //-----------------------------------------------------------------------------
-void TH_AWARD_GRAPHIC_2D_Draw( TH_AWARD_GRAPHIC_WORK *p_wk )
+void ZENKOKU_ZUKAN_AWARD_GRAPHIC_2D_Draw( ZENKOKU_ZUKAN_AWARD_GRAPHIC_WORK *p_wk )
 {	
 #ifdef GRAPHIC_OBJ_USE
 	GRAPHIC_OBJ_Main( &p_wk->obj );
@@ -556,7 +556,7 @@ void TH_AWARD_GRAPHIC_2D_Draw( TH_AWARD_GRAPHIC_WORK *p_wk )
  *	@param	GRAPHIC_WORK *p_wk ワーク
  */
 //-----------------------------------------------------------------------------
-void TH_AWARD_GRAPHIC_3D_StartDraw( TH_AWARD_GRAPHIC_WORK *p_wk )
+void ZENKOKU_ZUKAN_AWARD_GRAPHIC_3D_StartDraw( ZENKOKU_ZUKAN_AWARD_GRAPHIC_WORK *p_wk )
 {	
 #ifdef GRAPHIC_G3D_USE
 	GRAPHIC_G3D_StartDraw( &p_wk->g3d );
@@ -569,7 +569,7 @@ void TH_AWARD_GRAPHIC_3D_StartDraw( TH_AWARD_GRAPHIC_WORK *p_wk )
  *	@param	GRAPHIC_WORK *p_wk ワーク
  */
 //-----------------------------------------------------------------------------
-void TH_AWARD_GRAPHIC_3D_EndDraw( TH_AWARD_GRAPHIC_WORK *p_wk )
+void ZENKOKU_ZUKAN_AWARD_GRAPHIC_3D_EndDraw( ZENKOKU_ZUKAN_AWARD_GRAPHIC_WORK *p_wk )
 {	
 #ifdef GRAPHIC_G3D_USE
 	GRAPHIC_G3D_EndDraw( &p_wk->g3d );
@@ -584,7 +584,7 @@ void TH_AWARD_GRAPHIC_3D_EndDraw( TH_AWARD_GRAPHIC_WORK *p_wk )
  *	@return	CLUNIT取得
  */
 //-----------------------------------------------------------------------------
-GFL_CLUNIT * TH_AWARD_GRAPHIC_GetClunit( const TH_AWARD_GRAPHIC_WORK *cp_wk )
+GFL_CLUNIT * ZENKOKU_ZUKAN_AWARD_GRAPHIC_GetClunit( const ZENKOKU_ZUKAN_AWARD_GRAPHIC_WORK *cp_wk )
 {	
 #ifdef GRAPHIC_OBJ_USE
 	return GRAPHIC_OBJ_GetUnit( &cp_wk->obj );
@@ -601,7 +601,7 @@ GFL_CLUNIT * TH_AWARD_GRAPHIC_GetClunit( const TH_AWARD_GRAPHIC_WORK *cp_wk )
  *	@return	CAMERA取得
  */
 //-----------------------------------------------------------------------------
-GFL_G3D_CAMERA * TH_AWARD_GRAPHIC_GetCamera( const TH_AWARD_GRAPHIC_WORK *cp_wk )
+GFL_G3D_CAMERA * ZENKOKU_ZUKAN_AWARD_GRAPHIC_GetCamera( const ZENKOKU_ZUKAN_AWARD_GRAPHIC_WORK *cp_wk )
 {	
 #ifdef GRAPHIC_G3D_USE
 	return GRAPHIC_G3D_GetCamera( &cp_wk->g3d );
@@ -624,7 +624,7 @@ GFL_G3D_CAMERA * TH_AWARD_GRAPHIC_GetCamera( const TH_AWARD_GRAPHIC_WORK *cp_wk 
 //-----------------------------------------------------------------------------
 static void Graphic_VBlankTask( GFL_TCB *p_tcb, void *p_work )
 {
-	TH_AWARD_GRAPHIC_WORK *p_wk	= p_work;
+	ZENKOKU_ZUKAN_AWARD_GRAPHIC_WORK *p_wk	= p_work;
 #ifdef GRAPHIC_BG_USE
 	GRAPHIC_BG_VBlankFunction( &p_wk->bg );
 #endif //GRAPHIC_BG_USE
