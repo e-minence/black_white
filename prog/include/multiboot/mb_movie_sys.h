@@ -1,47 +1,35 @@
 //======================================================================
 /**
- * @file	mb_parent_sys.h
- * @brief	マルチブート・親機メイン
+ * @file	mb_movie_sys.h
+ * @brief	マルチブート・子機メイン・映画配信転送装置
  * @author	ariizumi
- * @data	09/11/13
+ * @data	10/03/15
  *
- * モジュール名：MB_PARENT
+ * モジュール名：MB_MOVIE
  */
 //======================================================================
 #pragma once
 
-#include "gamesystem/game_data.h"
 
 //======================================================================
 //	define
 //======================================================================
 #pragma mark [> define
-FS_EXTERN_OVERLAY(multiboot);
 
 //======================================================================
 //	enum
 //======================================================================
 #pragma mark [> enum
-typedef enum
-{
-  MPM_POKE_SHIFTER,
-  MPM_MOVIE_TRANS,
-}MB_PARENT_MODE;
 
 //======================================================================
 //	typedef struct
 //======================================================================
 #pragma mark [> struct
-typedef struct
-{
-  u8       mode;
-  GAMEDATA *gameData;
-}MB_PARENT_INIT_WORK;
 
 //======================================================================
 //	proto
 //======================================================================
 #pragma mark [> proto
-extern GFL_PROC_DATA MultiBoot_ProcData;
+extern GFL_PROC_DATA MultiBootMovie_ProcData;
 
 
