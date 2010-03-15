@@ -1,5 +1,5 @@
-#include "message_dl.naix"
-#define MB_ERROR_MSG_FILE (NARC_message_dl_net_err_dat)
+#include "message_dl_movie.naix"
+#define MB_ERROR_MSG_FILE (NARC_message_dl_movie_net_err_dat)
 
 #include "../prog/src/system/net_err.c"
 
