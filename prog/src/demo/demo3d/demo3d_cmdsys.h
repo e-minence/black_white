@@ -1,25 +1,26 @@
 //============================================================================
 /**
  *
- *	@file		demo3d_mb.h
- *	@brief  モーションブラー
- *	@author	hosaka genya(HGSSからnakamura hiroyukiさんのソースを移植)
- *	@data		2010.01.19
+ *	@file		demo3d_cmd.h
+ *	@brief  3Dデモコマンド
+ *	@author	hosaka genya
+ *	@data		2009.12.09
  *
  */
 //============================================================================
 #pragma once
 
-typedef struct _DEMO3D_MBL_WORK DEMO3D_MBL_WORK;
+#include <gflib.h>
+
+#include "demo/demo3d.h"
+
+typedef struct _DEMO3D_CMD_WORK DEMO3D_CMD_WORK;
 
 //=============================================================================
 /**
  *								定数定義
  */
 //=============================================================================
-
-#define ENCOUNT_LEGEND_PACKAGE_MOTIONBL_EVA	( 5 )	// モーションブラー係数　新しくブレンドされる絵
-#define ENCOUNT_LEGEND_PACKAGE_MOTIONBL_EAB	( 13 )	// モーションブラー係数　すでにバッファされている絵
 
 //=============================================================================
 /**
@@ -33,6 +34,11 @@ typedef struct _DEMO3D_MBL_WORK DEMO3D_MBL_WORK;
  */
 //=============================================================================
 
-extern DEMO3D_MBL_WORK* DEMO3D_MotionBlInit( GFL_TCBLSYS* tcbsys, int eva, int evb );
-extern void DEMO3D_MotionBlExit( DEMO3D_MBL_WORK * mb );
+
+extern DEMO3D_CMD_WORK* Demo3D_CMD_Init( DEMO3D_ENGINE_WORK* core, HEAPID heap_id );
+
+extern void Demo3D_CMD_Exit( DEMO3D_CMD_WORK* wk );
+
+extern void Demo3D_CMD_Main( DEMO3D_CMD_WORK* wk, fx32 now_frame );
+
 
