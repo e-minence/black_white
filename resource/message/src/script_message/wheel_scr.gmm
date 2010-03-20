@@ -4,7 +4,7 @@
 <gmml version="4.5">
 
 <head>
-	<create user="iwasawa" host="W00157" date="2010-03-20T17:12:50"/>
+	<create user="iwasawa" host="W00157" date="2010-03-20T17:12:32"/>
 	<generator name="MessageEditor" version="4.9.2.5"/>
 </head>
 
@@ -330,7 +330,7 @@
 		</language>
 	</columns>
 
-	<dialog left="6" top="97" right="711" bottom="717" maximized="no" rayout="Vertical2">
+	<dialog left="1355" top="339" right="2060" bottom="959" maximized="no" rayout="Vertical2">
 		<comment-input left="733" top="589" right="1080" bottom="739" visible="no"/>
 		<tag-palette left="736" top="133" right="1209" bottom="531" visible="yes"/>
 		<band id="0" index="1" style="0000" width="530"/>
@@ -359,264 +359,7 @@
 	</lock>
 
 
-	<row id="msg_c04p01_boss_01" text-color=",,,#000000,,,,,,,,,,,,,,," back-color="#8080ff,,,#8080ff,,#8080ff,#8080ff,,,,,,#8080ff,,,,,,">
-		<comment>♂
-・最初からGRIDX=23、GRIDZ=13）下向きで待機
-・pos（GRIDX=20.GRIDZ=12^16）を踏むと
-　！マーク表示後、隣接してメッセージ表示
-・表示後、画面左へ誘導</comment>
-		<attribute name="キャラ指定">Ｎ</attribute>
-		<language name="JPN" width="256">Ｎ『[BE:09:速度コントロール:1]……プラズマだんを
-さがして　いるんだろう？▼
-かれらは　ゆうえんちの
-おくに　にげていったよ▽
-ついてきたまえ[BE:09:速度コントロール:0]▼</language>
-		<language name="JPN_KANJI" width="256">Ｎ『[BE:09:速度コントロール:1]……プラズマ団を
-探して　いるんだろう？▼
-彼らは　遊園地の
-奥に　逃げていったよ▽
-ついてきたまえ[BE:09:速度コントロール:0]▼</language>
-	</row>
-
-	<row id="msg_c04p01_boss_02" text-color=",,,#000000,,,,,,,,,,,,,,," back-color="#8080ff,,,,,,,,,,,,,,,,,,">
-		<comment>♂
-・観覧車前に到達して
-　辺りを見回す動きの後にメッセージ表示
-・メッセージ表示後、観覧車に乗る演出
-・観覧車デモに切り替え
-　観覧車内でのメッセージは別ファイルで管理予定</comment>
-		<attribute name="キャラ指定">Ｎ</attribute>
-		<language name="JPN" width="256">Ｎ『[BE:09:速度コントロール:1]……いないね▼
-かんらんしゃに　のって
-さがすことに　しよう▼
-ボクは　かんらんしゃが
-だいすき　なんだ▼
-あの　えんうんどう……　りきがく……
-うつくしい　すうしきの　あつまり……[BE:09:速度コントロール:0]▼
-以下　観覧車デモでのセリフ▼
-ヤグルマのもり　での　だっかんげき
-おみごと　だったね▼
-そう……　ボクが
-プラズマだんの　おうさま▼
-ゲーチスに　たのまれ
-いっしょに　ポケモンを　すくうんだよ▼</language>
-		<language name="JPN_KANJI" width="256">Ｎ『[BE:09:速度コントロール:1]……いないね▼
-観覧車に　乗って
-探すことに　しよう▼
-ボクは　観覧車が
-大好きなんだ▼
-あの　円運動……　力学……
-美しい　数式の　集まり……[BE:09:速度コントロール:0]▼
-以下　観覧車デモでのセリフ▼
-ヤグルマの森での　奪還劇
-お見事　だったね▼
-そう……　ボクが
-プラズマ団の　王様▼
-ゲーチスとやらに　請われ
-一緒に　ポケモンを　救うんだよ▼</language>
-	</row>
-
-	<row id="msg_c04p01_hakaim1_01" text-color="#000000,,,#000000,,#000000,#000000,,,,,,#000000,,,,,," back-color="#80ff80,,,#80ff80,,#80ff80,#80ff80,,,,,,#80ff80,,,,,,">
-		<comment>♂
-・観覧車から降りるとプラズマ団が近づいてきて
-　メッセージ表示
-・続けてhakaim2_01</comment>
-		<attribute name="キャラ指定">プラズマ団したっぱ♂</attribute>
-		<language name="JPN" width="256">プラズマだん『Ｎさま！▼</language>
-		<language name="JPN_KANJI" width="256">プラズマ団『Ｎさま！▼</language>
-	</row>
-
-	<row id="msg_c04p01_hakaim2_01" text-color="#000000,,,#000000,,#000000,#000000,,,,,,#000000,,,,,," back-color="#80ff80,,,#80ff80,,#80ff80,#80ff80,,,,,,#80ff80,,,,,,">
-		<comment>♂
-・続けてboss_03
-・戦闘後には削除済みで</comment>
-		<attribute name="キャラ指定">プラズマ団したっぱ♂</attribute>
-		<language name="JPN" width="256">プラズマだん『ごぶじ　ですか！▼</language>
-		<language name="JPN_KANJI" width="256">プラズマ団『ご無事ですか！▼</language>
-	</row>
-
-	<row id="msg_c04p01_boss_03" text-color=",,,#000000,,,,,,,,,,,,,,," back-color="#8080ff,,,#8080ff,,#8080ff,#8080ff,,,,,,#8080ff,,,,,,">
-		<comment>♂
-・プラズマ団のほうは向かない(気にしていない）
-・はい/いいえの選択
-　どちらを選んだか保存しておく</comment>
-		<attribute name="キャラ指定">Ｎ</attribute>
-		<language name="JPN" width="256">Ｎ『[BE:09:速度コントロール:1]だいじょうぶ▼
-ポケモンを　すくうために
-あつまった　ひとは……▽
-ボクが　まもるよ▼
-ボクが　かれと　たたかうあいだに
-キミたちは　ここから　にげたまえ▼
-……さて　[1:00:トレーナー名:0]
-ボクの　かんがえ　わかるかい？[BE:09:速度コントロール:0]</language>
-		<language name="JPN_KANJI" width="256">Ｎ『[BE:09:速度コントロール:1]問題ない▼
-ポケモンを　救うために
-集った　人々は……▽
-ボクが　守るよ▼
-ボクが　彼と　戦うあいだに
-キミたちは　この場を　離れたまえ▼
-……さて　[1:00:トレーナー名:0]
-ボクの　考え　理解できるかい？[BE:09:速度コントロール:0]</language>
-	</row>
-
-	<row id="msg_c04p01_boss_04" text-color=",,,#000000,,,,,,,,,,,,,,," back-color="#8080ff,,,#8080ff,,#8080ff,#8080ff,,,,,,#8080ff,,,,,,">
-		<comment>♂
-・はい選択時
-・トレーナー戦闘に</comment>
-		<attribute name="キャラ指定">Ｎ</attribute>
-		<language name="JPN" width="256">[BE:09:速度コントロール:1]その　ことば
-ほんとうだと　うれしいね▼
-さて……
-ボクに　みえた　みらい▼
-ここでは　キミに　かてないが
-にげる　プラズマだんの　ため▽
-あいて　してもらうよ[BE:09:速度コントロール:0]▼</language>
-		<language name="JPN_KANJI" width="256">[BE:09:速度コントロール:1]その言葉
-真意だと　うれしいね▼
-さて……
-ボクに　みえた　未来▼
-ここでは　キミに　勝てないが
-逃げる　プラズマ団の　ため▽
-相手してもらうよ[BE:09:速度コントロール:0]▼</language>
-	</row>
-
-	<row id="msg_c04p01_boss_05" text-color=",,,#000000,,,,,,,,,,,,,,," back-color="#8080ff,,,#8080ff,,#8080ff,#8080ff,,,,,,#8080ff,,,,,,">
-		<comment>♂
-・いいえ選択時
-・トレーナー戦闘に</comment>
-		<attribute name="キャラ指定">Ｎ</attribute>
-		<language name="JPN" width="256">[BE:09:速度コントロール:1]そうかい……
-それは　ざんねんだ▼
-さて……
-ボクに　みえた　みらい▼
-ここでは　キミに　かてないが
-にげる　プラズマだんの　ため▽
-あいて　してもらうよ[BE:09:速度コントロール:0]▼</language>
-		<language name="JPN_KANJI" width="256">[BE:09:速度コントロール:1]そうかい……
-それは　残念▼
-さて……
-ボクに　みえた　未来▼
-ここでは　キミに　勝てないが
-逃げる　プラズマ団の　ため▽
-相手してもらうよ[BE:09:速度コントロール:0]▼</language>
-	</row>
-
-	<row id="msg_c04p01_boss_06" text-color=",,,#000000,,,,,,,,,,,,,,," back-color="#8080ff,,,#8080ff,,#8080ff,#8080ff,,,,,,#8080ff,,,,,,">
-		<comment>♂
-・戦闘後、フィールドに復帰すると
-　このメッセージ表示
-・メッセージ後、一歩近づく
-・続けてboss_07</comment>
-		<attribute name="キャラ指定">Ｎ</attribute>
-		<language name="JPN" width="256">Ｎ『[BE:09:速度コントロール:1]……キミは　つよい▼
-だが　ボクには　かえるべき
-みらいが　ある！[BE:09:速度コントロール:0]▼</language>
-		<language name="JPN_KANJI" width="256">Ｎ『[BE:09:速度コントロール:1]……キミは　強いな▼
-だが　ボクには　変えるべき
-未来が　ある！[BE:09:速度コントロール:0]▼</language>
-	</row>
-
-	<row id="msg_c04p01_boss_07" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#8080ff,,,#8080ff,,,,,,,,,,,,,,,">
-		<comment>♂
-・カットイン
-・続けてboss_08</comment>
-		<attribute name="キャラ指定">Ｎ</attribute>
-		<language name="JPN" width="256">ボクは　ポケモンリーグを　めざす！▼
-そこで　あたらしい
-チャンピオンと　なり▼
-イッシュちほう　への
-つよい　えいきょうりょくを　もつ！▼
-そう！　すべての　トレーナーに
-ポケモンを　かいほう　させるよ！▼
-キミが　ポケモンと
-いっしょに　いたい……！▼
-そう　のぞむなら
-かくちの　ジムバッジを　あつめ▽
-ポケモンリーグに　むかえ！▼
-そこで　ボクを　とめてみせるんだ▼</language>
-		<language name="JPN_KANJI" width="256">ボクは　ポケモンリーグを　めざす！▼
-そこで　新しい
-チャンピオンと　なり▼
-イッシュ地方への
-強い　影響力を　手に入れる！▼
-そう！　すべての　トレーナーに
-ポケモンを　解放させるよ！▼
-キミが　ポケモンと
-いつまでも　一緒……！▼
-そう　望むなら
-各地の　ジムバッジを　集め▽
-ポケモンリーグに　向かえ！▼
-そこで　ボクを　とめてみせるんだ▼</language>
-	</row>
-
-	<row id="msg_c04p01_boss_08" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#8080ff,,,#8080ff,,,,,,,,,,,,,,,">
-		<comment>♂
-・フィールドに戻り、メッセージ表示後
-　画面左に退場していく
-・画面外に消えると、主人公操作可能に</comment>
-		<attribute name="キャラ指定">Ｎ</attribute>
-		<language name="JPN" width="256">[BE:09:速度コントロール:1]それほどの
-つよい　きもちで　なければ▽
-ボクは　とめられないよ[BE:09:速度コントロール:0]▼</language>
-		<language name="JPN_KANJI" width="256">[BE:09:速度コントロール:1]それほどの
-強い　気持ちで　なければ▽
-ボクは　とめられないよ[BE:09:速度コントロール:0]▼</language>
-	</row>
-
-	<row id="msg_c04p01_clown1_01" text-color=",,,#ff0000,,,,,,,,,,,,,,,">
-		<comment>♂
-・仮メッセージ</comment>
-		<attribute name="キャラ指定">CLOWN
-ピエロ</attribute>
-		<language name="JPN" width="256">まわる　まわる　ジェットコースター
-ぐるぐるぐるぐるぐるりんこ！</language>
-		<language name="JPN_KANJI" width="256">まわる　まわる　ジェットコースター
-ぐるぐるぐるぐるぐるりんこ！</language>
-	</row>
-
-	<row id="msg_c04p01_clown2_01" text-color=",,,#ff0000,,,,,,,,,,,,,,,">
-		<comment>♂
-・仮メッセージ</comment>
-		<attribute name="キャラ指定">CLOWN
-ピエロ</attribute>
-		<language name="JPN" width="256">まわる　まわる　かんらんしゃ！
-のぼる　のぼる　かんらんしゃ！</language>
-		<language name="JPN_KANJI" width="256">まわる　まわる　観覧車！
-のぼる　のぼる　観覧車！</language>
-	</row>
-
-	<row id="msg_c04p01_middlewoman2_01" text-color=",,,#ff0000,,,,,,,,,,,,,,,">
-		<comment>♀
-・仮メッセージ</comment>
-		<attribute name="キャラ指定">MIDDLEWOMAN2</attribute>
-		<language name="JPN" width="256">ゆうえんちって　いくつになっても
-こころおどる　くうかん　よね</language>
-		<language name="JPN_KANJI" width="256">遊園地って　いくつになっても
-心躍る　空間よね</language>
-	</row>
-
-	<row id="msg_c04p01_girl1_01" text-color=",,,#ff0000,,,,,,,,,,,,,,,">
-		<comment>♀
-・仮メッセージ</comment>
-		<attribute name="キャラ指定">GIRL1</attribute>
-		<language name="JPN" width="256">ねーねー！
-ピエロさんが　いるよ！</language>
-		<language name="JPN_KANJI" width="256">ねーねー！
-ピエロさんが　いるよ！</language>
-	</row>
-
-	<row id="msg_c04p01_gymsign_01" text-color="#000000,,,#000000,,#000000,#000000,,,,,,#000000,,,,,," back-color="#8080ff,,,#8080ff,,#8080ff,#8080ff,,,,,,#8080ff,,,,,,">
-		<comment>ポケモンジム</comment>
-		<attribute name="キャラ指定">看板</attribute>
-		<language name="JPN" width="256">ライモンシティ　ポケモンジム
-リーダー　カミツレ[BE:00:ページ切り替え（行送り）]
-シャイニング　ビューティ</language>
-		<language name="JPN_KANJI" width="256">ライモンシティ　ポケモンジム
-リーダー　カミツレ[BE:00:ページ切り替え（行送り）]
-シャイニング　ビューティ</language>
-	</row>
-
-	<row id="msg_wheel_spring_f_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_spring_f_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>春：主人公性別が♂
 ・はい/いいえ
 　はい→spring_m_02
@@ -632,7 +375,7 @@
 どう　いい　アイデアでしょ？</language>
 	</row>
 
-	<row id="msg_wheel_spring_f_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_spring_f_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>春：主人公性別が♂
 ・はい選択時
 ・トレーナー戦闘へ</comment>
@@ -641,7 +384,7 @@
 		<language name="JPN_KANJI" width="256">じゃあ　ポケモンしょうぶよ！▼</language>
 	</row>
 
-	<row id="msg_wheel_spring_f_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_spring_f_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>春：主人公性別が♂
 ・いいえ選択時
 ・再度話しかけると01から</comment>
@@ -650,7 +393,7 @@
 		<language name="JPN_KANJI" width="256">なっ　なによ！</language>
 	</row>
 
-	<row id="msg_wheel_spring_f_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_spring_f_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>春：主人公性別が♂
 ・トレーナー戦に勝利
 ・メッセージ表示後、観覧車に乗りデモへ</comment>
@@ -663,7 +406,7 @@
 いっしょに　のってあげるね▼</language>
 	</row>
 
-	<row id="msg_wheel_spring_f_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_spring_f_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>春：主人公性別が♂
 ・観覧車デモ終了後
 　日付が変わるまで繰り返し</comment>
@@ -674,7 +417,7 @@
 また　いっしょに　のってあげてもいいよ</language>
 	</row>
 
-	<row id="msg_wheel_spring_m_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_spring_m_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>春：主人公性別が♀
 ・はい/いいえ
 　はい→spring_f_02
@@ -692,7 +435,7 @@
 いっしょに　のってあげるけど？</language>
 	</row>
 
-	<row id="msg_wheel_spring_m_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_spring_m_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>春：主人公性別が♀
 ・はい選択時
 ・トレーナー戦闘へ</comment>
@@ -703,7 +446,7 @@
 ポケモンしょうぶ！▼</language>
 	</row>
 
-	<row id="msg_wheel_spring_m_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_spring_m_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>春：主人公性別が♀
 ・いいえ選択時
 ・再度話しかけると01から</comment>
@@ -714,7 +457,7 @@
 どうして　ことわるのさ</language>
 	</row>
 
-	<row id="msg_wheel_spring_m_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_spring_m_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>春：主人公性別が♀
 ・トレーナー戦に勝利
 ・メッセージ表示後、観覧車に乗りデモへ</comment>
@@ -727,7 +470,7 @@
 いっしょに　のろうよ▼</language>
 	</row>
 
-	<row id="msg_wheel_spring_m_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_spring_m_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>春：主人公性別が♀
 ・観覧車デモ終了後
 　日付が変わるまで繰り返し</comment>
@@ -738,7 +481,7 @@
 またいっしょに　のってあげても　いいよ</language>
 	</row>
 
-	<row id="msg_wheel_summer_f_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_summer_f_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>夏：主人公性別が♂
 ・はい/いいえ
 　はい→summer_m_02
@@ -754,7 +497,7 @@
 どう　いい　アイデアでしょ？</language>
 	</row>
 
-	<row id="msg_wheel_summer_f_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_summer_f_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>夏：主人公性別が♂
 ・はい選択時
 ・トレーナー戦闘へ</comment>
@@ -763,7 +506,7 @@
 		<language name="JPN_KANJI" width="256">じゃあ　ポケモンしょうぶよ！▼</language>
 	</row>
 
-	<row id="msg_wheel_summer_f_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_summer_f_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>夏：主人公性別が♂
 ・いいえ選択時
 ・再度話しかけると01から</comment>
@@ -772,7 +515,7 @@
 		<language name="JPN_KANJI" width="256">なっ　なによ！</language>
 	</row>
 
-	<row id="msg_wheel_summer_f_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_summer_f_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>夏：主人公性別が♂
 ・トレーナー戦に勝利
 ・メッセージ表示後、観覧車に乗りデモへ</comment>
@@ -785,7 +528,7 @@
 いっしょに　のってあげるね▼</language>
 	</row>
 
-	<row id="msg_wheel_summer_f_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_summer_f_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>夏：主人公性別が♂
 ・観覧車デモ終了後
 　日付が変わるまで繰り返し</comment>
@@ -796,7 +539,7 @@
 また　いっしょに　のってあげてもいいよ</language>
 	</row>
 
-	<row id="msg_wheel_summer_m_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_summer_m_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>夏：主人公性別が♀
 ・はい/いいえ
 　はい→summer_f_02
@@ -814,7 +557,7 @@
 いっしょに　のってあげるけど？</language>
 	</row>
 
-	<row id="msg_wheel_summer_m_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_summer_m_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>夏：主人公性別が♀
 ・はい選択時
 ・トレーナー戦闘へ</comment>
@@ -825,7 +568,7 @@
 ポケモンしょうぶ！▼</language>
 	</row>
 
-	<row id="msg_wheel_summer_m_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_summer_m_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>夏：主人公性別が♀
 ・いいえ選択時
 ・再度話しかけると01から</comment>
@@ -836,7 +579,7 @@
 どうして　ことわるのさ</language>
 	</row>
 
-	<row id="msg_wheel_summer_m_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_summer_m_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>夏：主人公性別が♀
 ・トレーナー戦に勝利
 ・メッセージ表示後、観覧車に乗りデモへ</comment>
@@ -849,7 +592,7 @@
 いっしょに　のろうよ▼</language>
 	</row>
 
-	<row id="msg_wheel_summer_m_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_summer_m_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>夏：主人公性別が♀
 ・観覧車デモ終了後
 　日付が変わるまで繰り返し</comment>
@@ -860,7 +603,7 @@
 またいっしょに　のってあげても　いいよ</language>
 	</row>
 
-	<row id="msg_wheel_fall_f_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_fall_f_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>秋：主人公性別が♂
 ・はい/いいえ
 　はい→fall_m_02
@@ -876,7 +619,7 @@
 どう　いい　アイデアでしょ？</language>
 	</row>
 
-	<row id="msg_wheel_fall_f_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_fall_f_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>秋：主人公性別が♂
 ・はい選択時
 ・トレーナー戦闘へ</comment>
@@ -885,7 +628,7 @@
 		<language name="JPN_KANJI" width="256">じゃあ　ポケモンしょうぶよ！▼</language>
 	</row>
 
-	<row id="msg_wheel_fall_f_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_fall_f_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>秋：主人公性別が♂
 ・いいえ選択時
 ・再度話しかけると01から</comment>
@@ -894,7 +637,7 @@
 		<language name="JPN_KANJI" width="256">なっ　なによ！</language>
 	</row>
 
-	<row id="msg_wheel_fall_f_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_fall_f_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>秋：主人公性別が♂
 ・トレーナー戦に勝利
 ・メッセージ表示後、観覧車に乗りデモへ</comment>
@@ -907,7 +650,7 @@
 いっしょに　のってあげるね▼</language>
 	</row>
 
-	<row id="msg_wheel_fall_f_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_fall_f_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>秋：主人公性別が♂
 ・観覧車デモ終了後
 　日付が変わるまで繰り返し</comment>
@@ -918,7 +661,7 @@
 また　いっしょに　のってあげてもいいよ</language>
 	</row>
 
-	<row id="msg_wheel_fall_m_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_fall_m_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>秋：主人公性別が♀
 ・はい/いいえ
 　はい→fall_f_02
@@ -936,7 +679,7 @@
 いっしょに　のってあげるけど？</language>
 	</row>
 
-	<row id="msg_wheel_fall_m_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_fall_m_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>秋：主人公性別が♀
 ・はい選択時
 ・トレーナー戦闘へ</comment>
@@ -947,7 +690,7 @@
 ポケモンしょうぶ！▼</language>
 	</row>
 
-	<row id="msg_wheel_fall_m_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_fall_m_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>秋：主人公性別が♀
 ・いいえ選択時
 ・再度話しかけると01から</comment>
@@ -958,7 +701,7 @@
 どうして　ことわるのさ</language>
 	</row>
 
-	<row id="msg_wheel_fall_m_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_fall_m_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>秋：主人公性別が♀
 ・トレーナー戦に勝利
 ・メッセージ表示後、観覧車に乗りデモへ</comment>
@@ -971,7 +714,7 @@
 いっしょに　のろうよ▼</language>
 	</row>
 
-	<row id="msg_wheel_fall_m_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_fall_m_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>秋：主人公性別が♀
 ・観覧車デモ終了後
 　日付が変わるまで繰り返し</comment>
@@ -982,7 +725,7 @@
 またいっしょに　のってあげても　いいよ</language>
 	</row>
 
-	<row id="msg_wheel_winter_f_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_winter_f_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>冬：主人公性別が♂
 ・はい/いいえ
 　はい→winter_m_02
@@ -998,7 +741,7 @@
 どう　いい　アイデアでしょ？</language>
 	</row>
 
-	<row id="msg_wheel_winter_f_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_winter_f_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>冬：主人公性別が♂
 ・はい選択時
 ・トレーナー戦闘へ</comment>
@@ -1007,7 +750,7 @@
 		<language name="JPN_KANJI" width="256">じゃあ　ポケモンしょうぶよ！▼</language>
 	</row>
 
-	<row id="msg_wheel_winter_f_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_winter_f_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>冬：主人公性別が♂
 ・いいえ選択時
 ・再度話しかけると01から</comment>
@@ -1016,7 +759,7 @@
 		<language name="JPN_KANJI" width="256">なっ　なによ！</language>
 	</row>
 
-	<row id="msg_wheel_winter_f_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_winter_f_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>冬：主人公性別が♂
 ・トレーナー戦に勝利
 ・メッセージ表示後、観覧車に乗りデモへ</comment>
@@ -1029,7 +772,7 @@
 いっしょに　のってあげるね▼</language>
 	</row>
 
-	<row id="msg_wheel_winter_f_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_winter_f_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#80ffff,,,#80ffff,,#80ffff,#80ffff,,,,,,#80ffff,,,,,,">
 		<comment>冬：主人公性別が♂
 ・観覧車デモ終了後
 　日付が変わるまで繰り返し</comment>
@@ -1040,7 +783,7 @@
 また　いっしょに　のってあげてもいいよ</language>
 	</row>
 
-	<row id="msg_wheel_winter_m_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_winter_m_01" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>冬：主人公性別が♀
 ・はい/いいえ
 　はい→winter_f_02
@@ -1058,7 +801,7 @@
 いっしょに　のってあげるけど？</language>
 	</row>
 
-	<row id="msg_wheel_winter_m_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_winter_m_02" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>冬：主人公性別が♀
 ・はい選択時
 ・トレーナー戦闘へ</comment>
@@ -1069,7 +812,7 @@
 ポケモンしょうぶ！▼</language>
 	</row>
 
-	<row id="msg_wheel_winter_m_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_winter_m_03" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>冬：主人公性別が♀
 ・いいえ選択時
 ・再度話しかけると01から</comment>
@@ -1080,7 +823,7 @@
 どうして　ことわるのさ</language>
 	</row>
 
-	<row id="msg_wheel_winter_m_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_winter_m_04" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>冬：主人公性別が♀
 ・トレーナー戦に勝利
 ・メッセージ表示後、観覧車に乗りデモへ</comment>
@@ -1093,7 +836,7 @@
 いっしょに　のろうよ▼</language>
 	</row>
 
-	<row id="msg_wheel_winter_m_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,," back-color="#808080,,,#808080,,#808080,#808080,#808080,,,#808080,,#808080,#808080,,,#808080,,">
+	<row id="msg_wheel_winter_m_05" text-color="#ff0000,,,#ff0000,,#ff0000,#ff0000,,,,,,#ff0000,,,,,,">
 		<comment>冬：主人公性別が♀
 ・観覧車デモ終了後
 　日付が変わるまで繰り返し</comment>
