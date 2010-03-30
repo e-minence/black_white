@@ -4,7 +4,7 @@
 <gmml version="4.5">
 
 <head>
-	<create user="iwao_kazumasa" host="W00203" date="2010-03-30T12:43:50"/>
+	<create user="iwao_kazumasa" host="W00203" date="2010-03-30T12:46:38"/>
 	<generator name="MessageEditor" version="4.9.2.5"/>
 </head>
 
@@ -334,360 +334,309 @@
 
 
 	<row id="MUSICAL_EXTRA_NAME_01">
-		<comment>♂
-初級</comment>
-		<language name="JPN" width="240">ユージン</language>
-		<language name="JPN_KANJI">ユージン</language>
+		<comment>ユージン</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_02">
-		<comment>♂
-初級</comment>
-		<language name="JPN" width="240">ノブ</language>
-		<language name="JPN_KANJI">ノブ</language>
+		<comment>ノブ</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_03">
-		<comment>♂
-初級</comment>
-		<language name="JPN" width="240">タナー</language>
-		<language name="JPN_KANJI">タナー</language>
+		<comment>タナー</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_04">
-		<comment>♂
-初級</comment>
-		<language name="JPN" width="240">ソウタ</language>
-		<language name="JPN_KANJI">ソウタ</language>
+		<comment>ソウタ</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_05">
-		<comment>♂
-初級</comment>
-		<language name="JPN" width="240">テルジン</language>
-		<language name="JPN_KANJI">テルジン</language>
+		<comment>テルジン</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_06">
-		<comment>♂
-初級</comment>
-		<language name="JPN" width="240">ユキト</language>
-		<language name="JPN_KANJI">ユキト</language>
+		<comment>ユキト</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_07">
-		<comment>♂
-初級</comment>
-		<language name="JPN" width="240">トシ</language>
-		<language name="JPN_KANJI">トシ</language>
+		<comment>トシ</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_08">
-		<comment>♂
-初級</comment>
-		<language name="JPN" width="240">ヒデオ</language>
-		<language name="JPN_KANJI">ヒデオ</language>
+		<comment>ヒデオ</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_09">
-		<comment>♂
-初級</comment>
-		<language name="JPN" width="240">オリー</language>
-		<language name="JPN_KANJI">オリー</language>
+		<comment>オリー</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_10">
-		<comment>♂
-初級</comment>
-		<language name="JPN" width="240">マーク</language>
-		<language name="JPN_KANJI">マーク</language>
+		<comment>マーク</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_11">
-		<comment>♀
-初級</comment>
-		<language name="JPN" width="240">ノエ</language>
-		<language name="JPN_KANJI">ノエ</language>
+		<comment>ノエ</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_12">
-		<comment>♀
-初級</comment>
-		<language name="JPN" width="240">サーヤ</language>
-		<language name="JPN_KANJI">サーヤ</language>
+		<comment>サーヤ</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_13">
-		<comment>♀
-初級</comment>
-		<language name="JPN" width="240">リマ</language>
-		<language name="JPN_KANJI">リマ</language>
+		<comment>リマ</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_14">
-		<comment>♀
-初級</comment>
-		<language name="JPN" width="240">リンダ</language>
-		<language name="JPN_KANJI">リンダ</language>
+		<comment>リンダ</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_15">
-		<comment>♀
-初級</comment>
-		<language name="JPN" width="240">コニー</language>
-		<language name="JPN_KANJI">コニー</language>
+		<comment>コニー</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_16">
-		<comment>♀
-初級</comment>
-		<language name="JPN" width="240">コウ</language>
-		<language name="JPN_KANJI">コウ</language>
+		<comment>コウ</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_17">
-		<comment>♀
-初級</comment>
-		<language name="JPN" width="240">ゲルダ</language>
-		<language name="JPN_KANJI">ゲルダ</language>
+		<comment>ゲルダ</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_18">
-		<comment>♀
-初級</comment>
-		<language name="JPN" width="240">ハナ</language>
-		<language name="JPN_KANJI">ハナ</language>
+		<comment>ハナ</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_19">
-		<comment>♀
-初級</comment>
-		<language name="JPN" width="240">リタ</language>
-		<language name="JPN_KANJI">リタ</language>
+		<comment>リタ</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_20">
-		<comment>♀
-初級</comment>
-		<language name="JPN" width="240">アリー</language>
-		<language name="JPN_KANJI">アリー</language>
+		<comment>アリー</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_21">
-		<comment>♂
-中級</comment>
-		<language name="JPN" width="240">ユウゾウ</language>
-		<language name="JPN_KANJI">ユウゾウ</language>
+		<comment>ユウゾウ</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_22">
-		<comment>♂
-中級</comment>
-		<language name="JPN" width="240">サクジ</language>
-		<language name="JPN_KANJI">サクジ</language>
+		<comment>サクジ</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_23">
-		<comment>♂
-中級</comment>
-		<language name="JPN" width="240">ベン</language>
-		<language name="JPN_KANJI">ベン</language>
+		<comment>ベン</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_24">
-		<comment>♂
-中級</comment>
-		<language name="JPN" width="240">チャド</language>
-		<language name="JPN_KANJI">チャド</language>
+		<comment>チャド</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_25">
-		<comment>♂
-中級</comment>
-		<language name="JPN" width="240">ジェフ</language>
-		<language name="JPN_KANJI">ジェフ</language>
+		<comment>ジェフ</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_26">
-		<comment>♂
-中級</comment>
-		<language name="JPN" width="240">シュウ</language>
-		<language name="JPN_KANJI">シュウ</language>
+		<comment>シュウ</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_27">
-		<comment>♂
-中級</comment>
-		<language name="JPN" width="240">カール</language>
-		<language name="JPN_KANJI">カール</language>
+		<comment>カール</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_28">
-		<comment>♂
-中級</comment>
-		<language name="JPN" width="240">ヤン</language>
-		<language name="JPN_KANJI">ヤン</language>
+		<comment>ヤン</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_29">
-		<comment>♂
-中級</comment>
-		<language name="JPN" width="240">テオ</language>
-		<language name="JPN_KANJI">テオ</language>
+		<comment>テオ</comment>
+		<language name="JPN" width="240">ピカタロウ</language>
+		<language name="JPN_KANJI">ピカタロウ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_30">
-		<comment>♂
-中級</comment>
-		<language name="JPN" width="240">トミー</language>
-		<language name="JPN_KANJI">トミー</language>
+		<comment>トミー</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_31">
-		<comment>♀
-中級</comment>
-		<language name="JPN" width="240">リコ</language>
-		<language name="JPN_KANJI">リコ</language>
+		<comment>リコ</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_32">
-		<comment>♀
-中級</comment>
-		<language name="JPN" width="240">アイリ</language>
-		<language name="JPN_KANJI">アイリ</language>
+		<comment>アイリ</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_33">
-		<comment>♀
-中級</comment>
-		<language name="JPN" width="240">ルミ</language>
-		<language name="JPN_KANJI">ルミ</language>
+		<comment>ルミ</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_34">
-		<comment>♀
-中級</comment>
-		<language name="JPN" width="240">ミネ</language>
-		<language name="JPN_KANJI">ミネ</language>
+		<comment>ミネ</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_35">
-		<comment>♀
-中級</comment>
-		<language name="JPN" width="240">カナ</language>
-		<language name="JPN_KANJI">カナ</language>
+		<comment>カナ</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_36">
-		<comment>♀
-中級</comment>
-		<language name="JPN" width="240">ユウコ</language>
-		<language name="JPN_KANJI">ユウコ</language>
+		<comment>ユウコ</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_37">
-		<comment>♀
-中級</comment>
-		<language name="JPN" width="240">マキ</language>
-		<language name="JPN_KANJI">マキ</language>
+		<comment>マキ</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_38">
-		<comment>♀
-中級</comment>
-		<language name="JPN" width="240">タキ</language>
-		<language name="JPN_KANJI">タキ</language>
+		<comment>タキ</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_39">
-		<comment>♀
-中級</comment>
-		<language name="JPN" width="240">ニナ</language>
-		<language name="JPN_KANJI">ニナ</language>
+		<comment>ニナ</comment>
+		<language name="JPN" width="240">チラミ</language>
+		<language name="JPN_KANJI">チラミ</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_40">
-		<comment>♀
-中級</comment>
-		<language name="JPN" width="240">クラリス</language>
-		<language name="JPN_KANJI">クラリス</language>
+		<comment>クラリス</comment>
+		<language name="JPN" width="240">ピックン</language>
+		<language name="JPN_KANJI">ピックン</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_41">
-		<comment>♂
-上級</comment>
-		<language name="JPN" width="240">エイタ</language>
-		<language name="JPN_KANJI">エイタ</language>
+		<comment>エイタ</comment>
+		<language name="JPN" width="240">ピックン</language>
+		<language name="JPN_KANJI">ピックン</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_42">
-		<comment>♂
-上級</comment>
-		<language name="JPN" width="240">リク</language>
-		<language name="JPN_KANJI">リク</language>
+		<comment>リク</comment>
+		<language name="JPN" width="240">ピックン</language>
+		<language name="JPN_KANJI">ピックン</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_43">
-		<comment>♂
-上級</comment>
-		<language name="JPN" width="240">リュート</language>
-		<language name="JPN_KANJI">リュート</language>
+		<comment>リュート</comment>
+		<language name="JPN" width="240">ピックン</language>
+		<language name="JPN_KANJI">ピックン</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_44">
-		<comment>♂
-上級</comment>
-		<language name="JPN" width="240">アキノリ</language>
-		<language name="JPN_KANJI">アキノリ</language>
+		<comment>アキノリ</comment>
+		<language name="JPN" width="240">ピックン</language>
+		<language name="JPN_KANJI">ピックン</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_45">
-		<comment>♂
-上級</comment>
-		<language name="JPN" width="240">クニハル</language>
-		<language name="JPN_KANJI">クニハル</language>
+		<comment>クニハル</comment>
+		<language name="JPN" width="240">ピックン</language>
+		<language name="JPN_KANJI">ピックン</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_46">
-		<comment>♀
-上級</comment>
-		<language name="JPN" width="240">ヨシミ</language>
-		<language name="JPN_KANJI">ヨシミ</language>
+		<comment>ヨシミ</comment>
+		<language name="JPN" width="240">ピックン</language>
+		<language name="JPN_KANJI">ピックン</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_47">
-		<comment>♀
-上級</comment>
-		<language name="JPN" width="240">ジェニー</language>
-		<language name="JPN_KANJI">ジェニー</language>
+		<comment>ジェニー</comment>
+		<language name="JPN" width="240">ピックン</language>
+		<language name="JPN_KANJI">ピックン</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_48">
-		<comment>♀
-上級</comment>
-		<language name="JPN" width="240">ミナ</language>
-		<language name="JPN_KANJI">ミナ</language>
+		<comment>ミナ</comment>
+		<language name="JPN" width="240">ピックン</language>
+		<language name="JPN_KANJI">ピックン</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_49">
-		<comment>♀
-上級</comment>
-		<language name="JPN" width="240">ベッキー</language>
-		<language name="JPN_KANJI">ベッキー</language>
+		<comment>ベッキー</comment>
+		<language name="JPN" width="240">ピックン</language>
+		<language name="JPN_KANJI">ピックン</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_50">
-		<comment>♀
-上級</comment>
-		<language name="JPN" width="240">セリナ</language>
-		<language name="JPN_KANJI">セリナ</language>
+		<comment>セリナ</comment>
+		<language name="JPN" width="240">ピックン</language>
+		<language name="JPN_KANJI">ピックン</language>
 	</row>
 
 	<row id="MUSICAL_EXTRA_NAME_51">
-		<comment>♀
-上級</comment>
-		<language name="JPN" width="240">メイコ</language>
-		<language name="JPN_KANJI">メイコ</language>
+		<comment>メイコ</comment>
+		<language name="JPN" width="240">ピックン</language>
+		<language name="JPN_KANJI">ピックン</language>
 	</row>
 
 	<flowchart-group-list>
