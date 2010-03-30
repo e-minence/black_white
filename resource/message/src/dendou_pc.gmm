@@ -4,7 +4,7 @@
 <gmml version="4.5">
 
 <head>
-	<create user="hiro_nakamura" host="W00144" date="2010-03-29T20:45:20"/>
+	<create user="hiro_nakamura" host="W00144" date="2010-03-29T21:16:31"/>
 	<generator name="MessageEditor" version="4.9.2.5"/>
 </head>
 
@@ -67,6 +67,11 @@
 			<tag entry="11" japanese="ボックス名" english="ボックス名" view="EP" width="96" line="1">
 				<parameter number="0" japanese="番号" english="番号" type="int8"/>
 			</tag>
+			<tag entry="12" japanese="ポケモンニックネーム（正体）" english="ポケモンニックネーム（正体）" view="EP" width="60" line="1">
+				<parameter number="0" japanese="番号" english="番号" type="int8"/>
+				<comment language="japanese">バトル用。イリュージョンの影響を受けないニックネーム取得。</comment>
+				<comment language="english">バトル用。イリュージョンの影響を受けないニックネーム取得。</comment>
+			</tag>
 			<tag entry="13" japanese="ステータス名" english="ステータス名" view="EP" width="74" line="1">
 				<parameter number="0" japanese="番号" english="番号" type="int8"/>
 				<comment language="japanese">たいりょく、こうげきりょく、ぼうぎょりょく、とくこう、とくぼう、すばやさ、かいひりつ、めいちゅう</comment>
@@ -77,6 +82,14 @@
 				<comment language="japanese">「たんぱんこぞう」「エリートトレーナー」など</comment>
 				<comment language="english">「たんぱんこぞう」「エリートトレーナー」など</comment>
 			</tag>
+			<tag entry="15" japanese="趣味（調査レーダー）" english="趣味（調査レーダー）" view="EP" length="0" line="1">
+				<parameter number="0" japanese="番号" english="番号" type="int8"/>
+			</tag>
+			<tag entry="16" japanese="Gパワー名称" english="Gパワー名称" view="EP" width="156" line="1">
+				<parameter number="0" japanese="番号" english="番号" type="int8"/>
+				<comment language="japanese">Gパワーの名称です</comment>
+				<comment language="english">Gパワーの名称です</comment>
+			</tag>
 			<tag entry="17" japanese="特殊状態名" english="特殊状態名" view="EP" width="48" line="1">
 				<parameter number="0" japanese="番号" english="番号" type="int8"/>
 				<comment language="japanese">ポケモンの特殊状態です。</comment>
@@ -86,6 +99,9 @@
 				<parameter number="0" japanese="番号" english="番号" type="int8"/>
 				<comment language="japanese">バッグのポケットの名前。「ポケット」の部分も含む。</comment>
 				<comment language="english">バッグのポケットの名前。「ポケット」の部分も含む。</comment>
+			</tag>
+			<tag entry="19" japanese="アンケート回答" english="アンケート回答" view="EP" width="108" line="1">
+				<parameter number="0" japanese="番号" english="番号" type="int8"/>
 			</tag>
 			<tag entry="26" japanese="カップ名" english="カップ名" view="EP" width="72" line="1">
 				<parameter number="0" japanese="番号" english="番号" type="int8"/>
@@ -108,19 +124,17 @@
 				<comment language="japanese">ぼうけんノートなどで使う</comment>
 				<comment language="english">ぼうけんノートなどで使う</comment>
 			</tag>
-			<tag entry="34" japanese="コンテスト名称" english="コンテスト名称" view="EP" width="120" line="1">
+			<tag entry="34" japanese="ミュージカル演目名" english="ミュージカル演目名" view="EP" width="234" line="1">
 				<parameter number="0" japanese="番号" english="番号" type="int8"/>
-				<comment language="japanese">コンテストのジャンル
-「○○○○○コンテスト」</comment>
-				<comment language="english">コンテストのジャンル
-「○○○○○コンテスト」</comment>
+				<comment language="japanese">ミュージカルの演目名</comment>
+				<comment language="english">ミュージカルの演目名</comment>
 			</tag>
-			<tag entry="35" japanese="コンテストランク" english="コンテストランク" view="EP" width="84" line="1">
+			<tag entry="35" japanese="ミュージカルコンディション" english="ミュージカルコンディション" view="EP" width="65" line="1">
 				<parameter number="0" japanese="番号" english="番号" type="int8"/>
-				<comment language="japanese">○○○○ランク
-「ランク」も含む</comment>
-				<comment language="english">○○○○ランク
-「ランク」も含む</comment>
+				<comment language="japanese">ミュージカルのコンディション
+クール・キュート・エレガント・ユニーク</comment>
+				<comment language="english">ミュージカルのコンディション
+クール・キュート・エレガント・ユニーク</comment>
 			</tag>
 			<tag entry="36" japanese="国名" english="国名" view="EP" width="216" line="1">
 				<parameter number="0" japanese="番号" english="番号" type="int8"/>
@@ -182,6 +196,12 @@
 				<comment language="japanese">スペイン語の挨拶</comment>
 				<comment language="english">スペイン語の挨拶</comment>
 			</tag>
+			<tag entry="49" japanese="ミュージカルグッズ部位" english="ミュージカルグッズ部位" view="EP" width="39" line="1">
+				<parameter number="0" japanese="番号" english="番号" type="int8"/>
+			</tag>
+			<tag entry="50" japanese="PDW家具名" english="PDW家具名" view="EP" width="169" line="1">
+				<parameter number="0" japanese="番号" english="番号" type="int8"/>
+			</tag>
 		</group>
 
 		<group entry="2" japanese="ポケモンＷＢ（数値）" english="ポケモンＷＢ（数値）" color="#c0c0c0">
@@ -241,6 +261,13 @@
 				<comment language="english">描画X座標を加算します。
 使用は許可制です。</comment>
 			</tag>
+			<tag entry="05" japanese="X指定" english="X指定" view="EP" length="0" line="1">
+				<parameter number="0" japanese="Ｘ座標" english="Ｘ座標" type="int16"/>
+				<comment language="japanese">描画Ｘ座標を指定値に変更。
+使用は許可制です。</comment>
+				<comment language="english">描画Ｘ座標を指定値に変更。
+使用は許可制です。</comment>
+			</tag>
 		</group>
 
 		<group entry="190" japanese="動的コントロール" english="Word" color="#c0c0c0">
@@ -261,11 +288,21 @@
 			</tag>
 			<tag entry="07" japanese="コールバック引数リセット" english="コールバック引数リセット" view="EP" length="0" line="1"/>
 			<tag entry="08" japanese="描画領域クリア" english="描画領域クリア" view="EP" length="0" line="1"/>
+			<tag entry="09" japanese="速度コントロール" english="速度コントロール" view="EP" length="0" line="1">
+				<parameter number="0" japanese="モード" english="モード" type="int8"/>
+				<comment language="japanese">ユーザConfig設定に応じて
+相対的に速い（遅い）速度になるように、ウェイトフレーム値などを操作します。</comment>
+				<comment language="english">ユーザConfig設定に応じて
+相対的に速い（遅い）速度になるように、ウェイトフレーム値などを操作します。</comment>
+			</tag>
 		</group>
 
 		<group entry="254" japanese="文字列展開" english="Word">
 		</group>
 
+		<set japanese="RESET" english="RESET" value="BE:09:速度コントロール:0"/>
+		<set japanese="FAST" english="FAST" value="BE:09:速度コントロール:1"/>
+		<set japanese="SLOW" english="SLOW" value="BE:09:速度コントロール:2"/>
 		<set japanese="500%" english="500%" value="FF:01:サイズ:500"/>
 		<set japanese="400%" english="400%" value="FF:01:サイズ:400"/>
 		<set japanese="300%" english="300%" value="FF:01:サイズ:300"/>
@@ -312,13 +349,13 @@
 		</language>
 	</columns>
 
-	<dialog left="310" top="238" right="1015" bottom="858" maximized="no" rayout="Vertical2">
+	<dialog left="1575" top="202" right="2264" bottom="822" maximized="no" rayout="Vertical2">
 		<comment-input left="733" top="589" right="1080" bottom="739" visible="no"/>
-		<tag-palette left="736" top="133" right="1209" bottom="531" visible="no"/>
-		<band id="0" index="0" style="0000" width="530"/>
+		<tag-palette left="736" top="133" right="1209" bottom="531" visible="yes"/>
+		<band id="0" index="0" style="0000" width="514"/>
 		<band id="1" index="1" style="0000" width="165"/>
-		<band id="2" index="2" style="0000" width="697"/>
-		<band id="3" index="3" style="0000" width="697"/>
+		<band id="2" index="2" style="0000" width="681"/>
+		<band id="3" index="3" style="0000" width="681"/>
 		<edit entry="0" language="JPN" mode="Edit" spell-check="-1"/>
 		<edit entry="1" language="JPN" mode="Preview" spell-check="-1"/>
 		<edit entry="2" language="JPN" mode="Source" spell-check="-1"/>
@@ -340,119 +377,59 @@
 	</lock>
 
 
-	<row id="pokename">
-		<language name="JPN" width="256">デバッグポケ</language>
-		<language name="JPN_KANJI" width="256">デバッグポケ</language>
+	<row id="str_title00">
+		<language name="JPN" width="256">だい[2:01:２桁:0]かい</language>
+		<language name="JPN_KANJI" width="256">だい[2:01:２桁:0]かい</language>
 	</row>
 
-	<row id="top_menu00">
-		<language name="JPN" width="256">ボックスせいり</language>
-		<language name="JPN_KANJI" width="256">ボックスせいり</language>
+	<row id="str_title01">
+		<language name="JPN" width="256">でんどういり</language>
+		<language name="JPN_KANJI" width="256">でんどういり</language>
 	</row>
 
-	<row id="top_menu01">
-		<language name="JPN" width="256">ボックスつれていく</language>
-		<language name="JPN_KANJI" width="256">ボックスつれていく</language>
+	<row id="str_title02">
+		<language name="JPN" width="256">２０[2:01:２桁:0]／[2:01:２桁:1]／[2:01:２桁:2]</language>
+		<language name="JPN_KANJI" width="256">２０[2:01:２桁:0]／[2:01:２桁:1]／[2:01:２桁:2]</language>
 	</row>
 
-	<row id="top_menu02">
-		<language name="JPN" width="256">ボックスあずける</language>
-		<language name="JPN_KANJI" width="256">ボックスあずける</language>
+	<row id="str_page">
+		<language name="JPN" width="256">[2:01:２桁:0]／[2:01:２桁:1]</language>
+		<language name="JPN_KANJI" width="256">[2:01:２桁:0]／[2:01:２桁:1]</language>
 	</row>
 
-	<row id="top_menu03">
-		<language name="JPN" width="256">ボックスもちもの</language>
-		<language name="JPN_KANJI" width="256">ボックスもちもの</language>
+	<row id="str_info00">
+		<language name="JPN" width="256">[1:01:ポケモン種族名:0]</language>
+		<language name="JPN_KANJI" width="256">[1:01:ポケモン種族名:0]</language>
 	</row>
 
-	<row id="top_menu04">
-		<language name="JPN" width="256">バトルボックス</language>
-		<language name="JPN_KANJI" width="256">バトルボックス</language>
-	</row>
-
-	<row id="top_menu05">
-		<language name="JPN" width="256">ボックスねかす</language>
-		<language name="JPN_KANJI" width="256">ボックスねかす</language>
-	</row>
-
-	<row id="top_menu10">
-		<language name="JPN" width="256">ムービー</language>
-		<language name="JPN_KANJI" width="256">ムービー</language>
-	</row>
-
-	<row id="top_menu20">
-		<language name="JPN" width="256">ずかん</language>
-		<language name="JPN_KANJI" width="256">ずかん</language>
-	</row>
-
-	<row id="top_menu21">
-		<language name="JPN" width="256">ずかんリスト</language>
-		<language name="JPN_KANJI" width="256">ずかんリスト</language>
-	</row>
-
-	<row id="top_menu30">
-		<language name="JPN" width="256">ＶＳリストＬ</language>
-		<language name="JPN_KANJI" width="256">ＶＳリストＬ</language>
-	</row>
-
-	<row id="top_menu31">
-		<language name="JPN" width="256">ＶＳリストＲ</language>
-		<language name="JPN_KANJI" width="256">ＶＳリストＲ</language>
-	</row>
-
-	<row id="top_menu32">
-		<language name="JPN" width="256">ともだちてちょう</language>
-		<language name="JPN_KANJI" width="256">ともだちてちょう</language>
-	</row>
-
-	<row id="top_menu33">
-		<language name="JPN" width="256">でんどうＰＣ</language>
-		<language name="JPN_KANJI" width="256">でんどうＰＣ</language>
-	</row>
-
-	<row id="top_menu34">
-		<language name="JPN" width="256">ポケモンアイコン</language>
-		<language name="JPN_KANJI" width="256">ポケモンアイコン</language>
-	</row>
-
-	<row id="piv_str00">
-		<language name="JPN" width="256">[2:02:３桁:1]：[1:01:ポケモン種族名:0]</language>
-		<language name="JPN_KANJI" width="256">[2:02:３桁:1]：[1:01:ポケモン種族名:0]</language>
-	</row>
-
-	<row id="piv_str01">
-		<language name="JPN" width="256">０００：タマゴ</language>
-		<language name="JPN_KANJI" width="256">０００：タマゴ</language>
-	</row>
-
-	<row id="piv_str02">
-		<language name="JPN" width="256">ＵＰ：－１　ＤＯＷＮ：＋１　ＬＥＦＴ：－１０　ＲＩＧＨＴ：＋１０</language>
-		<language name="JPN_KANJI" width="256">ＵＰ：－１　ＤＯＷＮ：＋１　ＬＥＦＴ：－１０　ＲＩＧＨＴ：＋１０</language>
-	</row>
-
-	<row id="piv_str03">
-		<language name="JPN" width="256">Ｌ：フォルム　[2:01:２桁:0]</language>
-		<language name="JPN_KANJI" width="256">Ｌ：フォルム　[2:01:２桁:0]</language>
-	</row>
-
-	<row id="piv_str04">
-		<language name="JPN" width="256">Ｒ：せいべつ</language>
-		<language name="JPN_KANJI" width="256">Ｒ：せいべつ</language>
-	</row>
-
-	<row id="piv_str05">
-		<language name="JPN" width="256">Ａ：アニメ　Ｂ：もどる　Ｙ：はいけいしょく　[2:00:１桁:0]</language>
-		<language name="JPN_KANJI" width="256">Ａ：アニメ　Ｂ：もどる　Ｙ：はいけいしょく　[2:00:１桁:0]</language>
-	</row>
-
-	<row id="piv_str06">
+	<row id="str_info01">
 		<language name="JPN" width="256">♂</language>
 		<language name="JPN_KANJI" width="256">♂</language>
 	</row>
 
-	<row id="piv_str07">
+	<row id="str_info02">
 		<language name="JPN" width="256">♀</language>
 		<language name="JPN_KANJI" width="256">♀</language>
+	</row>
+
+	<row id="str_info03">
+		<language name="JPN" width="256">[2:02:３桁:0]</language>
+		<language name="JPN_KANJI" width="256">[2:02:３桁:0]</language>
+	</row>
+
+	<row id="str_info04">
+		<language name="JPN" width="256">なまえ：[1:02:ポケモンニックネーム:0]</language>
+		<language name="JPN_KANJI" width="256">なまえ：[1:02:ポケモンニックネーム:0]</language>
+	</row>
+
+	<row id="str_info05">
+		<language name="JPN" width="256">おや：[1:00:トレーナー名:0]</language>
+		<language name="JPN_KANJI" width="256">おや：[1:00:トレーナー名:0]</language>
+	</row>
+
+	<row id="str_info06">
+		<language name="JPN" width="256">[1:07:わざ名:0]</language>
+		<language name="JPN_KANJI" width="256">[1:07:わざ名:0]</language>
 	</row>
 
 	<flowchart-group-list>
