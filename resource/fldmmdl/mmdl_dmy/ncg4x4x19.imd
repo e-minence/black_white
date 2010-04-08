@@ -3,14 +3,14 @@
 <imd version="1.6.0">
 
 <head>
-	<create user="lee_hyunjung" host="W00154A" date="2010-04-05T18:39:04" source="ncg4x4x14.mb"/>
+	<create user="lee_hyunjung" host="W00154A" date="2010-03-21T16:22:44" source="ncg4x4x19.mb"/>
 	<title>Model Data for NINTENDO NITRO-System</title>
 	<generator name="Maya 6.5 NNS_Export" version="1.6.0.20060417"/>
 </head>
 
 <body>
 
-<original_create user="lee_hyunjung" host="W00154A" date="2010-04-05T18:39:04" source="ncg4x4x14.mb"/>
+<original_create user="lee_hyunjung" host="W00154A" date="2010-03-21T16:22:44" source="ncg4x4x19.mb"/>
 <original_generator name="Maya 6.5 NNS_Export" version="1.6.0.20060417"/>
 
 <model_info
@@ -29,13 +29,13 @@
 
 <box_test pos_scale="3" xyz="-2.000000 0.000000 0.000000" whd="4.000000 4.000000 0.000000"/>
 
-<tex_image_array size="14">
-	<tex_image index="0" name="t4x4x14.1"
+<tex_image_array size="19">
+	<tex_image index="0" name="t4x4x19.1"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
-		color0_mode="color"
-		palette_name="t4x4x14"
-		path="C:/home/wb_data3d/field/fldobj/t4x4x14.1.tga"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.1.tga"
 	>
 		<bitmap size="256">
 			eeee eeee eeee eeee eeee eeee eeee eeee
@@ -72,12 +72,12 @@
 			d9aa eccc eeee eeee eeee eeee eeee eeee
 		</bitmap>
 	</tex_image>
-	<tex_image index="1" name="t4x4x14.2"
+	<tex_image index="1" name="t4x4x19.2"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
-		color0_mode="color"
-		palette_name="t4x4x14"
-		path="C:/home/wb_data3d/field/fldobj/t4x4x14.2.tga"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.2.tga"
 	>
 		<bitmap size="256">
 			eeee eeee eeee eeee eeee eeee eeee eeee
@@ -114,12 +114,12 @@
 			d9aa eccc eeee eeee eeee eeee eeee eeee
 		</bitmap>
 	</tex_image>
-	<tex_image index="2" name="t4x4x14.3"
+	<tex_image index="2" name="t4x4x19.3"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
-		color0_mode="color"
-		palette_name="t4x4x14"
-		path="C:/home/wb_data3d/field/fldobj/t4x4x14.3.tga"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.3.tga"
 	>
 		<bitmap size="256">
 			eeee eeee eeee eeee eeee eeee eeee eeee
@@ -156,12 +156,12 @@
 			d9aa eccc eeee eeee eeee eeee eeee eeee
 		</bitmap>
 	</tex_image>
-	<tex_image index="3" name="t4x4x14.4"
+	<tex_image index="3" name="t4x4x19.4"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
-		color0_mode="color"
-		palette_name="t4x4x14"
-		path="C:/home/wb_data3d/field/fldobj/t4x4x14.4.tga"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.4.tga"
 	>
 		<bitmap size="256">
 			eeee eeee eeee eeee eeee eeee eeee eeee
@@ -198,12 +198,12 @@
 			d9aa eccc eeee eeee eeee eeee eeee eeee
 		</bitmap>
 	</tex_image>
-	<tex_image index="4" name="t4x4x14.5"
+	<tex_image index="4" name="t4x4x19.5"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
-		color0_mode="color"
-		palette_name="t4x4x14"
-		path="C:/home/wb_data3d/field/fldobj/t4x4x14.5.tga"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.5.tga"
 	>
 		<bitmap size="256">
 			eeee eeee eeee eeee eeee eeee eeee eeee
@@ -240,12 +240,12 @@
 			d9aa eccc eeee eeee eeee eeee eeee eeee
 		</bitmap>
 	</tex_image>
-	<tex_image index="5" name="t4x4x14.6"
+	<tex_image index="5" name="t4x4x19.6"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
-		color0_mode="color"
-		palette_name="t4x4x14"
-		path="C:/home/wb_data3d/field/fldobj/t4x4x14.6.tga"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.6.tga"
 	>
 		<bitmap size="256">
 			eeee eeee eeee eeee eeee eeee eeee eeee
@@ -282,12 +282,222 @@
 			d9aa eccc eeee eeee eeee eeee eeee eeee
 		</bitmap>
 	</tex_image>
-	<tex_image index="6" name="t4x4x14.7"
+	<tex_image index="6" name="t4x4x19.7"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
-		color0_mode="color"
-		palette_name="t4x4x14"
-		path="C:/home/wb_data3d/field/fldobj/t4x4x14.7.tga"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.7.tga"
+	>
+		<bitmap size="256">
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee feee eeef eeee eeee eeee
+			eeee ffee eeee feee eeef eeee eeee eeee
+			eeee ffee eeef feee eeef eeee eeee eeee
+			eeee ffee eeef feee ffff ffff eeef eeee
+			eeee ffee eeef feee ffef ffff eeef eeee
+			eeee ffee eeef feee eeef ffee eeef eeee
+			eeee ffee eeef feee eeef eeee eeee eeee
+			eeee feee eeef feee ffff eeef eeee eeee
+			eeee feee eeef feee ffff eeff eeee eeee
+			eeee feee eeff eeee ffee efff eeee eeee
+			eeee feee eeff eeee eeee efff eeee eeee
+			eeee feee eeff effe feee efff eeee eeee
+			eeee feee eeff fffe ffff eeff eeee eeee
+			eeee feee eeff fffe ffff eeff eeee eeee
+			eeee feee eeff fffe ffff eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee ceee cccc cdcc ddcc
+			dcee 678a 4445 5544 3455 1233 0011 0001
+			0134 0000 0000 0000 0000 0000 0000 0000
+			0000 0000 0000 0000 0000 0000 0000 0000
+			0000 4321 5665 4455 4444 7655 7777 7777
+			d9aa eccc eeee eeee eeee eeee eeee eeee
+		</bitmap>
+	</tex_image>
+	<tex_image index="7" name="t4x4x19.8"
+		width="32" height="32" original_width="32" original_height="32"
+		format="palette16"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.8.tga"
+	>
+		<bitmap size="256">
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee ffee eeee eeee eeee
+			eeee eeee eeee eeee ffff eeee eeee eeee
+			eeee ffee eeee feee eeff eeee eeee eeee
+			eeee ffee eeef feee eeef eeee eeee eeee
+			eeee ffee eeef ffee eeef eeee eeee eeee
+			eeee ffee eeef ffee ffff efff eeee eeee
+			eeee ffee eeef fffe ffff ffff eeee eeee
+			eeee ffee eeef fffe efff fffe eeef eeee
+			eeee feee eeef fffe eeef ffee eeef eeee
+			eeee feee eeef fffe eeee ffee eeef eeee
+			eeee feee eeff fffe eeef fffe eeef eeee
+			eeee feee eeff ffee eeff ffff eeee eeee
+			eeee feee eeff feee ffff ffff eeee eeee
+			eeee feee eeff eeee ffff efff eeee eeee
+			eeee feee eeff eeee eeee eeee eeee eeee
+			eeee feee eeff eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee ceee cccc cdcc ddcc
+			dcee 678a 4445 5544 3455 1233 0011 0001
+			0134 0000 0000 0000 0000 0000 0000 0000
+			0000 0000 0000 0000 0000 0000 0000 0000
+			0000 4321 5665 4455 4444 7655 7777 7777
+			d9aa eccc eeee eeee eeee eeee eeee eeee
+		</bitmap>
+	</tex_image>
+	<tex_image index="8" name="t4x4x19.9"
+		width="32" height="32" original_width="32" original_height="32"
+		format="palette16"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.9.tga"
+	>
+		<bitmap size="256">
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee ffee eeee fffe ffff ffff eeee eeee
+			eeee ffee eeef effe feee ffff eeff eeee
+			eeee ffee eeef effe eeee eeee eeff eeee
+			eeee ffee eeef effe eeee feee eeff eeee
+			eeee ffee eeef effe eeee feee eeff eeee
+			eeee ffee eeef effe eeee ffee eeff eeee
+			eeee feee eeef eeee eeee ffee eeef eeee
+			eeee feee eeef eeee eeee ffee eeef eeee
+			eeee feee eeff eeee eeee ffee eeef eeee
+			eeee feee eeff eeee eeee fffe eeee eeee
+			eeee feee eeff eeee eeee fffe eeee eeee
+			eeee feee eeff eeee eeee fffe eeee eeee
+			eeee feee eeff eeee eeee fffe eeee eeee
+			eeee feee eeff eeee eeee fffe eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee ceee cccc cdcc ddcc
+			dcee 678a 4445 5544 3455 1233 0011 0001
+			0134 0000 0000 0000 0000 0000 0000 0000
+			0000 0000 0000 0000 0000 0000 0000 0000
+			0000 4321 5665 4455 4444 7655 7777 7777
+			d9aa eccc eeee eeee eeee eeee eeee eeee
+		</bitmap>
+	</tex_image>
+	<tex_image index="9" name="t4x4x19.10"
+		width="32" height="32" original_width="32" original_height="32"
+		format="palette16"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.10.tga"
+	>
+		<bitmap size="256">
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee feee ffff eeff eeee eeee
+			eeee eeee eeee ffee ffff ffff eeee eeee
+			eeee ffee eeee fffe ffff ffff eeef eeee
+			eeee ffee eeef fffe eeee ffee eeef eeee
+			eeee ffee eeef effe eeee ffee eeef eeee
+			eeee ffee eeef effe eeee feee eeef eeee
+			eeee ffee eeef fffe eeee ffee eeef eeee
+			eeee ffee eeef ffee eeef fffe eeef eeee
+			eeee feee eeef ffee ffff ffff eeef eeee
+			eeee feee eeef eeee ffff ffff eeee eeee
+			eeee feee eeff feee ffff ffff eeef eeee
+			eeee feee eeff feee eeef fffe eeef eeee
+			eeee feee eeff ffee eeef ffee eeef eeee
+			eeee feee eeff ffee eeef fffe eeef eeee
+			eeee feee eeff ffee eeff ffff eeef eeee
+			eeee feee eeff feee ffff ffff eeee eeee
+			eeee eeee eeee feee ffff eeff eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee ceee cccc cdcc ddcc
+			dcee 678a 4445 5544 3455 1233 0011 0001
+			0134 0000 0000 0000 0000 0000 0000 0000
+			0000 0000 0000 0000 0000 0000 0000 0000
+			0000 4321 5665 4455 4444 7655 7777 7777
+			d9aa eccc eeee eeee eeee eeee eeee eeee
+		</bitmap>
+	</tex_image>
+	<tex_image index="10" name="t4x4x19.11"
+		width="32" height="32" original_width="32" original_height="32"
+		format="palette16"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.11.tga"
+	>
+		<bitmap size="256">
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee fffe eeef eeee eeee
+			eeee eeee eeee feee ffff efff eeee eeee
+			eeee eeee eeee ffee efff effe eeee eeee
+			eeee ffee eeee ffee eeff fffe eeee eeee
+			eeee ffee eeef fffe eeef fffe eeee eeee
+			eeee ffee eeef fffe feef ffff eeee eeee
+			eeee ffee eeef fffe ffff efff eeee eeee
+			eeee ffee eeef ffee ffff efff eeee eeee
+			eeee ffee eeef eeee efff efff eeee eeee
+			eeee feee eeef eeee eeee eeff eeee eeee
+			eeee feee eeef eeee feee eeff eeee eeee
+			eeee feee eeff eeee feee eeff eeee eeee
+			eeee feee eeff eeee feee eeff eeee eeee
+			eeee feee eeff eeee feee eeef eeee eeee
+			eeee feee eeff eeee ffee eeef eeee eeee
+			eeee feee eeff eeee ffee eeef eeee eeee
+			eeee feee eeff eeee ffee eeef eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee eeee eeee eeee eeee
+			eeee eeee eeee eeee ceee cccc cdcc ddcc
+			dcee 678a 4445 5544 3455 1233 0011 0001
+			0134 0000 0000 0000 0000 0000 0000 0000
+			0000 0000 0000 0000 0000 0000 0000 0000
+			0000 4321 5665 4455 4444 7655 7777 7777
+			d9aa eccc eeee eeee eeee eeee eeee eeee
+		</bitmap>
+	</tex_image>
+	<tex_image index="11" name="t4x4x19.12"
+		width="32" height="32" original_width="32" original_height="32"
+		format="palette16"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.12.tga"
 	>
 		<bitmap size="256">
 			eeee eeee eeee eeee eeee eeee eeee eeee
@@ -324,12 +534,12 @@
 			d9aa eccc eeee eeee eeee eeee eeee eeee
 		</bitmap>
 	</tex_image>
-	<tex_image index="7" name="t4x4x14.8"
+	<tex_image index="12" name="t4x4x19.13"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
-		color0_mode="color"
-		palette_name="t4x4x14"
-		path="C:/home/wb_data3d/field/fldobj/t4x4x14.8.tga"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.13.tga"
 	>
 		<bitmap size="256">
 			eeee eeee eeee eeee eeee eeee eeee eeee
@@ -366,12 +576,12 @@
 			d9aa eccc eeee eeee eeee eeee eeee eeee
 		</bitmap>
 	</tex_image>
-	<tex_image index="8" name="t4x4x14.9"
+	<tex_image index="13" name="t4x4x19.14"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
-		color0_mode="color"
-		palette_name="t4x4x14"
-		path="C:/home/wb_data3d/field/fldobj/t4x4x14.9.tga"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.14.tga"
 	>
 		<bitmap size="256">
 			eeee eeee eeee eeee eeee eeee eeee eeee
@@ -408,12 +618,12 @@
 			d9aa eccc eeee eeee eeee eeee eeee eeee
 		</bitmap>
 	</tex_image>
-	<tex_image index="9" name="t4x4x14.10"
+	<tex_image index="14" name="t4x4x19.15"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
-		color0_mode="color"
-		palette_name="t4x4x14"
-		path="C:/home/wb_data3d/field/fldobj/t4x4x14.10.tga"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.15.tga"
 	>
 		<bitmap size="256">
 			eeee eeee eeee eeee eeee eeee eeee eeee
@@ -450,12 +660,12 @@
 			d9aa eccc eeee eeee eeee eeee eeee eeee
 		</bitmap>
 	</tex_image>
-	<tex_image index="10" name="t4x4x14.11"
+	<tex_image index="15" name="t4x4x19.16"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
-		color0_mode="color"
-		palette_name="t4x4x14"
-		path="C:/home/wb_data3d/field/fldobj/t4x4x14.11.tga"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.16.tga"
 	>
 		<bitmap size="256">
 			eeee eeee eeee eeee eeee eeee eeee eeee
@@ -492,12 +702,12 @@
 			d9aa eccc eeee eeee eeee eeee eeee eeee
 		</bitmap>
 	</tex_image>
-	<tex_image index="11" name="t4x4x14.12"
+	<tex_image index="16" name="t4x4x19.17"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
-		color0_mode="color"
-		palette_name="t4x4x14"
-		path="C:/home/wb_data3d/field/fldobj/t4x4x14.12.tga"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.17.tga"
 	>
 		<bitmap size="256">
 			eeee eeee eeee eeee eeee eeee eeee eeee
@@ -534,12 +744,12 @@
 			d9aa eccc eeee eeee eeee eeee eeee eeee
 		</bitmap>
 	</tex_image>
-	<tex_image index="12" name="t4x4x14.13"
+	<tex_image index="17" name="t4x4x19.18"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
-		color0_mode="color"
-		palette_name="t4x4x14"
-		path="C:/home/wb_data3d/field/fldobj/t4x4x14.13.tga"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.18.tga"
 	>
 		<bitmap size="256">
 			eeee eeee eeee eeee eeee eeee eeee eeee
@@ -576,12 +786,12 @@
 			d9aa eccc eeee eeee eeee eeee eeee eeee
 		</bitmap>
 	</tex_image>
-	<tex_image index="13" name="t4x4x14.14"
+	<tex_image index="18" name="t4x4x19.19"
 		width="32" height="32" original_width="32" original_height="32"
 		format="palette16"
-		color0_mode="color"
-		palette_name="t4x4x14"
-		path="C:/home/wb_data3d/field/fldobj/t4x4x14.14.tga"
+		color0_mode="transparency"
+		palette_name="t4x4x19"
+		path="C:/home/wb_data3d/field/fldobj/t4x4x19.19.tga"
 	>
 		<bitmap size="256">
 			eeee eeee eeee eeee eeee eeee eeee eeee
@@ -621,7 +831,7 @@
 </tex_image_array>
 
 <tex_palette_array size="1">
-	<tex_palette index="0" name="t4x4x14" color_size="16">
+	<tex_palette index="0" name="t4x4x19" color_size="16">
 		02bf 02bf 02df 06df 0edf 16ff 231f 3b5f
 		539f 6fdf 63bf 77ff 7fff 7fff 7fff 0000
 	</tex_palette>
