@@ -6,7 +6,7 @@
  *  @data   2010.04.26
  *  @note   
  *
- *  モジュール名：MANUAL
+ *  モジュール名：MANUAL_TOP
  */
 //============================================================================
 #pragma once
@@ -17,8 +17,7 @@
 
 #include "gamesystem/gamedata_def.h"
 
-// オーバーレイ
-FS_EXTERN_OVERLAY(manual);
+#include "manual_common.h"
 
 
 //=============================================================================
@@ -26,21 +25,6 @@ FS_EXTERN_OVERLAY(manual);
 *  定数定義
 */
 //=============================================================================
-// どのように終了したか
-typedef enum
-{
-  MANUAL_RESULT_CLOSE,   //×ボタン
-  MANUAL_RESULT_RETURN,  //←┘ボタン
-}
-MANUAL_RESULT;
-
-
-//=============================================================================
-/**
- *  PROC
- */
-//=============================================================================
-extern const GFL_PROC_DATA  MANUAL_ProcData;
 
 
 //=============================================================================
@@ -49,14 +33,9 @@ extern const GFL_PROC_DATA  MANUAL_ProcData;
 */
 //=============================================================================
 //-------------------------------------
-/// PROC パラメータ
+/// ワーク
 //=====================================
-typedef struct
-{
-  GAMEDATA*      gamedata;  ///< [in]  セーブデータにアクセスするのに必要
-  MANUAL_RESULT  result;    ///< [out] どのように終了したか
-}
-MANUAL_PARAM;
+typedef struct _MANUAL_TOP_WORK MANUAL_TOP_WORK;
 
 
 //=============================================================================
@@ -64,4 +43,16 @@ MANUAL_PARAM;
 *  関数のプロトタイプ宣言
 */
 //=============================================================================
+// 初期化処理
+extern  MANUAL_TOP_WORK*  MANUAL_TOP_Init(
+    MANUAL_COMMON_WORK*  cmn_wk
+);
+// 終了処理
+extern  void  MANUAL_TOP_Exit(
+    MANUAL_TOP_WORK*     work
+);
+// 主処理
+extern  void  MANUAL_TOP_Main(
+    MANUAL_TOP_WORK*     work
+);
 
