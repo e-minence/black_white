@@ -1,12 +1,12 @@
 //============================================================================
 /**
- *  @file   manual_explain.h
+ *  @file   manual_list.h
  *  @brief  ゲーム内マニュアル
  *  @author Koji Kawada
  *  @data   2010.04.26
  *  @note   
  *
- *  モジュール名：MANUAL_EXPLAIN
+ *  モジュール名：MANUAL_LIST
  */
 //============================================================================
 #pragma once
@@ -25,14 +25,26 @@
 *  定数定義
 */
 //=============================================================================
-#define MANUAL_EXPLAIN_NO_IMAGE  (0xFFFF)    // 画像ファイルなしのとき
-#define MANUAL_EXPLAIN_PAGE_MAX  (9)         // 最大9ページ
+typedef enum
+{
+  MANUAL_LIST_RESULT_RETURN,  // タッチバーのリターンアイコンを選んで終了
+  MANUAL_LIST_RESULT_ITEM,    // 項目のどれかを選んで終了
+}
+MANUAL_LIST_RESULT;
 
 typedef enum
 {
-  MANUAL_EXPLAIN_RESULT_RETURN,
+  MANUAL_LIST_ICON_NONE,    // アイコンなし
+  MANUAL_LIST_ICON_NEW,     // NEWアイコンあり
 }
-MANUAL_EXPLAIN_RESULT;
+MANUAL_LIST_ICON;
+
+typedef enum
+{
+  MANUAL_LIST_TYPE_CATEGORY,
+  MANUAL_LIST_TYPE_TITLE,
+}
+MANUAL_LIST_TYPE;
 
 
 //=============================================================================
@@ -41,14 +53,15 @@ MANUAL_EXPLAIN_RESULT;
 */
 //=============================================================================
 //-------------------------------------
-/// 1ページの情報
+/// 項目の情報
 //=====================================
 typedef struct
 {
-  u16         image;       // 画像ファイルなしのときMANUAL_EXPLAIN_NO_IMAGE
-  u16         str_id;      // gmm中の表示する文章のID
+  u16                    no;          // カテゴリのリストのときはcate_no、タイトルのリストのときはserial_no
+  u16                    str_id;      // gmm中の表示する文章のID
+  MANUAL_LIST_ICON       icon;
 }
-MANUAL_EXPLAIN_PAGE;
+MANUAL_LIST_ITEM;
 
 //-------------------------------------
 /// パラメータ
@@ -56,18 +69,22 @@ MANUAL_EXPLAIN_PAGE;
 typedef struct
 {
   // in
-  u8                     page_num;                       // ページ数  // page_num<=MANUAL_EXPLAIN_PAGE_MAX
-  u16                    title_str_id;                   // gmm中の表示する文章のID  // タイトル
-  MANUAL_EXPLAIN_PAGE    page[MANUAL_EXPLAIN_PAGE_MAX];  // 使用するのは添え字0<= <page_num
+  MANUAL_LIST_TYPE   type;        // タイプ
+  u16                num;         // 全項目数
+  MANUAL_LIST_ITEM*  item;        // 全項目のitem[num]
+  // in,out
+  u16                head_pos;    // 全項目の中での番号(画面の1番上(UP_HALFは除く)にある項目の番号)  // スクロールバーのカーソルの位置はこれで決まる
+  u16                cursor_pos;  // 全項目の中での番号
   // out 
-  MANUAL_EXPLAIN_RESULT  result;
+  MANUAL_LIST_RESULT result;
 }
-MANUAL_EXPLAIN_PARAM;
+MANUAL_LIST_PARAM;
+
 
 //-------------------------------------
 /// ワーク
 //=====================================
-typedef struct _MANUAL_EXPLAIN_WORK MANUAL_EXPLAIN_WORK;
+typedef struct _MANUAL_LIST_WORK MANUAL_LIST_WORK;
 
 
 //=============================================================================
@@ -76,16 +93,16 @@ typedef struct _MANUAL_EXPLAIN_WORK MANUAL_EXPLAIN_WORK;
 */
 //=============================================================================
 // 初期化処理
-extern  MANUAL_EXPLAIN_WORK*  MANUAL_EXPLAIN_Init(
-    MANUAL_EXPLAIN_PARAM*    param,
-    MANUAL_COMMON_WORK*      cmn_wk
+extern  MANUAL_LIST_WORK*  MANUAL_LIST_Init(
+    MANUAL_LIST_PARAM*   param,
+    MANUAL_COMMON_WORK*  cmn_wk
 );
 // 終了処理
-extern  void  MANUAL_EXPLAIN_Exit(
-    MANUAL_EXPLAIN_WORK*     work
+extern  void  MANUAL_LIST_Exit(
+    MANUAL_LIST_WORK*    work
 );
 // 主処理(終了したときTRUEを返す)
-extern  BOOL  MANUAL_EXPLAIN_Main(
-    MANUAL_EXPLAIN_WORK*     work
+extern  BOOL  MANUAL_LIST_Main(
+    MANUAL_LIST_WORK*    work
 );
 
