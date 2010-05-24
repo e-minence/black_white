@@ -3,7 +3,7 @@
 <itp version="1.6.0">
 
 <head>
-	<create user="ohkubo_tomohiko" host="W00195" date="2010-05-24T19:01:15" source="staffroll_b_005.mb"/>
+	<create user="ohkubo_tomohiko" host="W00195" date="2010-05-24T19:59:56" source="staffroll_w_002.mb"/>
 	<title>Texture Pattern Animation Data for NINTENDO NITRO-System</title>
 	<generator name="Maya 6.5 NNS_Export" version="1.6.0.20060417"/>
 </head>
@@ -18,14 +18,14 @@
 />
 
 <tex_pattern_list_data image_size="4" palette_size="4">
-	<image_name index="0" name="mu_eye.1"/>
-	<image_name index="1" name="mu_eye.2"/>
-	<image_name index="2" name="mu_eye.3"/>
-	<image_name index="3" name="mu_eye.4"/>
-	<palette_name index="0" name="mu_eye.1_pl"/>
-	<palette_name index="1" name="mu_eye.2_pl"/>
-	<palette_name index="2" name="mu_eye.3_pl"/>
-	<palette_name index="3" name="mu_eye.4_pl"/>
+	<image_name index="0" name="shin_eye.1"/>
+	<image_name index="1" name="shin_eye.2"/>
+	<image_name index="2" name="shin_eye.3"/>
+	<image_name index="3" name="shin_eye.4"/>
+	<palette_name index="0" name="shin_eye.1_pl"/>
+	<palette_name index="1" name="shin_eye.2_pl"/>
+	<palette_name index="2" name="shin_eye.3_pl"/>
+	<palette_name index="3" name="shin_eye.4_pl"/>
 </tex_pattern_list_data>
 
 <tex_pattern_data>
@@ -41,7 +41,7 @@
 </tex_pattern_data>
 
 <tex_pattern_anm_array size="1">
-	<tex_pattern_anm index="0" material_name="mu_eye" data_size="7" data_head="0"/>
+	<tex_pattern_anm index="0" material_name="shin_eye" data_size="7" data_head="0"/>
 </tex_pattern_anm_array>
 
 </body>
