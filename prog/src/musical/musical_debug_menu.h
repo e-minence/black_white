@@ -15,5 +15,19 @@
 #include "musical/musical_define.h"
 
 #if PM_DEBUG
-extern const BOOL MUSICAL_DEBUG_CreateDummyData( MUSICAL_SHOT_DATA* shotData , const u16 monsNo , const HEAPID heapId );
+
+typedef struct
+{
+  HEAPID heapId;
+  MUSICAL_SCRIPT_WORK *scriptWork;
+  BOOL enableArr;
+  BOOL forceNpc;
+  u16 arr[4];
+  u16 npc[3];
+}MUSICAL_DEBUG_MENU_WORK;
+
+extern void MUSICAL_DEBUG_InitDebugMenu( MUSICAL_SCRIPT_WORK *work , const HEAPID heapId );
+extern void MUSICAL_DEBUG_TermDebugMenu( void );
+extern MUSICAL_DEBUG_MENU_WORK* MUSICAL_DEBUG_GetWork( void );
+
 #endif
