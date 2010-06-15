@@ -1,8 +1,8 @@
 //============================================================================
 /**
  *
- *	@file		event_debug_btl_all_waza_check2.h
- *	@brief  バトルで全技チェック(トリプル)
+ *	@file		event_debug_btl_all_poke_check.h
+ *	@brief  バトルで全ポケモン表示
  *	@author hosaka genya
  *	@data		2010.06.10
  *
@@ -11,7 +11,7 @@
 #ifdef PM_DEBUG
 #pragma once
 
-FS_EXTERN_OVERLAY( debug_all_waza_check2 );
+FS_EXTERN_OVERLAY( debug_all_poke_check );
 
 //=============================================================================
 /**
@@ -33,7 +33,7 @@ FS_EXTERN_OVERLAY( debug_all_waza_check2 );
 
 //-----------------------------------------------------------------------------
 /**
- *	@brief  全技チェックイベントを生成する
+ *	@brief  全ポケモンチェックイベントを生成する
  *
  *	@param	GAMESYS_WORK* gsys
  *	@param	wk_adrs 
@@ -41,6 +41,6 @@ FS_EXTERN_OVERLAY( debug_all_waza_check2 );
  *	@retval
  */
 //-----------------------------------------------------------------------------
-extern GMEVENT* EVENT_DEBUG_BtlAllWazaCheck2( GAMESYS_WORK* gsys, void* wk_adrs );
+extern GMEVENT* EVENT_DEBUG_BtlAllPokeCheck( GAMESYS_WORK* gsys, void* wk_adrs );
 
 #endif // PM_DEBUG
