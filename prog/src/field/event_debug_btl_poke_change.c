@@ -1,7 +1,7 @@
 //=============================================================================
 /**
  *
- *	@file		event_debug_btl_all_waza_check2.c
+ *	@file		event_debug_btl_poke_change.c
  *	@brief  バトルで全技チェック(トリプル)
  *	@author		hosaka genya
  *	@data		2010.06.10
@@ -29,7 +29,7 @@
 #include "poke_tool/status_rcv.h" // for STATUS_RCV_PokeParty_RecoverAll
 
 #include "event_fieldmap_control.h"
-#include "event_debug_btl_all_waza_check2.h"
+#include "event_debug_btl_poke_change.h"
 
 #include "field/event_battle.h" // for EVENT_WildPokeBattle
 #include "field/field_encount.h" // for BTL_FIELD_SITUATION_SetFromFieldStatus
@@ -54,14 +54,15 @@
 typedef struct {
   GAMESYS_WORK*   gsys;
   int count;
-} DEBUG_BTL_ALL_WAZA_CHECK2_WORK;
+  u32 poke_list[ MONSNO_END ];
+} DEBUG_BTL_POKE_CHANGE_WORK;
 
 //=============================================================================
 /**
  *							プロトタイプ宣言
  */
 //=============================================================================
-static GMEVENT_RESULT BtlAllWazaCheck2( GMEVENT* event, int* seq, void* wk_adrs );
+static GMEVENT_RESULT BtlPokeChange( GMEVENT* event, int* seq, void* wk_adrs );
 
 //=============================================================================
 /**
@@ -79,18 +80,18 @@ static GMEVENT_RESULT BtlAllWazaCheck2( GMEVENT* event, int* seq, void* wk_adrs 
  *	@retval
  */
 //-----------------------------------------------------------------------------
-GMEVENT* EVENT_DEBUG_BtlAllWazaCheck2( GAMESYS_WORK* gsys, void* wk_adrs )
+GMEVENT* EVENT_DEBUG_BtlPokeChange( GAMESYS_WORK* gsys, void* wk_adrs )
 {
   GMEVENT* event;
-  DEBUG_BTL_ALL_WAZA_CHECK2_WORK* wk;
+  DEBUG_BTL_POKE_CHANGE_WORK* wk;
   GAMEDATA* gdata;
 
   gdata = GAMESYSTEM_GetGameData( gsys );
 
-  event = GMEVENT_Create( gsys, NULL, BtlAllWazaCheck2, sizeof(DEBUG_BTL_ALL_WAZA_CHECK2_WORK) );
+  event = GMEVENT_Create( gsys, NULL, BtlPokeChange, sizeof(DEBUG_BTL_POKE_CHANGE_WORK) );
 
   wk = GMEVENT_GetEventWork( event );
-  GFL_STD_MemClear( wk, sizeof(DEBUG_BTL_ALL_WAZA_CHECK2_WORK) );
+  GFL_STD_MemClear( wk, sizeof(DEBUG_BTL_POKE_CHANGE_WORK) );
   wk->gsys = gsys;
 
   return event;
@@ -114,7 +115,7 @@ GMEVENT* EVENT_DEBUG_BtlAllWazaCheck2( GAMESYS_WORK* gsys, void* wk_adrs )
  *	@retval
  */
 //-----------------------------------------------------------------------------
-static GMEVENT_RESULT BtlAllWazaCheck2( GMEVENT* event, int* seq, void* wk_adrs )
+static GMEVENT_RESULT BtlPokeChange( GMEVENT* event, int* seq, void* wk_adrs )
 {
   enum
   {
@@ -125,41 +126,37 @@ static GMEVENT_RESULT BtlAllWazaCheck2( GMEVENT* event, int* seq, void* wk_adrs 
   };
   
   int i;
-  DEBUG_BTL_ALL_WAZA_CHECK2_WORK* wk = wk_adrs;
+  DEBUG_BTL_POKE_CHANGE_WORK* wk = wk_adrs;
   GAMESYS_WORK* gsys = wk->gsys;
   GAMEDATA* gdata = GAMESYSTEM_GetGameData(gsys);
 
   switch( *seq )
   {
     case SEQ_INIT:
-      wk->count = 1;//35;
-      OS_TPrintf("トリプル全方向全技チェック開始！\n");
+      wk->count = 0;
+
+      for( i=0; i<MONSNO_END; i++ )
+      {
+        wk->poke_list[i] = i+1;
+      }
+      
+      for( i=0; i<10000; i++ )
+      {
+        u32 n,m;
+        u32 temp;
+        n = GFUser_GetPublicRand0( MONSNO_END );
+        m = GFUser_GetPublicRand0( MONSNO_END );
+        temp = wk->poke_list[n];
+        wk->poke_list[n] = wk->poke_list[m];
+        wk->poke_list[m] = temp;
+      }
+
+      OS_TPrintf("トリプル ポケモン交換テスト開始！\n");
       *seq = SEQ_SETUP;
       break;
 
     case SEQ_SETUP:
 
-    {
-      POKEPARTY* mp;
-      
-      mp = GAMEDATA_GetMyPokemon(gdata);
-
-      // 全ステータス回復
-      STATUS_RCV_PokeParty_RecoverAll( mp );
-
-      // 自分のポケモンを強制上書き
-      for( i=0; i<PokeParty_GetPokeCount( mp ); i++ )
-      {
-        POKEMON_PARAM* pp;
-        pp = PokeParty_GetMemberPointer( mp, i );
-
-        PP_ChangeMonsNo( pp, 1+i );
-        PP_SetWazaPos( pp, wk->count, 0 );
-      }
-    }
-
-    OS_TPrintf("セットした技ID=%d\n",wk->count);
-    
     // バトル呼び出し
     {
       FIELDMAP_WORK* fieldmap = GAMESYSTEM_GetFieldMapWork(gsys);
@@ -173,14 +170,50 @@ static GMEVENT_RESULT BtlAllWazaCheck2( GMEVENT* event, int* seq, void* wk_adrs 
       BTL_FIELD_SITUATION_SetFromFieldStatus( &sit, gdata, fieldmap );
       BTL_SETUP_Triple_Trainer( bp, gdata, &sit, TRID_BIGFOUR3_01, HEAPID_PROC );
 
-      // 敵の技を上書き
+      // 味方／敵を上書き
       {
+        POKEPARTY* mp = bp->party[ BTL_CLIENT_PLAYER ];
         POKEPARTY* ep = bp->party[ BTL_CLIENT_ENEMY1 ];
-        for( i=0; i<PokeParty_GetPokeCount( ep ); i++ )
+      
+        for( i=0; i<6; i++ )
         {
           POKEMON_PARAM* pp;
+
+          if( PokeParty_GetPokeCount( mp ) <= i )
+          {
+            pp = GFL_HEAP_AllocMemoryLo( HEAPID_PROC, POKETOOL_GetWorkSize() );
+            PP_Clear( pp );
+            PP_Setup( pp, 1, 1, PTL_SETUP_ID_AUTO );
+            PokeParty_Add( mp, pp );
+            GFL_HEAP_FreeMemory( pp );
+          }
+          
+          if( PokeParty_GetPokeCount( ep ) <= i )
+          {
+            pp = GFL_HEAP_AllocMemoryLo( HEAPID_PROC, POKETOOL_GetWorkSize() );
+            PP_Clear( pp );
+            PP_Setup( pp, 1, 1, PTL_SETUP_ID_AUTO );
+            PokeParty_Add( ep, pp );
+            GFL_HEAP_FreeMemory( pp );
+          }
+
+          pp = PokeParty_GetMemberPointer( mp, i );
+          PP_Clear( pp );
+          PP_Setup( pp, wk->poke_list[ wk->count ], 1, PTL_SETUP_ID_AUTO );
           pp = PokeParty_GetMemberPointer( ep, i );
-          PP_SetWazaPos( pp, wk->count, 0 );
+          PP_ChangeMonsNo( pp, wk->poke_list[ wk->count+1 ] );
+          
+          OS_FPrintf( 1, "[%d]匹目 味方 monsno=%d 敵 monsno=%d \n",
+              i, 
+              wk->poke_list[wk->count], 
+              wk->poke_list[wk->count+1] );
+
+          wk->count += 2;
+
+          if( wk->count > MONSNO_END )
+          {
+            break;
+          }
         }
       }
 
@@ -199,19 +232,8 @@ static GMEVENT_RESULT BtlAllWazaCheck2( GMEVENT* event, int* seq, void* wk_adrs 
       break;
 
     case SEQ_RET:
-      // 次の技へ
-      wk->count++;
-
-      // スキップ じばく、だいばくはつ、かなしばり、一撃必殺技
-      if( wk->count == WAZANO_ZIBAKU ||
-          wk->count == WAZANO_DAIBAKUHATU ||
-          wk->count == WAZANO_KANASIBARI ||
-          WAZADATA_GetCategory( wk->count ) == WAZADATA_CATEGORY_ICHIGEKI )
-      {
-        wk->count++;
-      }
-
-      if( wk->count < WAZANO_MAX )
+      if( wk->count <= 300 )
+//      if( wk->count <= MONSNO_END )
       {
         *seq = SEQ_SETUP;
       }
@@ -222,7 +244,7 @@ static GMEVENT_RESULT BtlAllWazaCheck2( GMEVENT* event, int* seq, void* wk_adrs 
       break;
 
     case SEQ_EXIT:
-      OS_TPrintf("トリプル全方向全技チェック終了！\n");
+      OS_TPrintf("トリプル ポケモン交換テスト終了！\n");
       return GMEVENT_RES_FINISH;
     default : GF_ASSERT(0);
   }
