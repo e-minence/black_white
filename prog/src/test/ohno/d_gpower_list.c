@@ -1,14 +1,15 @@
 //==============================================================================
 /**
- * @file	d_ohno_list.c
- * @brief	デバッグメニュー
+ * @file	  d_gpower_list.c
+ * @brief	  GPOWER配信メニュー
  * @author	ohno
- * @date	2009.2.12
+ * @date	  2009.2.12
  */
 //==============================================================================
 #include <gflib.h>
 #if PM_DEBUG
 #include "system/main.h"
+#include "system/gfl_use.h"
 //#include "savedata/contest_savedata.h"
 #include "savedata/save_tbl.h"
 #include "savedata/save_control.h"
@@ -39,6 +40,10 @@
 #include "debug/debugwin_sys.h"
 #include "test/debug_pause.h"
 
+#include "../matsuda/d_haisin_power.h"
+#include "../matsuda/d_haisin_comm.h"
+
+
 //==============================================================================
 //	定数定義
 //==============================================================================
@@ -63,16 +68,19 @@ typedef struct {
   int debug_mode;
   int timer;
 
+  HAISIN_POWER_GROUP aGPower;
+
+  int timerGPower;
+  int startListGPowerCnt;
+  int GPowerOdds;
+  BOOL bGPowerSeq;
+  BOOL isInit;
+
   GFL_FONT		*fontHandle;
-  //	PRINT_QUE		*printQue;
   PRINT_STREAM	*printStream;
   GFL_MSGDATA		*mm;
   STRBUF			*strbuf[D_STRBUF_NUM];
-//  STRBUF			*strbuf_name;
-//  STRBUF			*strbuf_name_kanji;
   STRBUF			*strbufEx;
-//  STRBUF			*strbuf_info;
-//  STRBUF			*strbuf_info_kanji;
   GFL_TCBLSYS		*tcbl;
   DM_MSG_DRAW_WIN drawwin;
   WORDSET *pWordSet;
@@ -96,26 +104,26 @@ typedef struct {
   int pokeNo;
   int form;
 
-}D_OHNO_WORK;
+} D_GPOWER_WORK;
 
 ///メニューリスト
 typedef struct{
   u32 str_id;
   const GFL_PROC_DATA *next_proc;
-  void *(*parent_work_func)(D_OHNO_WORK *);
+  void *(*parent_work_func)(D_GPOWER_WORK *);
   u32 ov_id;
 }D_MENULIST;
 
 //==============================================================================
 //	プロトタイプ宣言
 //==============================================================================
-static BOOL DebugOhno_ItemDebug(D_OHNO_WORK *wk);
-static void * _PokeTradeDemoWorkCreate(D_OHNO_WORK *wk);
-static void * _PokeTradeDemo2WorkCreate(D_OHNO_WORK *wk);
-static void * _PokeTradeWorkCreate(D_OHNO_WORK *wk);
-static void * _PokeIrcTradeWorkCreate(D_OHNO_WORK *wk);
-static void * _PokeTradeGtsNegoCreate(D_OHNO_WORK *wk);
-static void * _initTrial(D_OHNO_WORK *wk);
+static BOOL DebugOhno_ItemDebug(D_GPOWER_WORK *wk);
+static void * _PokeTradeDemoWorkCreate(D_GPOWER_WORK *wk);
+static void * _PokeTradeDemo2WorkCreate(D_GPOWER_WORK *wk);
+static void * _PokeTradeWorkCreate(D_GPOWER_WORK *wk);
+static void * _PokeIrcTradeWorkCreate(D_GPOWER_WORK *wk);
+static void * _PokeTradeGtsNegoCreate(D_GPOWER_WORK *wk);
+static void * _initTrial(D_GPOWER_WORK *wk);
 
 
 //==============================================================================
@@ -151,125 +159,65 @@ extern const GFL_PROC_DATA NetFourChildProcData;
 //メニューデータ
 static const D_MENULIST DebugMenuList[] = {
   {//
-    DEBUG_OHNO_MSG0027,
-    //		&PokemonTradeWiFiProcData,
-    //		_PokeTradeWorkCreate,
-    //		FS_OVERLAY_ID(pokemon_trade)
-   // &PokemonTradeGTSRecvProcData,
-   &PokemonTradeGTSMidProcData,
-    _PokeTradeDemoWorkCreate,
+    DEBUG_OHNO_MSG0031,
+    NULL,
+    NULL,
     FS_OVERLAY_ID(pokemon_trade)
     },
   {//
-    DEBUG_OHNO_MSG0013,
-    &PokemonTradeIrcProcData,
-    _PokeIrcTradeWorkCreate,
+    DEBUG_OHNO_MSG0032,
+    NULL,
+    NULL,
     FS_OVERLAY_ID(pokemon_trade)
     },
-#if 0
-  {//
-    DEBUG_OHNO_MSG0018,
-    &PokemonTradeGTSSendProcData,
-    //		&GtsNego_ProcData,
-    //		_PokeTradeGtsNegoCreate,
-    _PokeTradeDemoWorkCreate,
-    //		FS_OVERLAY_ID(gts_negotiate)
+  {//                                HAISIN_POWER_MAXにあわせて数を増やす必要がある
+    DEBUG_OHNO_MSG0033,
+    NULL,
+    NULL,
     FS_OVERLAY_ID(pokemon_trade)
     },
   {//
-    DEBUG_OHNO_MSG0018,
-    &GtsNego_ProcData,
-    _PokeTradeGtsNegoCreate,
-    FS_OVERLAY_ID(gts_negotiate)
-    },
-#endif
-
-
-  {//
-    DEBUG_OHNO_MSG0028,
-    &PokemonTradeDemoProcData,
-    //    &PokemonTradeGTSProcData,
-    //    &PokemonTradeGTSSendProcData,
-    //    &PokemonTradeGTSRecvProcData,
-    //    &PokemonTradeGTSMidProcData,
-    _PokeTradeDemo2WorkCreate,
+    DEBUG_OHNO_MSG0033,
+    NULL,
+    NULL,
     FS_OVERLAY_ID(pokemon_trade)
     },
   {//
-    DEBUG_OHNO_MSG0029,
-    &PokemonTradeGTSSendProcData,
-    _PokeTradeDemoWorkCreate,
+    DEBUG_OHNO_MSG0033,
+    NULL,
+    NULL,
     FS_OVERLAY_ID(pokemon_trade)
     },
   {//
-    DEBUG_OHNO_MSG0030,
-    &PokemonTradeGTSRecvProcData,
-    _PokeTradeDemoWorkCreate,
-    FS_OVERLAY_ID(pokemon_trade)
-    },
-  {//
-    //		DEBUG_OHNO_MSG0002,
-    DEBUG_OHNO_MSG0022,
-    //		&DebugLayoutMainProcData,
-    &NetDeliverySendProcData,
+    DEBUG_OHNO_MSG0033,
+    NULL,
     NULL,
     FS_OVERLAY_ID(ohno_debugapp)
     },
   {//
-    //		DEBUG_OHNO_MSG0003,
-    //		&DebugOhnoMainProcData,
-    //		DEBUG_OHNO_MSG0023,
-    //		&NetDeliveryRecvProcData,
-    DEBUG_OHNO_MSG0026,
-    &NetDeliveryTriSendProcData,
-    _initTrial,
-    FS_OVERLAY_ID(ohno_debugapp)
-    },
-  {//
-    //		DEBUG_OHNO_MSG0014,
-    //		&VTRProcData,
-    DEBUG_OHNO_MSG0024,
-    &NetDeliveryIRCSendProcData,
+    DEBUG_OHNO_MSG0033,
+    NULL,
     NULL,
     FS_OVERLAY_ID(ohno_debugapp)
     },
-
   {//
-    DEBUG_OHNO_MSG0013,
-    &PokemonTradeProcData,
-    _PokeIrcTradeWorkCreate,
-    FS_OVERLAY_ID(pokemon_trade)
-    },
-  /*
-  {//
-		DEBUG_OHNO_MSG0020,
-		&NetFourParentProcData,
-		NULL,
-		FS_OVERLAY_ID(ohno_debugapp)
-	},
-   */
-  /*	{//
-		DEBUG_OHNO_MSG0021,
-		&NetFourChildProcData,
-		NULL,
-		FS_OVERLAY_ID(ohno_debugapp)
-	},*/
-  {//
-    DEBUG_OHNO_MSG0017,
-    &GtsNego_ProcData,
-    _PokeTradeGtsNegoCreate,
-    FS_OVERLAY_ID(gts_negotiate)
-    },
-  {//
-    DEBUG_OHNO_MSG0016,
-    &DebugSaveAddrProcData,
+    DEBUG_OHNO_MSG0033,
+    NULL,
     NULL,
     FS_OVERLAY_ID(ohno_debugapp)
     },
-
-
-
-
+  {//
+    DEBUG_OHNO_MSG0033,
+    NULL,
+    NULL,
+    FS_OVERLAY_ID(ohno_debugapp)
+    },
+  {//
+    DEBUG_OHNO_MSG0033,
+    NULL,
+    NULL,
+    FS_OVERLAY_ID(ohno_debugapp)
+    },
 };
 
 
@@ -308,17 +256,22 @@ static GFL_PROC_RESULT DebugOhnoMainProcInit( GFL_PROC * proc, int * seq, void *
     GX_OBJVRAMMODE_CHAR_1D_32K,		// サブOBJマッピングモード
   };
 
-  D_OHNO_WORK* wk;
+  D_GPOWER_WORK* wk;
 
   DEBUG_PerformanceSetActive(FALSE);
   //デバッグ
   SaveControl_Load(SaveControl_GetPointer());
 
   GFL_HEAP_CreateHeap( GFL_HEAPID_APP, HEAPID_PROC, 0x70000 );
-  wk = GFL_PROC_AllocWork( proc, sizeof(D_OHNO_WORK), HEAPID_PROC );
-  MI_CpuClear8(wk, sizeof(D_OHNO_WORK));
+  wk = GFL_PROC_AllocWork( proc, sizeof(D_GPOWER_WORK), HEAPID_PROC );
+  MI_CpuClear8(wk, sizeof(D_GPOWER_WORK));
   wk->heapID = HEAPID_PROC;
 
+  if(pwk){
+    GFL_STD_MemCopy( pwk, &wk->aGPower, sizeof(HAISIN_POWER_GROUP));
+  }
+
+  
   GFL_DISP_SetBank( &vramBank );
 
   //バックグラウンドの色を入れておく
@@ -379,7 +332,7 @@ static GFL_PROC_RESULT DebugOhnoMainProcInit( GFL_PROC * proc, int * seq, void *
     int i;
 
     wk->pWordSet    = WORDSET_Create( wk->heapID );
-    wk->drawwin.win = GFL_BMPWIN_Create( GFL_BG_FRAME0_M, 4, 0, 24, 23, 0, GFL_BMP_CHRAREA_GET_F );
+    wk->drawwin.win = GFL_BMPWIN_Create( GFL_BG_FRAME0_M, 2, 0, 28, 23, 0, GFL_BMP_CHRAREA_GET_F );
     wk->drawwin.bmp = GFL_BMPWIN_GetBmp(wk->drawwin.win);
     GFL_BMP_Clear( wk->drawwin.bmp, 0xff );
     GFL_BMPWIN_MakeScreen( wk->drawwin.win );
@@ -409,6 +362,47 @@ static GFL_PROC_RESULT DebugOhnoMainProcInit( GFL_PROC * proc, int * seq, void *
   GFL_ARC_UTIL_TransVramPalette(ARCID_FONT, NARC_font_default_nclr, PALTYPE_MAIN_BG,
                                 0, 0x20, HEAPID_PROC);
 
+
+
+
+  {
+    int x;
+
+    wk->bGPowerSeq = wk->aGPower.movemode;
+
+    if(wk->bGPowerSeq) {  //順送りモードの場合 -1から
+      wk->startListGPowerCnt = -1;
+    }
+
+    for(x = 0; x < wk->aGPower.data_num ; x++){
+      wk->GPowerOdds += wk->aGPower.hp[x].odds;
+    }
+    wk->timerGPower = -1;
+    wk->isInit = TRUE;
+  }
+
+  // 時間が同じ場合 24時間配布
+  if(wk->aGPower.start_time_hour == wk->aGPower.end_time_hour){
+    if(wk->aGPower.start_time_min == wk->aGPower.end_time_min){
+      wk->aGPower.start_time_hour = 0;
+      wk->aGPower.start_time_min = 0;
+      wk->aGPower.end_time_hour = 100;
+      wk->aGPower.end_time_min = 0;
+    }
+  }
+  //時間がひっくり返っていた場合
+  if(wk->aGPower.start_time_hour > wk->aGPower.end_time_hour){
+  }
+  else if(wk->aGPower.start_time_hour == wk->aGPower.end_time_hour){
+    if(wk->aGPower.start_time_min > wk->aGPower.end_time_min){
+      
+      //時計を１２時間進める
+      //エンドタイムを24すすめる
+      wk->aGPower.end_time_hour+=24;
+      
+    }
+  }
+  
   return GFL_PROC_RES_FINISH;
 }
 //--------------------------------------------------------------------------
@@ -418,7 +412,7 @@ static GFL_PROC_RESULT DebugOhnoMainProcInit( GFL_PROC * proc, int * seq, void *
 //--------------------------------------------------------------------------
 static GFL_PROC_RESULT DebugOhnoMainProcMain( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
 {
-  D_OHNO_WORK* wk = mywk;
+  D_GPOWER_WORK* wk = mywk;
   BOOL ret = 0;
   int i;
   BOOL que_ret=TRUE;
@@ -462,28 +456,14 @@ static GFL_PROC_RESULT DebugOhnoMainProcMain( GFL_PROC * proc, int * seq, void *
 //--------------------------------------------------------------------------
 static GFL_PROC_RESULT DebugOhnoMainProcEnd( GFL_PROC * proc, int * seq, void * pwk, void * mywk )
 {
-  D_OHNO_WORK* wk = mywk;
+  D_GPOWER_WORK* wk = mywk;
   int i;
-  void *parent_work;
 
-  if(DebugMenuList[wk->cursor_y].parent_work_func != NULL){
-    if(DebugMenuList[wk->cursor_y].ov_id != GFL_OVERLAY_BLANK_ID){
-      GFL_OVERLAY_Load(DebugMenuList[wk->cursor_y].ov_id);
-    }
-    wk->parent_work = DebugMenuList[wk->cursor_y].parent_work_func(wk);
-    if(DebugMenuList[wk->cursor_y].ov_id != GFL_OVERLAY_BLANK_ID){
-      GFL_OVERLAY_Unload(DebugMenuList[wk->cursor_y].ov_id);
-    }
-    parent_work = wk->parent_work;
-  }
-  else{
-    parent_work = NULL;
+  if(FALSE == HaisinBeacon_ExitWait()){  //終了待ち
+    return GFL_PROC_RES_CONTINUE;
   }
 
-  //次のPROC予約
-  GFL_PROC_SysSetNextProc(
-    DebugMenuList[wk->cursor_y].ov_id, DebugMenuList[wk->cursor_y].next_proc, parent_work);
-
+  
   GFL_BMPWIN_Delete(wk->drawwin.win);
   for(i = 0; i < D_STRBUF_NUM; i++){
     GFL_STR_DeleteBuffer(wk->strbuf[i]);
@@ -508,10 +488,62 @@ static GFL_PROC_RESULT DebugOhnoMainProcEnd( GFL_PROC * proc, int * seq, void * 
 }
 
 
+static BOOL _printList(D_GPOWER_WORK *wk, int initmsgNo)
+{
+  const int yini = 12;
+  BOOL ret, irc_ret = 0;
+  int msg_id;
+  int i, x;
+
+  GFL_BMP_Clear( wk->drawwin.bmp, 0xff );
+  for(i = 0; i < NELEMS(DebugMenuList); i++){
+    
+    if(wk->cursor_y == i){
+      GFL_MSG_GetString(wk->mm, DEBUG_OHNO_MSG0005, wk->strbuf[i]);
+      PRINTSYS_Print(wk->drawwin.bmp, 0, yini+i*2*8, wk->strbuf[i], wk->fontHandle);
+    }
+
+    x = 2;
+    
+    if(i > 1 && (wk->aGPower.data_num!=0) && (wk->aGPower.data_num + 2) > i){
+      GFL_MSG_GetString(wk->mm, DebugMenuList[i].str_id, wk->strbufEx);
+      
+      WORDSET_RegisterGPowerName(wk->pWordSet, 0, wk->aGPower.hp[i-2].g_power_id);
+      
+      WORDSET_RegisterNumber(wk->pWordSet, 1, wk->aGPower.hp[i-2].time , 3, STR_NUM_DISP_SPACE, STR_NUM_CODE_DEFAULT);
+      WORDSET_RegisterNumber(wk->pWordSet, 2, wk->aGPower.hp[i-2].odds , 3, STR_NUM_DISP_SPACE, STR_NUM_CODE_DEFAULT);
+      WORDSET_ExpandStr( wk->pWordSet, wk->strbuf[i], wk->strbufEx  );
+    }
+    else{
+      if(i==0){
+        GFL_MSG_GetString(wk->mm, initmsgNo, wk->strbuf[i]);
+      }
+      else{
+        GFL_MSG_GetString(wk->mm, DebugMenuList[i].str_id, wk->strbuf[i]);
+      }
+    }
+    
+    PRINTSYS_Print( wk->drawwin.bmp, 10, yini+i*2*8, wk->strbuf[i], wk->fontHandle);
+  }
+}
 
 //==============================================================================
 //
 //==============================================================================
+
+typedef enum{
+  _START_LISTWRITE,
+  _TIMER_WAIT,
+  _MESSAGE_REWRITE,
+  _NET_START,
+  _NET_WAIT,
+  _MESSAGE_END,
+  _SEQ_END,
+  _SEQ_MAX,
+  
+} _GPOWERSEQ_ENUM;
+
+
 //--------------------------------------------------------------
 /**
  * @brief   ワイヤレス通信テスト
@@ -521,7 +553,7 @@ static GFL_PROC_RESULT DebugOhnoMainProcEnd( GFL_PROC * proc, int * seq, void * 
  * @retval  TRUE:終了。　FALSE:処理継続中
  */
 //--------------------------------------------------------------
-static BOOL DebugOhno_ItemDebug(D_OHNO_WORK *wk)
+static BOOL DebugOhno_ItemDebug(D_GPOWER_WORK *wk)
 {
   const int yini = 12;
   BOOL ret, irc_ret = 0;
@@ -531,119 +563,109 @@ static BOOL DebugOhno_ItemDebug(D_OHNO_WORK *wk)
   GF_ASSERT(wk);
 
   switch(wk->seq){
-  case 0:		//リスト描画
-    GFL_BMP_Clear( wk->drawwin.bmp, 0xff );
+  case _START_LISTWRITE:		//リスト描画
     wk->drawwin.message_req = TRUE;
 
-    for(i = 0; i < NELEMS(DebugMenuList); i++){
-      if(wk->cursor_y == i){
-        GFL_MSG_GetString(wk->mm, DEBUG_OHNO_MSG0005, wk->strbuf[i]);
-        PRINTSYS_Print(wk->drawwin.bmp, 0, yini+i*2*8, wk->strbuf[i], wk->fontHandle);
-      }
-      x = 2;
+    _printList(wk, DEBUG_OHNO_MSG0034);
 
-      if(DebugMenuList[i].str_id==DEBUG_OHNO_MSG0030){
-        GFL_MSG_GetString(wk->mm, DEBUG_OHNO_MSG0030, wk->strbufEx);
-        WORDSET_RegisterNumber(wk->pWordSet, 0, wk->pokeNo, 3, STR_NUM_DISP_SPACE, STR_NUM_CODE_DEFAULT);
-        WORDSET_RegisterNumber(wk->pWordSet, 1, wk->form, 3, STR_NUM_DISP_SPACE, STR_NUM_CODE_DEFAULT);
-        WORDSET_ExpandStr( wk->pWordSet, wk->strbuf[i], wk->strbufEx  );
-      }
-      else if(DebugMenuList[i].str_id==DEBUG_OHNO_MSG0029){
-        GFL_MSG_GetString(wk->mm, DEBUG_OHNO_MSG0029, wk->strbufEx);
-        WORDSET_RegisterNumber(wk->pWordSet, 0, wk->pokeNo, 3, STR_NUM_DISP_SPACE, STR_NUM_CODE_DEFAULT);
-        WORDSET_RegisterNumber(wk->pWordSet, 1, wk->form, 3, STR_NUM_DISP_SPACE, STR_NUM_CODE_DEFAULT);
-        WORDSET_ExpandStr( wk->pWordSet, wk->strbuf[i], wk->strbufEx  );
-      }
-      else if(DebugMenuList[i].str_id==DEBUG_OHNO_MSG0026){
-        GFL_MSG_GetString(wk->mm, DEBUG_OHNO_MSG0026, wk->strbufEx);
-        WORDSET_RegisterNumber(wk->pWordSet, 0, wk->trialNo, 3, STR_NUM_DISP_SPACE, STR_NUM_CODE_DEFAULT);
-        WORDSET_RegisterNumber(wk->pWordSet, 1, wk->trialType, 1, STR_NUM_DISP_SPACE, STR_NUM_CODE_DEFAULT);
-        WORDSET_ExpandStr( wk->pWordSet, wk->strbuf[i], wk->strbufEx  );
-      }
-      else{
-        GFL_MSG_GetString(wk->mm, DebugMenuList[i].str_id, wk->strbuf[i]);
-      }
-
-      PRINTSYS_Print( wk->drawwin.bmp, 16, yini+i*2*8, wk->strbuf[i], wk->fontHandle);
-    }
     wk->drawwin.message_req = TRUE;
-
     wk->seq++;
     break;
-  case 1:
-    {
-      int before_cursor;
+  case _TIMER_WAIT:
+    if(GFL_UI_KEY_GetTrg() == PAD_BUTTON_START){
+      wk->seq = _MESSAGE_END;
+      break;
+    }
+    {  //時間がきたら _NET_STARTに
+      RTCTime time;
+      GFL_RTC_GetTime( &time );
 
-      if(GFL_UI_KEY_GetTrg() == PAD_BUTTON_A){
-        wk->seq++;
+      OS_TPrintf(" %d %d  \n",time.hour, time.minute);
+      
+      if(wk->aGPower.start_time_hour <= time.hour && wk->aGPower.start_time_min <= time.minute){
+        wk->seq = _NET_START;
+    //    wk->timerGPower = -1;
         break;
-      }
-
-      before_cursor = wk->cursor_y;
-      switch(GFL_UI_KEY_GetRepeat()){
-      case PAD_KEY_UP:
-        wk->cursor_y--;
-        break;
-      case PAD_KEY_DOWN:
-        wk->cursor_y++;
-        break;
-      case PAD_KEY_LEFT:
-        if(wk->cursor_y==6){
-          wk->trialNo--;
-        }
-        if(wk->cursor_y==3 || wk->cursor_y==4){
-          wk->pokeNo--;
-        }
-        wk->seq = 0;
-        break;
-      case PAD_KEY_RIGHT:
-        if(wk->cursor_y==3 || wk->cursor_y==4){
-          wk->pokeNo++;
-        }
-        if(wk->cursor_y==6){
-          wk->trialNo++;
-        }
-        wk->seq = 0;
-        break;
-      case PAD_BUTTON_L:
-        if(wk->cursor_y==3 || wk->cursor_y==4){
-          wk->pokeNo-=10;
-        }
-        if(wk->cursor_y==6){
-          wk->trialType--;
-        }
-        wk->seq = 0;
-        break;
-      case PAD_BUTTON_R:
-        if(wk->cursor_y==3 || wk->cursor_y==4){
-          wk->pokeNo+=10;
-        }
-        if(wk->cursor_y==6){
-          wk->trialType++;
-        }
-        wk->seq = 0;
-        break;
-
-      case PAD_BUTTON_X:
-        wk->form++;
-        wk->seq = 0;
-        break;
-      case PAD_BUTTON_Y:
-        wk->form--;
-        wk->seq = 0;
-        break;
-      }
-
-      if(before_cursor != wk->cursor_y){
-        if(wk->cursor_y < 0){
-          wk->cursor_y = NELEMS(DebugMenuList) - 1;
-        }
-        if(wk->cursor_y >= NELEMS(DebugMenuList)){
-          wk->cursor_y = 0;
-        }
-        wk->seq = 0;
       }
     }
+    break;
+  case _MESSAGE_REWRITE:
+    _printList(wk, DEBUG_OHNO_MSG0031);
+    wk->drawwin.message_req = TRUE;
+    wk->seq++;
+    break;
+  case _NET_START:
+    {
+      if(GFL_UI_KEY_GetTrg() == PAD_BUTTON_START){
+        HaisinBeacon_Exit();  //終了
+        wk->seq = _MESSAGE_END;
+        break;
+      }
+    }
+    {  //時間が終了を過ぎていたら 3に
+      RTCTime time;
+      GFL_RTC_GetTime( &time );
+      if(wk->aGPower.end_time_hour >= 24){
+        time.hour += 24;
+      }
+      if(wk->aGPower.end_time_hour <= time.hour && wk->aGPower.end_time_min <= time.minute){
+        HaisinBeacon_Exit();  //終了
+        wk->seq = _MESSAGE_END;
+        break;
+      }
+    }
+    if(wk->timerGPower == 0){
+      if(HaisinBeacon_ExitWait()){  //終了待ち
+        wk->timerGPower--;
+      }
+    }
+    else if(wk->timerGPower == 1){
+      HaisinBeacon_Exit();  //終了
+      wk->timerGPower--;
+    }
+    else if( wk->isInit == FALSE){
+      wk->isInit = HaisinBeacon_InitWait();
+    }
+    else if(wk->timerGPower > 0){
+      wk->timerGPower--;
+    }
+    else if(wk->timerGPower < 0){
+      int x;
+
+      if(wk->bGPowerSeq){  //順送りモードの場合
+        wk->startListGPowerCnt++;
+        if(wk->startListGPowerCnt >= wk->aGPower.data_num ){
+          wk->startListGPowerCnt = 0;
+        }
+        HaisinBeacon_Init(wk->aGPower.hp[ wk->startListGPowerCnt ].g_power_id, wk->aGPower.beacon_space_time);
+        wk->timerGPower = wk->aGPower.hp[ wk->startListGPowerCnt ].time * 60 * 60;
+      }
+      else{  //乱数の場合
+        int rand = GFUser_GetPublicRand(wk->GPowerOdds - 1);
+        for(x = 0; x < wk->aGPower.data_num ; x++){
+          if(rand < wk->aGPower.hp[x].odds){
+            HaisinBeacon_Init(wk->aGPower.hp[x].g_power_id, wk->aGPower.beacon_space_time);
+            wk->timerGPower = wk->aGPower.hp[x].time * 60 * 60;
+            wk->startListGPowerCnt = x;
+            break;
+          }
+          rand -= wk->aGPower.hp[x].odds;
+        }
+      }
+      wk->seq = _MESSAGE_REWRITE;
+      wk->isInit = FALSE;
+      wk->cursor_y = wk->startListGPowerCnt + 2;
+    }
+    if(wk->isInit && wk->timerGPower > 1 ){
+      HaisinBeacon_Update();
+    }
+    break;
+  case _NET_WAIT:
+    break;
+  case _MESSAGE_END:
+    wk->drawwin.message_req = TRUE;
+    _printList(wk, DEBUG_OHNO_MSG0035);
+    wk->seq = _NET_WAIT;
     break;
   default:
     return TRUE;	//ワイヤレス通信処理へ
@@ -658,7 +680,7 @@ FS_EXTERN_OVERLAY(ui_common);
 //FS_EXTERN_OVERLAY(dpw_common);
 
 
-static void * _PokeTradeDemoWorkCreate(D_OHNO_WORK *wk)
+static void * _PokeTradeDemoWorkCreate(D_GPOWER_WORK *wk)
 {
   POKEMONTRADE_DEMO_PARAM *pWork;
   MYSTATUS* pFriend;
@@ -694,7 +716,7 @@ static void * _PokeTradeDemoWorkCreate(D_OHNO_WORK *wk)
   return pWork;
 }
 
-static void * _PokeTradeDemo2WorkCreate(D_OHNO_WORK *wk)
+static void * _PokeTradeDemo2WorkCreate(D_GPOWER_WORK *wk)
 {
   POKEMONTRADE_DEMO_PARAM *pWork;
   MYSTATUS* pFriend;
@@ -749,7 +771,7 @@ static void _DebugDataCreate(EVENT_GTSNEGO_WORK *pWork)
 
 
 
-static void * _PokeTradeGtsNegoCreate(D_OHNO_WORK *wk)
+static void * _PokeTradeGtsNegoCreate(D_GPOWER_WORK *wk)
 {
   EVENT_GTSNEGO_WORK *pWork;
   MYSTATUS* pFriend;
@@ -778,7 +800,7 @@ static void * _PokeTradeGtsNegoCreate(D_OHNO_WORK *wk)
 }
 
 
-static void * _PokeTradeWorkCreate(D_OHNO_WORK *wk)
+static void * _PokeTradeWorkCreate(D_GPOWER_WORK *wk)
 {
   POKEMONTRADE_PARAM *pWork2;
   EVENT_GTSNEGO_WORK *pWork;
@@ -806,7 +828,7 @@ static void * _PokeTradeWorkCreate(D_OHNO_WORK *wk)
   return pWork2;
 }
 
-static void * _PokeIrcTradeWorkCreate(D_OHNO_WORK *wk)
+static void * _PokeIrcTradeWorkCreate(D_GPOWER_WORK *wk)
 {
   POKEMONTRADE_PARAM *pWork;
   MYSTATUS* pFriend;
@@ -822,7 +844,7 @@ static void * _PokeIrcTradeWorkCreate(D_OHNO_WORK *wk)
   return pWork;
 }
 
-static void * _initTrial(D_OHNO_WORK *wk)
+static void * _initTrial(D_GPOWER_WORK *wk)
 {
   DEBUG_TRIAL_PARAM* pWork = GFL_HEAP_AllocClearMemory(GFL_HEAPID_APP, sizeof(DEBUG_TRIAL_PARAM));
   pWork->trialType = wk->trialType;
@@ -838,15 +860,11 @@ static void * _initTrial(D_OHNO_WORK *wk)
  *
  */
 //----------------------------------------------------------
-const GFL_PROC_DATA DebugOhnoListProcData = {
+const GFL_PROC_DATA DebugGPowerFuncProcData = {
   DebugOhnoMainProcInit,
   DebugOhnoMainProcMain,
   DebugOhnoMainProcEnd,
 };
-
-
-
-
 
 
 
